@@ -7,5 +7,4 @@ extras/documentation
 # Zend Studio files #
 #####################
 .buildpath
-.project
 .settings*
