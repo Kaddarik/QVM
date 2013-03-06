@@ -18,7 +18,9 @@ class Event implements InputFilterAwareInterface
 		$this->id_event     = (isset($data['id_event'])) ? $data['id_event'] : null;
 		$this->date = (isset($data['date'])) ? $data['date'] : null;
 		$this->infos_event  = (isset($data['infos_event'])) ? $data['infos_event'] : null;
-	} public function setInputFilter(InputFilterInterface $inputFilter)
+	} 
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }

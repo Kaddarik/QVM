@@ -1,56 +1,95 @@
-<strong>Module:</strong>        Qvm &raquo;
-<strong>Controller:</strong>    Indexqvm &raquo;
-<strong>Action:</strong>        index
+<?php
+use Zend\Validator\File\Count;
+use Zend\Form\Element;
+?>
+
+<strong>Module:</strong>
+Qvm &raquo;
+<strong>Controller:</strong>
+Indexqvm &raquo;
+<strong>Action:</strong>
+index
 
 <h1>Mes prochains Evenements</h1>
 <table class="table">
-<tr>
-	<th>Nom</th>
-    <th>Date</th>
-    <th>Vote</th>
-</tr>
+	<tr>
+		<th>Nom</th>
+		<th>Date</th>
+		<th>Vote</th>
+	</tr>
 <?php
 
 use Zend\Form\Element\Select;
-$vote = array(1=>"OUI", 2=>"NON", 3=>"P-E", 4=>"En Attente");
-$listVote = new Select();
-$listVote->setAttributes($vote);
-foreach ($upcomingParticipatings as $upcomingParticipating) : ?>
+$vote = array (
+		1 => "OUI",
+		2 => "NON",
+		3 => "P-E",
+		4 => "En Attente" 
+);
+$listVote = new Select ();
+$listVote->setAttributes ( $vote );
+foreach ( $upcomingParticipatings as $upcomingParticipating ) :
+	?>
 <tr>
-    <td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
-    <td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
-    <td><?php echo ($listVote->getAttribute($this->escapeHtml($upcomingParticipating->vote)));?></td>
-</tr>
+		<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
+		<td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
+		<td><?php echo ($listVote->getAttribute($this->escapeHtml($upcomingParticipating->vote)));?></td>
+	</tr>
 <?php endforeach; ?>
 </table>
 
 <h1>Mes Evenements en attente de vote</h1>
 <table class="table">
-<tr>
-	<th>Nom</th>
-    <th>Date</th>
-    <th>Vote</th>
-</tr>
+	<tr>
+		<th>Nom</th>
+		<th>Date</th>
+		<th>Vote</th>
+	</tr>
 <?php
-foreach ($pendingParticipatings as $pendingParticipating) : ?>
+$nbEvtEnAttente = count ( $pendingParticipatings );
+foreach ( $pendingParticipatingsLimit as $pendingParticipating ) :
+	?>
 <tr>
-    <td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
-    <td><?php echo $this->escapeHtml($pendingParticipating->date);?></td>
-    <td><?php echo ($listVote->getAttribute($this->escapeHtml($pendingParticipating->vote)));?></td>
-</tr>
+		<td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
+		<td><?php echo $this->escapeHtml($pendingParticipating->date);?></td>
+		<td><?php echo ($listVote->getAttribute($this->escapeHtml($pendingParticipating->vote)));?></td>
+	</tr>
 <?php endforeach; ?>
 </table>
+<?php
+if ($nbEvtEnAttente > 5) {
+	?>
+<p>
+	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus d'&eacute;v&egrave;nements") ?> &raquo;</a>
+</p>
+<?php
 
+}
+?>
+
+<br>
 <h1>Mes Groupes</h1>
 <table class="table">
+	<tr>
+		<th>Nom</th>
+		<th>Privacite</th>
+	</tr>
+<?php
+$nbGroupe = count ( $groups );
+foreach ( $groupsLimit as $group ) :
+	?>
 <tr>
-	<th>Nom</th>
-    <th>Privacite</th>
-</tr>
-<?php foreach ($groups as $group) : ?>
-<tr>
-    <td><?php echo $this->escapeHtml($group->label);?></td>
-    <td><?php echo $this->escapeHtml($group->is_private);?></td>
-</tr>
+		<td><?php echo $this->escapeHtml($group->label);?></td>
+		<td><?php echo $this->escapeHtml($group->is_private);?></td>
+	</tr>
 <?php endforeach; ?>
 </table>
+<?php
+if ($nbGroupe > 5) {
+	?>
+<p>
+	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus de groupes") ?> &raquo;</a>
+</p>
+<?php
+}
+?>

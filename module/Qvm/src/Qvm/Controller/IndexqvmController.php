@@ -26,7 +26,9 @@ class IndexqvmController extends AbstractActionController
 		return new ViewModel(array(
             'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->fetchAll(),
 			'pendingParticipatings' => $this->getPendingParticipatingTable()->fetchAll(),
+			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->fetchLimit(),
 			'groups' => $this->getGroupTable()->fetchAll(),
+			'groupsLimit' => $this->getGroupTable()->fetchLimit(),
         ));
 	}
 	

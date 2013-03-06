@@ -17,7 +17,9 @@ class Group implements InputFilterAwareInterface
 		$this->id_group     = (isset($data['id_group'])) ? $data['id_group'] : null;
 		$this->label = (isset($data['label'])) ? $data['label'] : null;
 		$this->is_private  = (isset($data['is_private'])) ? $data['is_private'] : null;
-	} public function setInputFilter(InputFilterInterface $inputFilter)
+	} 
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }

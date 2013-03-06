@@ -16,11 +16,20 @@ class PendingParticipatingTable
 	public function fetchAll()
 	{
 		$resultSet = $this->tableGateway->select(function (Select $select){
+			$select->order('date');
+		});
+		return $resultSet;
+	}
+	
+	public function fetchLimit()
+	{
+		$resultSet = $this->tableGateway->select(function (Select $select){
 			$select->order('date')->limit(5);
 		});
 		return $resultSet;
 	}
-
+	
+	
 	public function getPendingParticipating($id)
 	{
 		$id  = (int) $id;

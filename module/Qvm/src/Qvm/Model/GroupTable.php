@@ -2,6 +2,7 @@
 namespace Qvm\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class GroupTable
 {
@@ -17,7 +18,15 @@ class GroupTable
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
-
+	
+	public function fetchLimit()
+	{
+		$resultSet = $this->tableGateway->select(function (Select $select){
+			$select->order('label')->limit(5);
+		});
+		return $resultSet;
+	}
+	
 	public function getGroup($id)
 	{
 		$id  = (int) $id;
