@@ -9,10 +9,14 @@
 
 namespace Qvm\Controller;
 
+use Qvm\Model\UpcomingParticipating;
+
 use Zend\Session\Container;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Qvm\Form\VoteEvenementForm;
+use Qvm\Model\PendingParticipating;
 
 class IndexqvmController extends AbstractActionController
 {
@@ -23,12 +27,28 @@ class IndexqvmController extends AbstractActionController
 
 	public function indexAction()
 	{
+		$form  = new VoteEvenementForm();
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			 
+			$votePending = new PendingParticipating();
+			$voteUpcoming = new UpcomingParticipating();
+			$form->setInputFilter($votePending->getInputFilter());
+			$form->setInputFilter($voteUpcoming->getInputFilter());
+			$form->setData($request->getPost());
+		
+			if ($form->isValid()) {
+				//SAVE TO DATABASE...
+			}
+		}
+		
 		return new ViewModel(array(
             'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->fetchAll(),
 			'pendingParticipatings' => $this->getPendingParticipatingTable()->fetchAll(),
 			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->fetchLimit(),
 			'groups' => $this->getGroupTable()->fetchAll(),
 			'groupsLimit' => $this->getGroupTable()->fetchLimit(),
+			'form' => $form
         ));
 	}
 	

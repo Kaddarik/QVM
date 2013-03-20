@@ -1,6 +1,8 @@
 <?php
 use Zend\Validator\File\Count;
 use Zend\Form\Element;
+use Zend\Form\Element\Select;
+use Zend\Form\Form;
 ?>
 
 <strong>Module:</strong>
@@ -18,24 +20,29 @@ index
 		<th>Vote</th>
 	</tr>
 <?php
-
-use Zend\Form\Element\Select;
 $vote = array (
 		1 => "OUI",
 		2 => "NON",
 		3 => "P-E",
 		4 => "En Attente" 
 );
-$listVote = new Select ();
-$listVote->setAttributes ( $vote );
+$listVote = new  Select ();
+$listVote->setAttributes($vote);
+
+$form = $this->form;
+$form->prepare();
+echo $this->form()->openTag($form);
+
 foreach ( $upcomingParticipatings as $upcomingParticipating ) :
 	?>
 <tr>
 		<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
 		<td><?php echo ($listVote->getAttribute($this->escapeHtml($upcomingParticipating->vote)));?></td>
+		<td><?php echo $this->formRow($form->get('vote'));?></td>
 	</tr>
-<?php endforeach; ?>
+<?php 
+endforeach; ?>
 </table>
 
 <h1>Mes Evenements en attente de vote</h1>
@@ -47,14 +54,18 @@ foreach ( $upcomingParticipatings as $upcomingParticipating ) :
 	</tr>
 <?php
 $nbEvtEnAttente = count ( $pendingParticipatings );
+
 foreach ( $pendingParticipatingsLimit as $pendingParticipating ) :
 	?>
 <tr>
 		<td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($pendingParticipating->date);?></td>
 		<td><?php echo ($listVote->getAttribute($this->escapeHtml($pendingParticipating->vote)));?></td>
+		<td><?php echo $this->formRow($form->get('vote'));?></td>
 	</tr>
-<?php endforeach; ?>
+<?php endforeach; 
+echo $this->form()->closeTag();
+?>
 </table>
 <?php
 if ($nbEvtEnAttente > 5) {
