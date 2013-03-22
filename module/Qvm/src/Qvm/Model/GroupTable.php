@@ -15,7 +15,10 @@ class GroupTable
 
 	public function fetchAll()
 	{
-		$resultSet = $this->tableGateway->select();
+		$resultSet = $this->tableGateway->select(function (Select $select){
+			//liste tous les groupes publics
+			$select->where->equalTo('is_private', 0);
+		});
 		return $resultSet;
 	}
 	

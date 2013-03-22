@@ -31,14 +31,17 @@ class IndexqvmController extends AbstractActionController
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			 
-			$votePending = new PendingParticipating();
 			$voteUpcoming = new UpcomingParticipating();
-			$form->setInputFilter($votePending->getInputFilter());
-			$form->setInputFilter($voteUpcoming->getInputFilter());
+			$form->setInputFilter($vote->getInputFilter());
+			$form->setInputFilter($vote->getInputFilter());
 			$form->setData($request->getPost());
 		
 			if ($form->isValid()) {
-				//SAVE TO DATABASE...
+				/*$album->exchangeArray($form->getData());
+                $this->getAlbumTable()->saveAlbum($album);
+
+                // Redirect to list of albums
+                return $this->redirect()->toRoute('album');*/
 			}
 		}
 		

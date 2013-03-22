@@ -39,7 +39,7 @@ foreach ( $upcomingParticipatings as $upcomingParticipating ) :
 		<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
 		<td><?php echo ($listVote->getAttribute($this->escapeHtml($upcomingParticipating->vote)));?></td>
-		<td><?php echo $this->formRow($form->get('vote'));?></td>
+		<td><?php echo $this->formCollection($form);?></td>
 	</tr>
 <?php 
 endforeach; ?>
@@ -99,7 +99,9 @@ foreach ( $groupsLimit as $group ) :
 if ($nbGroupe > 5) {
 	?>
 <p>
-	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus de groupes") ?> &raquo;</a>
+	<a class="btn btn-success btn-small" href="<?php echo $this->url('group', array('action'=>'index'));?>">
+		<?php echo $this->translate("Plus de groupes") ?> &raquo;
+	</a>
 </p>
 <?php
 }

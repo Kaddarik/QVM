@@ -1,1 +1,14 @@
-<head><?php echo"Je suis dans l'index du groupcontroller"; ?></head>
+<h1>Mes Groupes</h1>
+<table class="table">
+	<tr>
+		<th>Nom</th>
+		<th>Privacity</th>
+	</tr>
+<?php 
+foreach ( $groups as $group ) :
+	?>
+<tr>
+	<td><?php echo $this->escapeHtml($group->label);?></td>
+	<td><?php echo $this->escapeHtml($group->is_private);?></td>
+</tr>
+<?php endforeach; ?>
