@@ -38,7 +38,7 @@ class IndexqvmController extends AbstractActionController
 			$form->setData($request->getPost());
 		
 			if ($form->isValid()) {
-				//SAVE TO DATABASE.....**
+				//SAVE TO DATABASE...
 			}
 		}
 		
