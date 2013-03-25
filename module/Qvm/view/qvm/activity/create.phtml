@@ -1,0 +1,30 @@
+<?php
+$title = 'Nouvelle activite';
+$this->headTitle ( $title );
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form = $this->form;
+$form->setAttribute ( 'action', $this->url ( 'activity', array (
+		'action' => 'create' 
+) ) );
+$form->setAttribute('method', 'post');
+echo $this->form ()->openTag ( $form );
+?>
+<dl class="zend_form">
+	<?php echo $this->formHidden($form->get('id')); ?>
+	<dd><?php
+	echo $this->formRow ( $form->get ( 'categorie' ) );
+	?></dd>
+	<dd><?php
+	echo $this->formRow ( $form->get ( 'title' ) );
+	?></dd>
+	<dd><?php
+	echo $this->formRow ( $form->get ( 'description' ) );
+	?></dd>
+	<dd><?php
+	echo $this->formSubmit ( $form->get ( 'submit' ) );
+	?></dd>
+</dl>
+
+<?php echo $this->form()->closeTag(); ?>

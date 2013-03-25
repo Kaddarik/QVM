@@ -9,6 +9,10 @@
 
 namespace Qvm;
 
+use Qvm\Model\ActivityCategory;
+use Qvm\Model\ActivityCategoryTable;
+use Qvm\Model\Category;
+use Qvm\Model\CategoryTable;
 use Qvm\Model\Group;
 use Qvm\Model\GroupTable;
 use Qvm\Model\UpcomingParticipatingTable;
@@ -144,6 +148,39 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new GroupMember());
     						return new TableGateway('groupmember', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\ActivityTable' =>  function($sm) {
+    						$tableGateway = $sm->get('ActivityTableGateway');
+    						$table = new ActivityTable($tableGateway);
+    						return $table;
+    					},
+    					'ActivityTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Activity());
+    						return new TableGateway('activity', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\CategoryTable' =>  function($sm) {
+    						$tableGateway = $sm->get('CategoryTableGateway');
+    						$table = new CategoryTable($tableGateway);
+    						return $table;
+    					},
+    					'CategoryTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Category());
+    						return new TableGateway('category', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\ActivityCategoryTable' =>  function($sm) {
+    						$tableGateway = $sm->get('ActivityCategoryTableGateway');
+    						$table = new ActivityCategoryTable($tableGateway);
+    						return $table;
+    					},
+    					'ActivityCategoryTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new ActivityCategory());
+    						return new TableGateway('activityCategory', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);

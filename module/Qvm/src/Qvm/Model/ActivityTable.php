@@ -28,27 +28,36 @@ class ActivityTable
 		}
 		return $row;
 	}
+	
+	public function getLastActivity()
+	{
+		
+		$rowset = $this->tableGateway->getLastInsertValue();
+		
+		return $rowset;
+	}
 
-	/*public function saveAlbum(Album $album)
+	public function saveActivity(Activity $activity)
 	{
 		$data = array(
-				'artist' => $album->artist,
-				'title'  => $album->title,
+				'title'  => $activity->title,
+				'description'  => $activity->description,
+				'id_location' => '1',
 		);
 
-		$id = (int)$album->id;
-		if ($id == 0) {
+		$id_activity = (int)$activity->id_activity;
+		if ($id_activity == 0) {
 			$this->tableGateway->insert($data);
 		} else {
-			if ($this->getAlbum($id)) {
-				$this->tableGateway->update($data, array('id' => $id));
+			if ($this->getActivity($id_activity)) {
+				$this->tableGateway->update($data, array('id_activity' => $id_activity));
 			} else {
 				throw new \Exception('Form id does not exist');
 			}
 		}
 	}
 
-	public function deleteAlbum($id)
+	/*public function deleteAlbum($id)
 	{
 		$this->tableGateway->delete(array('id' => $id));
 	}*/

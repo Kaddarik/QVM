@@ -15,6 +15,7 @@ class Activity implements InputFilterAwareInterface
 	public $periodicrule;
 	public $exceptionrule;
 	public $displaying_order;
+	
     protected $inputFilter; 
 
 	public function exchangeArray($data)
@@ -26,12 +27,12 @@ class Activity implements InputFilterAwareInterface
 		$this->periodicrule  = (isset($data['periodicrule'])) ? $data['periodicrule'] : null;
 		$this->exceptionrule  = (isset($data['exceptionrule'])) ? $data['exceptionrule'] : null;
 		$this->displaying_order  = (isset($data['displaying_order'])) ? $data['displaying_order'] : null;
-	} public function setInputFilter(InputFilterInterface $inputFilter)
+	} 
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
-
-//  A MODIFIER
 	
     public function getInputFilter()
     {
@@ -40,50 +41,40 @@ class Activity implements InputFilterAwareInterface
             $factory     = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'id_event',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
+                'name'     => 'id_activity',
+                'required' => false,
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'date',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
-                        ),
-                    ),
-                ),
+                'name'     => 'title',
+                'required' => false,
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'infos_event',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
-                        ),
-                    ),
-                ),
+                'name'     => 'description',
+                'required' => false,
             )));
+            
+            $inputFilter->add($factory->createInput(array(
+            		'name'     => 'id_location',
+            		'required' => false,
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+            		'name'     => 'periodicrule',
+            		'required' => false,
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+            		'name'     => 'exceptionrule',
+            		'required' => false,
+            )));
+            
+            $inputFilter->add($factory->createInput(array(
+            		'name'     => 'displaying_order',
+            		'required' => false,
+            )));
+            
 
             $this->inputFilter = $inputFilter;
         }
@@ -91,9 +82,5 @@ class Activity implements InputFilterAwareInterface
         return $this->inputFilter;
     }
     
-    public function getArrayCopy()
-    {
-    	return get_object_vars($this);
-    }
     
 }
