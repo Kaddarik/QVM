@@ -38,3 +38,13 @@ div.container a.brand {
 .table{
 	width:50%;
 }
+
+#submitbutton-right, .btn-right{
+	float:right !important;
+}
+.btn-align-fieldset{
+	width:68% !important;
+}
+.marg-bas{
+	margin-bottom:25px;
+}

@@ -1,14 +1,24 @@
+<p class="btn-align-fieldset marg-bas">
+	<a class="btn btn-success btn-small btn-right" href="<?php echo $this->url('group', array('action'=>'rejoindre'));?>">
+		<?php echo $this->translate("Rejoindre un groupe") ?>
+	</a>
+</p>
+
 <h1>Mes Groupes</h1>
+<?php
+echo $this->formCollection($form);
+?>
+
 <table class="table">
-	<tr>
-		<th>Nom</th>
-		<th>Privacity</th>
-	</tr>
 <?php 
 foreach ( $groups as $group ) :
 	?>
 <tr>
-	<td><?php echo $this->escapeHtml($group->label);?></td>
-	<td><?php echo $this->escapeHtml($group->is_private);?></td>
+	<td>
+		<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
+			<?php echo $this->escapeHtml($group->label);?>
+		</a>
+	</td>
 </tr>
 <?php endforeach; ?>
+</table>

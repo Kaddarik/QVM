@@ -5,20 +5,8 @@ use Zend\Form\Element\Select;
 use Zend\Form\Form;
 ?>
 
-<strong>Module:</strong>
-Qvm &raquo;
-<strong>Controller:</strong>
-Indexqvm &raquo;
-<strong>Action:</strong>
-index
-
 <h1>Mes prochains Evenements</h1>
 <table class="table">
-	<tr>
-		<th>Nom</th>
-		<th>Date</th>
-		<th>Vote</th>
-	</tr>
 <?php
 $vote = array (
 		1 => "OUI",
@@ -47,11 +35,6 @@ endforeach; ?>
 
 <h1>Mes Evenements en attente de vote</h1>
 <table class="table">
-	<tr>
-		<th>Nom</th>
-		<th>Date</th>
-		<th>Vote</th>
-	</tr>
 <?php
 $nbEvtEnAttente = count ( $pendingParticipatings );
 
@@ -81,17 +64,16 @@ if ($nbEvtEnAttente > 5) {
 <br>
 <h1>Mes Groupes</h1>
 <table class="table">
-	<tr>
-		<th>Nom</th>
-		<th>Privacite</th>
-	</tr>
 <?php
 $nbGroupe = count ( $groups );
 foreach ( $groupsLimit as $group ) :
 	?>
-<tr>
-		<td><?php echo $this->escapeHtml($group->label);?></td>
-		<td><?php echo $this->escapeHtml($group->is_private);?></td>
+	<tr>
+		<td>
+			<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
+				<?php echo $this->escapeHtml($group->label);?>
+			</a>
+		</td>
 	</tr>
 <?php endforeach; ?>
 </table>

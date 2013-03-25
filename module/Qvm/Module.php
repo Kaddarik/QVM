@@ -10,24 +10,19 @@
 namespace Qvm;
 
 use Qvm\Model\Group;
-
 use Qvm\Model\GroupTable;
-
 use Qvm\Model\UpcomingParticipatingTable;
-
 use Qvm\Model\UpcomingParticipating;
-
 use Qvm\Model\PendingParticipatingTable;
-
 use Qvm\Model\PendingParticipating;
-
 use Qvm\Model\EventTable;
-
 use Qvm\Model\Event;
-
 use Qvm\Model\ActivityTable;
-
 use Qvm\Model\Activity;
+use Qvm\Model\PersonTable;
+use Qvm\Model\Person;
+use Qvm\Model\GroupMemberTable;
+use Qvm\Model\GroupMember;
 
 
 
@@ -127,6 +122,28 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Activity());
     						return new TableGateway('activity', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\PersonTable' =>  function($sm) {
+    						$tableGateway = $sm->get('PersonTableGateway');
+    						$table = new PersonTable($tableGateway);
+    						return $table;
+    					},
+    					'PersonTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Person());
+    						return new TableGateway('person', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\GroupMemberTable' =>  function($sm) {
+    						$tableGateway = $sm->get('GroupMemberTableGateway');
+    						$table = new GroupMemberTable($tableGateway);
+    						return $table;
+    					},
+    					'GroupMemberTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new GroupMember());
+    						return new TableGateway('groupmember', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);

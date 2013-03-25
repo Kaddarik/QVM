@@ -1,8 +1,12 @@
 <?php
 namespace Qvm\Model;
 
+use Zend\Db\TableGateway\AbstractTableGateway;
+
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Where;
+use Zend\Db\Adapter\Platform\Mysql;
 
 class GroupTable
 {
@@ -25,9 +29,41 @@ class GroupTable
 	public function fetchLimit()
 	{
 		$resultSet = $this->tableGateway->select(function (Select $select){
+			$select->where->equalTo('is_private', 0);
 			$select->order('label')->limit(5);
 		});
 		return $resultSet;
+	}
+	
+	public function getMembersByGroup($idGroupe){
+		
+		
+		$select = new Select('person');
+		$select->columns(array('firstname', 'surname', 'mail', 'phonenumber', 'is_sysadmin'))
+			->join('groupmember', 'person.id_person = groupmember.id_person', array())
+			->join('group', 'groupmember.id_group = group.id_group', array())
+			->where(array('group.id_group' => $idGroupe));
+		
+		/*	$select = new Select();
+			$select->columns(array('firstname', 'surname', 'mail', 'phonenumber', 'is_sysadmin'))->from('person')
+			->join('groupmember', 'groupmember.id_person = person.id_person', array())
+			->join('group', 'group.id_group = group.id_group', array());
+		
+			$where = new Where();
+			$where->equalTo('id_group', $idGroupe) ;
+			$select->where($where);*/
+		
+			echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
+			
+			
+			//return $this->tableGateway->selectWith($select);
+		
+		
+		
+		
+		
+		
+		//return $this->tableGateway->selectWith($select);
 	}
 	
 	public function getGroup($id)
@@ -40,28 +76,4 @@ class GroupTable
 		}
 		return $row;
 	}
-
-	/*public function saveAlbum(Album $album)
-	{
-		$data = array(
-				'artist' => $album->artist,
-				'title'  => $album->title,
-		);
-
-		$id = (int)$album->id;
-		if ($id == 0) {
-			$this->tableGateway->insert($data);
-		} else {
-			if ($this->getAlbum($id)) {
-				$this->tableGateway->update($data, array('id' => $id));
-			} else {
-				throw new \Exception('Form id does not exist');
-			}
-		}
-	}
-
-	public function deleteAlbum($id)
-	{
-		$this->tableGateway->delete(array('id' => $id));
-	}*/
 }
