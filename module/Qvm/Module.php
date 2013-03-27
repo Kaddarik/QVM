@@ -9,6 +9,8 @@
 
 namespace Qvm;
 
+use Qvm\Model\VoteKind;
+use Qvm\Model\VoteKindTable;
 use Qvm\Model\ActivityCategory;
 use Qvm\Model\ActivityCategoryTable;
 use Qvm\Model\Category;
@@ -19,6 +21,8 @@ use Qvm\Model\UpcomingParticipatingTable;
 use Qvm\Model\UpcomingParticipating;
 use Qvm\Model\PendingParticipatingTable;
 use Qvm\Model\PendingParticipating;
+use Qvm\Model\AllEventsTable;
+use Qvm\Model\AllEvents;
 use Qvm\Model\EventTable;
 use Qvm\Model\Event;
 use Qvm\Model\ActivityTable;
@@ -181,6 +185,28 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new ActivityCategory());
     						return new TableGateway('activityCategory', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\AllEventsTable' =>  function($sm) {
+    						$tableGateway = $sm->get('AllEventsTableGateway');
+    						$table = new AllEventsTable($tableGateway);
+    						return $table;
+    					},
+    					'AllEventsTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new AllEvents());
+    						return new TableGateway('allEvents', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\VoteKindTable' =>  function($sm) {
+    						$tableGateway = $sm->get('VoteKindTableGateway');
+    						$table = new VoteKindTable($tableGateway);
+    						return $table;
+    					},
+    					'VoteKindTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new VoteKind());
+    						return new TableGateway('votekind', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);
