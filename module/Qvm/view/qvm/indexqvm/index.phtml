@@ -23,7 +23,7 @@ echo $this->form()->openTag($form);
 
 foreach ( $upcomingParticipatings as $upcomingParticipating ) :
 	?>
-<tr>
+ <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
 		<td><?php echo ($listVote->getAttribute($this->escapeHtml($upcomingParticipating->vote)));?></td>
@@ -40,7 +40,7 @@ $nbEvtEnAttente = count ( $pendingParticipatings );
 
 foreach ( $pendingParticipatingsLimit as $pendingParticipating ) :
 	?>
-<tr>
+ <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($pendingParticipating->date);?></td>
 		<td><?php echo ($listVote->getAttribute($this->escapeHtml($pendingParticipating->vote)));?></td>
@@ -51,10 +51,10 @@ echo $this->form()->closeTag();
 ?>
 </table>
 <?php
-if ($nbEvtEnAttente > 5) {
+if ($nbEvtEnAttente > $nbLimit) {
 	?>
-<p>
-	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus d'&eacute;v&egrave;nements") ?> &raquo;</a>
+<p class="table">
+	<a class="btn btn-success btn-small btn-right" href="#"><?php echo $this->translate("Plus d'&eacute;v&egrave;nements") ?> &raquo;</a>
 </p>
 <?php
 
@@ -68,7 +68,7 @@ if ($nbEvtEnAttente > 5) {
 $nbGroupe = count ( $groups );
 foreach ( $groupsLimit as $group ) :
 	?>
-	<tr>
+	<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td>
 			<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
 				<?php echo $this->escapeHtml($group->label);?>
@@ -78,10 +78,10 @@ foreach ( $groupsLimit as $group ) :
 <?php endforeach; ?>
 </table>
 <?php
-if ($nbGroupe > 5) {
+if ($nbGroupe > $nbLimit) {
 	?>
-<p>
-	<a class="btn btn-success btn-small" href="<?php echo $this->url('group', array('action'=>'index'));?>">
+<p class="table">
+	<a class="btn btn-success btn-small btn-right" href="<?php echo $this->url('group', array('action'=>'index'));?>">
 		<?php echo $this->translate("Plus de groupes") ?> &raquo;
 	</a>
 </p>

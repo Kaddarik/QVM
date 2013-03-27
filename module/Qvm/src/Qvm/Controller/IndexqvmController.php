@@ -27,6 +27,8 @@ class IndexqvmController extends AbstractActionController
 
 	public function indexAction()
 	{
+		$nbLimit = (int) 5;
+		
 		$form  = new VoteEvenementForm();
 		$request = $this->getRequest();
 		if ($request->isPost()) {
@@ -44,8 +46,9 @@ class IndexqvmController extends AbstractActionController
             'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->fetchAll(),
 			'pendingParticipatings' => $this->getPendingParticipatingTable()->fetchAll(),
 			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->fetchLimit(),
+			'nbLimit' => $nbLimit,
 			'groups' => $this->getGroupTable()->fetchAll(),
-			'groupsLimit' => $this->getGroupTable()->fetchLimit(),
+			'groupsLimit' => $this->getGroupTable()->fetchLimit($nbLimit),
 			'form' => $form
         ));
 	}

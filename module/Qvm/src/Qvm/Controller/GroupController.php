@@ -11,6 +11,8 @@ class GroupController extends AbstractActionController
 
     public function indexAction()
     {
+    	$nbLimit = (int) 10;
+    	
     	$form  = new RechercheGroupeForm();
     	$request = $this->getRequest();
     	if ($request->isPost()) {
@@ -24,7 +26,9 @@ class GroupController extends AbstractActionController
     	}
     	
     	return array(
+    		'nbLimit' => $nbLimit,
     		'groups' => $this->getGroupTable()->fetchAll(),
+    		'groupsLimit' => $this->getGroupTable()->fetchLimit($nbLimit),
 			'form' => $form    		
     	);
     }
