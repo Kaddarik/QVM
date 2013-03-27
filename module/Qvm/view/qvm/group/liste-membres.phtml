@@ -5,10 +5,7 @@
 		<h2>Liste des membres</h2>
 		<table class="table">
 			<?php
-			$nbMembres = count($membres);
-			
-			foreach ( $membres as $indexMembre => $membre ) : 
-				if ($indexMembre <= 3){
+			foreach ( $membres as $index => $membre ) : 
 					?>
 					 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 						<td>
@@ -35,38 +32,7 @@
 						</td>
 					</tr>
 					<?php 
-				}
 			endforeach; 
-			?>
-		</table>
-	
-		<?php 
-		if ($indexMembre >= 4){
-			?>
-			<p class="table">
-				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
-					<?php echo $this->translate("Plus de membres") ?> &raquo;
-				</a>
-			</p>
-			<?php
-		}
-		?>
-	</div>
-	<div class="span6">
-		<h2>Liste des activit&eacute;s</h2>
-		<table class="table">
-			<?php 
-			
-			foreach ($activites as $activite) :?>
-					<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-						<td>
-							<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
-								<?php echo $this->escapeHtml($activite->title);?>
-							</a>
-						</td>
-					</tr>
-					<?php 
-			endforeach;
 			?>
 		</table>
 	</div>

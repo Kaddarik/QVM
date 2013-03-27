@@ -32,49 +32,21 @@ class Group implements InputFilterAwareInterface
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'id_event',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'Int'),
-                ),
-            )));
+                'required' => false,
+                )
+            ));
 
             $inputFilter->add($factory->createInput(array(
                 'name'     => 'label',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
-                        ),
-                    ),
-                ),
-            )));
+                'required' => false,
+                )
+            ));
 
-        /*    $inputFilter->add($factory->createInput(array(
+            $inputFilter->add($factory->createInput(array(
                 'name'     => 'is_private',
-                'required' => true,
-                'filters'  => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
-                        'name'    => 'StringLength',
-                        'options' => array(
-                            'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 100,
-                        ),
-                    ),
-                ),
-            )));*/
+                'required' => false,
+                )
+            ));
 
             $this->inputFilter = $inputFilter;
         }

@@ -1,14 +1,8 @@
 <?php
 namespace Qvm\Model;
 
-use Zend\Filter\Int;
-
-use Zend\XmlRpc\Value\Integer;
-
 use Zend\Db\Sql\Sql;
-
 use Zend\Db\TableGateway\AbstractTableGateway;
-
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db;
 use Zend\Db\Sql\Select;
@@ -51,7 +45,24 @@ class GroupTable
 			->join('group', 'groupmember.id_group = group.id_group', array())
 			->where(array('group.id_group' => $idGroupe))
 			->order('is_sysadmin DESC');
- 		//echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
+		
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
+		
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
+		
+		return $resultSet;
+	}
+	
+	public function getActivitesByGroup($idGroupe){
+		$select = new Select;
+		$select->columns(array('id_activity', 'title'))->from('activity')
+			->join('participatinggroup', 'activity.id_activity = participatinggroup.id_activity', array())
+			->join('group', 'group.id_group = participatinggroup.id_group', array())
+			->where(array('group.id_group' => $idGroupe));
+		//echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
 		
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();

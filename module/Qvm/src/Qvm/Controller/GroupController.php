@@ -1,6 +1,8 @@
 <?php 
 namespace Qvm\Controller;
 
+use Zend\Mvc\Controller\Plugin\Redirect;
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Qvm\Form\RechercheGroupeForm;
 use Qvm\Model\Group;
@@ -46,7 +48,22 @@ class GroupController extends AbstractActionController
             'id' => $idGroupe,
             'group' => $this->getGroupTable()->getGroup($idGroupe),
     	 	'membres' => $this->getGroupTable()->getMembersByGroup($idGroupe),
+    	 	'activites' => $this->getGroupTable()->getActivitesByGroup($idGroupe),
         );
+    }
+    
+    public function listeMembresAction(){
+    	$idGroupe = (int) $this->params()->fromRoute('id', 0);
+    	if (!$idGroupe) {
+    		return $this->redirect()->toRoute('group', array(
+    				'action' => 'index'
+    		));
+    	}
+    	
+    	return array(
+    		'group' => $this->getGroupTable()->getGroup($idGroupe),
+    		'membres' => $this->getGroupTable()->getMembersByGroup($idGroupe)
+    	);
     }
     
     public function rejoindreAction(){
