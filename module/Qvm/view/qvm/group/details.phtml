@@ -1,8 +1,48 @@
 <h1>Groupe " <?php echo $group->label;?> "</h1>
 <h2>Liste des membres</h2>
 <table class="table">
-<?php //foreach ( $membres as $membre ) : ?>
-	<td><?php //echo $this->escapeHtml($membre->surname); ?></td>
+<?php
+$nbMembres = count($membres);
+
+foreach ( $membres as $index => $membre ) : 
+if ($index <= 3){
+?>
+ <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+	<td>
+		<?php echo $this->escapeHtml($membre->firstname).'&nbsp;'; 
+		echo $this->escapeHtml($membre->surname).'&nbsp';?>
+		<span class="right">
+			<?php 
+				if ($this->escapeHtml($membre->is_sysadmin) == 1){
+					echo 'Administrateur du groupe';
+				}
+			?>
+		</span>
+		<div class="decalage-droite">
+			<?php 
+				echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
+				if (isset($membre->phonenumber)){
+					echo 'Num&eacute;ro de t&eacute;l&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
+				}
+				if ($this->escapeHtml($membre->is_sysadmin) == 1){
+					echo 'Administrateur du groupe';
+				}
+			?>
+		</div>
+	</td>
 	<td></td>
-<?php //endforeach; ?>
+</tr>
+<?php 
+}
+endforeach; ?>
 </table>
+<?php 
+if ($index >= 4){
+?>
+<p class="table">
+	<a class="btn btn-success btn-small btn-right" href="<?php echo $this->url('group', array('action'=>'index'));?>">
+		<?php echo $this->translate("Plus de membres") ?> &raquo;
+	</a>
+</p>
+<?php
+}

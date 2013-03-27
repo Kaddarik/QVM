@@ -11,9 +11,10 @@ echo $this->formCollection($form);
 
 <table class="table">
 <?php 
-foreach ( $groups as $group ) :
+$nbGroupe = count ( $groups );
+foreach ( $groupsLimit as $group ) :
 	?>
-<tr>
+<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 	<td>
 		<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
 			<?php echo $this->escapeHtml($group->label);?>
@@ -22,3 +23,12 @@ foreach ( $groups as $group ) :
 </tr>
 <?php endforeach; ?>
 </table>
+<?php
+if ($nbGroupe > $nbLimit) {
+	?>
+<p class="pagination">
+	Pagination
+</p>
+<?php
+}
+?>

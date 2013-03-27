@@ -1,10 +1,18 @@
 <?php
 namespace Qvm\Model;
 
+use Zend\Filter\Int;
+
+use Zend\XmlRpc\Value\Integer;
+
+use Zend\Db\Sql\Sql;
+
 use Zend\Db\TableGateway\AbstractTableGateway;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db;
 use Zend\Db\Sql\Select;
+use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Where;
 use Zend\Db\Adapter\Platform\Mysql;
 
@@ -26,44 +34,33 @@ class GroupTable
 		return $resultSet;
 	}
 	
-	public function fetchLimit()
+	public function fetchLimit($nbLimit)
 	{
-		$resultSet = $this->tableGateway->select(function (Select $select){
-			$select->where->equalTo('is_private', 0);
-			$select->order('label')->limit(5);
-		});
-		return $resultSet;
+		$select = new Select;
+		$select->from('group');
+		$select->where->equalTo('is_private', 0);
+		$select->order('label')->limit($nbLimit);
+		
+		return $this->tableGateway->selectWith($select);
 	}
 	
 	public function getMembersByGroup($idGroupe){
-		
-		
-		$select = new Select('person');
-		$select->columns(array('firstname', 'surname', 'mail', 'phonenumber', 'is_sysadmin'))
+		$select = new Select;
+		$select->columns(array('firstname', 'surname', 'mail', 'phonenumber', 'is_sysadmin'))->from('person')
 			->join('groupmember', 'person.id_person = groupmember.id_person', array())
 			->join('group', 'groupmember.id_group = group.id_group', array())
-			->where(array('group.id_group' => $idGroupe));
+			->where(array('group.id_group' => $idGroupe))
+			->order('is_sysadmin DESC');
+ 		//echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
 		
-		/*	$select = new Select();
-			$select->columns(array('firstname', 'surname', 'mail', 'phonenumber', 'is_sysadmin'))->from('person')
-			->join('groupmember', 'groupmember.id_person = person.id_person', array())
-			->join('group', 'group.id_group = group.id_group', array());
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
 		
-			$where = new Where();
-			$where->equalTo('id_group', $idGroupe) ;
-			$select->where($where);*/
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
 		
-			echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
-			
-			
-			//return $this->tableGateway->selectWith($select);
-		
-		
-		
-		
-		
-		
-		//return $this->tableGateway->selectWith($select);
+		return $resultSet;
 	}
 	
 	public function getGroup($id)
