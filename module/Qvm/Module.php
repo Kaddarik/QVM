@@ -31,6 +31,8 @@ use Qvm\Model\PersonTable;
 use Qvm\Model\Person;
 use Qvm\Model\GroupMemberTable;
 use Qvm\Model\GroupMember;
+use Qvm\Model\ParticipatingGroupTable;
+use Qvm\Model\ParticipatingGroup;
 
 
 
@@ -207,6 +209,17 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new VoteKind());
     						return new TableGateway('votekind', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\ParticipatingGroupTable' =>  function($sm) {
+    						$tableGateway = $sm->get('ParticipatingGroupTableGateway');
+    						$table = new ParticipatingGroupTable($tableGateway);
+    						return $table;
+    					},
+    					'ParticipatingGroupTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new ParticipatingGroup());
+    						return new TableGateway('participatinggroup', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);
