@@ -1,39 +1,24 @@
 <?php
-use Zend\Validator\File\Count;
-use Zend\Form\Element;
-use Zend\Form\Element\Select;
-use Zend\Form\Form;
+$form = $this->form;
+echo $this->form ()->openTag ( $form );
 ?>
-
-<h1>Mes prochains Evenements</h1>
+<h1>Mes prochains &eacutev&eacutenements</h1>
 <table class="table">
 <?php
-$vote = array (
-		1 => "OUI",
-		2 => "NON",
-		3 => "P-E",
-		4 => "En Attente" 
-);
-$listVote = new  Select ();
-$listVote->setAttributes($vote);
-
-$form = $this->form;
-$form->prepare();
-echo $this->form()->openTag($form);
-
 foreach ( $upcomingParticipatings as $upcomingParticipating ) :
 	?>
  <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
-		<td><?php echo ($listVote->getAttribute($this->escapeHtml($upcomingParticipating->vote)));?></td>
-		<td><?php echo $this->formCollection($form);?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$upcomingParticipating->vote) );?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
 	</tr>
+		
 <?php 
 endforeach; ?>
 </table>
 
-<h1>Mes Evenements en attente de vote</h1>
+<h1>Mes &eacutev&eacutenements en attente de vote</h1>
 <table class="table">
 <?php
 $nbEvtEnAttente = count ( $pendingParticipatings );
@@ -43,8 +28,8 @@ foreach ( $pendingParticipatingsLimit as $pendingParticipating ) :
  <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
 		<td><?php echo $this->escapeHtml($pendingParticipating->date);?></td>
-		<td><?php echo ($listVote->getAttribute($this->escapeHtml($pendingParticipating->vote)));?></td>
-		<td><?php echo $this->formRow($form->get('vote'));?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$pendingParticipating->vote) );?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
 	</tr>
 <?php endforeach; 
 echo $this->form()->closeTag();
@@ -62,7 +47,7 @@ if ($nbEvtEnAttente > $nbLimit) {
 ?>
 
 <br>
-<h1>Mes Groupes</h1>
+<h1>Mes groupes</h1>
 <table class="table">
 <?php
 $nbGroupe = count ( $groups );

@@ -2,6 +2,7 @@
 namespace Qvm\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Select;
 
 class ActivityTable
 {
@@ -15,6 +16,14 @@ class ActivityTable
 	public function fetchAll()
 	{
 		$resultSet = $this->tableGateway->select();
+		return $resultSet;
+	}
+	
+	public function fetchLimit()
+	{
+		$resultSet = $this->tableGateway->select(function (Select $select){
+			$select->order('title')->limit(10);
+		});
 		return $resultSet;
 	}
 

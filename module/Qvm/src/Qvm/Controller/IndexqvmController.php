@@ -16,6 +16,7 @@ use Zend\Session\Container;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Qvm\Form\VoteEvenementForm;
+use Qvm\Model\VoteKindTable;
 use Qvm\Model\PendingParticipating;
 
 class IndexqvmController extends AbstractActionController
@@ -24,12 +25,21 @@ class IndexqvmController extends AbstractActionController
 	protected $upcomingParticipatingTable;
 	protected $pendingParticipatingTable;
 	protected $groupTable;
+	protected $votekindTable;
 
 	public function indexAction()
 	{
 		$nbLimit = (int) 5;
 		
 		$form  = new VoteEvenementForm();
+		$votekindTable = $this->getVoteKindTable();
+		$value_options = array();
+		
+		foreach ($votekindTable->fetchAll() as $votekind) {
+			$value_options[$votekind->id_votekind] = $votekind->label;
+		}
+		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			 
@@ -95,6 +105,15 @@ class IndexqvmController extends AbstractActionController
 			$this->pendingParticipatingTable = $sm->get('Qvm\Model\PendingParticipatingTable');
 		}
 		return $this->pendingParticipatingTable;
+	}
+	
+	public function getVoteKindTable()
+	{
+		if (!$this->votekindTable) {
+			$sm = $this->getServiceLocator();
+			$this->votekindTable = $sm->get('Qvm\Model\VoteKindTable');
+		}
+		return $this->votekindTable;
 	}
 
     public function fooAction()

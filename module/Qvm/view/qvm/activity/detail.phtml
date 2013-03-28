@@ -1,1 +1,19 @@
-<head><?php echo"Je suis dans l'index du activitycontroller"; ?></head>
+<?php
+$form = $this->form;
+echo $this->form ()->openTag ( $form );
+?>
+<h1>Activit&eacute "<?php echo $this->escapeHtml($activity->title);?>"</h1>
+
+<h1>Liste des groupes</h1>
+<table class="table">
+<?php
+foreach ( $groups as $group ) :
+	?>
+ <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+		<td><?php echo $this->escapeHtml($group->label);?></td>
+	</tr>
+		
+<?php 
+endforeach; ?>
+</table>
+

@@ -4,10 +4,11 @@ namespace Qvm\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
 
-class EventTable
+class AllEventsTable
 {
 	protected $tableGateway;
-
+	protected $limit;
+	
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
@@ -20,21 +21,11 @@ class EventTable
 	}
 	
 	public function fetchLimit()
-	{
+	{	
 		$resultSet = $this->tableGateway->select(function (Select $select){
-			$select->order('date')->limit(5);
+			$select->limit(5);
 		});
 		return $resultSet;
 	}
-	
-	public function getEvent($id)
-	{
-		$id  = (int) $id;
-		$rowset = $this->tableGateway->select(array('id_event' => $id));
-		$row = $rowset->current();
-		if (!$row) {
-			throw new \Exception("Could not find row $id");
-		}
-		return $row;
-	}
+
 }

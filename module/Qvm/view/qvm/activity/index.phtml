@@ -1,1 +1,50 @@
-<head><?php echo"Je suis dans l'index du activitycontroller"; ?></head>
+<?php
+$form = $this->form;
+echo $this->form ()->openTag ( $form );
+?>
+<h1>Mes activit&eacutes</h1>
+<table class="table">
+<?php 
+foreach ($activites as $activity) :
+	?>
+<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+	<td>
+		<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activity->id_activity));?>" >
+			<?php echo $this->escapeHtml($activity->description);?>
+		</a>
+	</td>
+</tr>
+<?php endforeach; ?>
+</table>
+<?php
+if ($nbActivites > 10) {
+	?>
+<p>
+	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus d'activit&eacutes") ?> &raquo;</a>
+</p>
+<?php
+}
+?>
+
+<h1>Mes &eacutev&eacutenements</h1>
+<table class="table">
+<?php 
+foreach ($events as $event) :
+	?>
+<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+		<td><?php echo $this->escapeHtml($event->title);?></td>
+		<td><?php echo $this->escapeHtml($event->date);?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) );?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+<?php
+if ($nbEvents > 10) {
+	?>
+<p>
+	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus d'&eacutev&eacutenements") ?> &raquo;</a>
+</p>
+<?php
+}
+?>
