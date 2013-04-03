@@ -37,10 +37,7 @@ use Qvm\Model\GroupMemberTable;
 use Qvm\Model\GroupMember;
 use Qvm\Model\ParticipatingGroupTable;
 use Qvm\Model\ParticipatingGroup;
-
-
-
-
+use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Db\ResultSet\ResultSet;
@@ -49,6 +46,14 @@ use Zend\Db\TableGateway\TableGateway;
 
 class Module implements AutoloaderProviderInterface
 {
+	public function onBootstrap(MvcEvent $e)
+	{
+		$e->getApplication()->getServiceManager()->get('translator');
+		$eventManager        = $e->getApplication()->getEventManager();
+		$moduleRouteListener = new ModuleRouteListener();
+		$moduleRouteListener->attach($eventManager);
+	}
+	
     public function getAutoloaderConfig()
     {
         return array(
@@ -69,15 +74,6 @@ class Module implements AutoloaderProviderInterface
         return include __DIR__ . '/config/module.config.php';
     }
 
-    public function onBootstrap($e)
-    {
-        // You may not need to do this if you're doing it elsewhere in your
-        // application
-        $eventManager        = $e->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-    }
-    
     public function getServiceConfig()
     {
     	return array(
