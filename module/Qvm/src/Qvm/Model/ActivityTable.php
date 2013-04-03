@@ -3,6 +3,8 @@ namespace Qvm\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\Platform\Mysql;
 
 class ActivityTable
 {
@@ -64,6 +66,23 @@ class ActivityTable
 				throw new \Exception('Form id does not exist');
 			}
 		}
+	}
+	
+	public function getActivitesByGroup($idGroupe){
+		$select = new Select;
+		$select->columns(array('id_activity', 'title'))->from('activity')
+		->join('participatinggroup', 'activity.id_activity = participatinggroup.id_activity', array())
+		->join('group', 'group.id_group = participatinggroup.id_group', array())
+		->where(array('group.id_group' => $idGroupe));
+	
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
+	
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
+	
+		return $resultSet;
 	}
 
 	/*public function deleteAlbum($id)

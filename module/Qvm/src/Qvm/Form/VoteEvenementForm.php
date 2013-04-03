@@ -19,6 +19,7 @@ class VoteEvenementForm extends Form
                 'type'  => 'submit',
                 'value' => 'Valider',
                 'id' => 'submitbutton',
+            	'class' => 'btn btn-success btn-small btn-vert-cent'
             ),
         ));
 	}

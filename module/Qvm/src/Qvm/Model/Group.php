@@ -31,7 +31,7 @@ class Group implements InputFilterAwareInterface
             $factory     = new InputFactory();
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'id_event',
+                'name'     => 'id_group',
                 'required' => false,
                 )
             ));

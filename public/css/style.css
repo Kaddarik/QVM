@@ -35,9 +35,6 @@ div.container a.brand {
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
-.btn-align-fieldset{
-	width:68% !important;
-}
 .marg-bas{
 	margin-bottom:25px;
 }
@@ -55,4 +52,20 @@ div.container a.brand {
 }
 .pagination{
 	text-align:center;
+}
+.width80{
+	width:80%;
+}
+.btn-vert-cent{
+	vertical-align:25%;
+	margin-left:5px;
+}
+.btn-rotat{
+	-webkit-transform:rotate(90deg);
+	-moz-transform:rotate(90deg);
+	-o-transform:rotate(90deg);
+	-ms-transform:rotate(90deg);
+}
+.display-none{
+	display:none;
 }

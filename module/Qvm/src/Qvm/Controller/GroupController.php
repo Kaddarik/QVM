@@ -5,11 +5,14 @@ use Zend\Mvc\Controller\Plugin\Redirect;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Qvm\Form\RechercheGroupeForm;
+use Qvm\Form\GroupForm;
 use Qvm\Model\Group;
 
 class GroupController extends AbstractActionController
 {
 	protected $groupTable;
+	protected $activityTable;
+	protected $personTable;
 
     public function indexAction()
     {
@@ -47,8 +50,8 @@ class GroupController extends AbstractActionController
     	 return array(
             'id' => $idGroupe,
             'group' => $this->getGroupTable()->getGroup($idGroupe),
-    	 	'membres' => $this->getGroupTable()->getMembersByGroup($idGroupe),
-    	 	'activites' => $this->getGroupTable()->getActivitesByGroup($idGroupe),
+    	 	'membres' => $this->getPersonTable()->getMembersByGroup($idGroupe),
+    	 	'activites' => $this->getActivityTable()->getActivitesByGroup($idGroupe),
         );
     }
     
@@ -62,12 +65,35 @@ class GroupController extends AbstractActionController
     	
     	return array(
     		'group' => $this->getGroupTable()->getGroup($idGroupe),
-    		'membres' => $this->getGroupTable()->getMembersByGroup($idGroupe)
+    		'membres' => $this->getPersonTable()->getMembersByGroup($idGroupe)
+    	);
+    }
+    
+    public function createAction() {
+    	$form = new GroupForm ();
+    	$request = $this->getRequest ();
+    	if ($request->isPost ()) {
+    		$group = new Group();
+    		$form->setInputFilter ( $group->getInputFilter () );
+    		$form->setData ($request->getPost ());
+    		if ($form->isValid ()) {
+    			$group->exchangeArray($form->getData());
+    			$this->getGroupTable()->saveGroup($group);
+    			
+    			return $this->redirect ()->toRoute ( 'group' );
+    		}
+    	}
+    	return array (
+    			'form' => $form
     	);
     }
     
     public function rejoindreAction(){
-    	return;
+    	
+    	return array(
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivate(),	
+    		'groups' => $this->getGroupTable()->fetchAll()
+    	);
     }
     
 	public function getGroupTable()
@@ -77,6 +103,24 @@ class GroupController extends AbstractActionController
 			$this->groupTable = $sm->get('Qvm\Model\GroupTable');
 		}
 		return $this->groupTable;
+	}
+	
+	public function getActivityTable()
+	{
+		if (!$this->activityTable) {
+			$sm = $this->getServiceLocator();
+			$this->activityTable = $sm->get('Qvm\Model\ActivityTable');
+		}
+		return $this->activityTable;
+	}
+	
+	public function getPersonTable()
+	{
+		if (!$this->personTable) {
+			$sm = $this->getServiceLocator();
+			$this->personTable = $sm->get('Qvm\Model\PersonTable');
+		}
+		return $this->personTable;
 	}
 	
 }

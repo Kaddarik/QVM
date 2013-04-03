@@ -1,1 +1,24 @@
-C'est ici qu'on peut rejoindre un groupe !!
+<h1>Liste des groupes publiques</h1>
+
+<div class="row-fluid">
+	<div class="span9">
+		<table class="table">
+		<?php 
+		foreach ( $groups as $group ) :
+			?>
+		<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+			<td>
+				<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
+					<?php echo $this->escapeHtml($group->label);?>
+				</a>
+				<span class="pull-right">
+					<a href="#">
+						Rejoindre
+					</a>
+				</span>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+		</table>
+	</div>
+</div>

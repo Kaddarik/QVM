@@ -1,9 +1,9 @@
 <h1>Groupe " <?php echo $group->label;?> "</h1>
 
 <div class="row-fluid">
-	<div class="span6">
+	<div class="span5">
 		<h2>Liste des membres</h2>
-		<table class="table">
+		<table class="table" id="details-membres-hide">
 			<?php
 			$nbMembres = count($membres);
 			
@@ -13,15 +13,25 @@
 					 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 						<td>
 							<?php echo $this->escapeHtml($membre->firstname).'&nbsp;'; 
-							echo $this->escapeHtml($membre->surname).'&nbsp';?>
+							echo $this->escapeHtml($membre->surname).'&nbsp';
+							if($indexMembre != 0){
+								$membreAdminDetails='display-none';
+								$membreAdminButton='btn-rotat';
+							}
+							else{
+								$membreAdminDetails='';
+								$membreAdminButton='';
+							}
+							?>
 							<span class="pull-right">
 								<?php 
 									if ($this->escapeHtml($membre->is_sysadmin) == 1){
 										echo 'Administrateur du groupe';
 									}
 								?>
+								<a href="#" class="<?php echo 'btnHide btn btn-success btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
 							</span>
-							<div class="decalage-droite">
+							<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
 								<?php 
 									echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
 									if (isset($membre->phonenumber)){
@@ -52,7 +62,7 @@
 		}
 		?>
 	</div>
-	<div class="span6">
+	<div class="span5">
 		<h2>Liste des activit&eacute;s</h2>
 		<table class="table">
 			<?php 
