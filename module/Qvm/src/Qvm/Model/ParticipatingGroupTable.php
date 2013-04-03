@@ -14,7 +14,9 @@ protected $tableGateway;
 
 	public function fetchAll()
 	{
-		$resultSet = $this->tableGateway->select();
+		$resultSet = $this->tableGateway->select(function (Select $select){
+			$select->order('date');
+		});
 		return $resultSet;
 	}
 	

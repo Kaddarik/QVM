@@ -1,26 +1,20 @@
-<h1>Mes Activit&eacutes</h1>
-
-
+<?php
+$form = $this->form;
+echo $this->form ()->openTag ( $form );
+?>
+<h1>Mes activit&eacutes</h1>
 <table class="table">
 <?php 
-foreach ($activites as $activity) :
+foreach ($activities as $activity) :
 	?>
-<tr>
+<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 	<td>
-		<a href="<?php echo $this->url('activity', array('action'=>'details', 'id' => $activity->id_activity));?>" >
-			<?php echo $this->escapeHtml($activity->description);?>
+		<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activity->id_activity));?>" >
+			<?php echo $this->escapeHtml($activity->title);?>
 		</a>
 	</td>
 </tr>
 <?php endforeach; ?>
 </table>
-<?php
-if ($nbActivites > 10) {
-	?>
-<p>
-	<a class="btn btn-success btn-small" href="#"><?php echo $this->translate("Plus d'activit&eacutes") ?> &raquo;</a>
-</p>
-<?php
 
-}
-?>
+<?php echo $this->paginationControl($this->activities, 'Elastic', 'pagination', array('route' => 'paginationActivityList/page')); ?>

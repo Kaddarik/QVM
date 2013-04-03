@@ -10,6 +10,34 @@ return array(
     ),
     'router' => array(
         'routes' => array(
+        	'paginationActivityList' => array(
+    			'type' => 'Segment', 
+     			'options' => array(
+                    'route'    => '/activity/list/page/[:page]',
+                    'constraints' => array(
+                        'page'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Qvm\Controller\Activity',
+                        'action' => 'list',
+                    	'page' => 1
+                    ),
+    			)
+            ),
+        	'paginationActivityListEvents' => array(
+        			'type' => 'Segment',
+        			'options' => array(
+        					'route'    => '/activity/list-events/page/[:page]',
+        					'constraints' => array(
+        							'page'     => '[0-9]+',
+        					),
+        					'defaults' => array(
+        							'controller' => 'Qvm\Controller\Activity',
+        							'action' => 'listEvents',
+        							'page' => 1
+        					),
+        			)
+        		),
             'indexqvm' => array(
                 'type'    => 'segment',
                 'options' => array(
@@ -76,5 +104,6 @@ return array(
         'template_path_stack' => array(
             'qvm' => __DIR__ . '/../view',
         ),
+    		'template_map' => array('pagination' => __DIR__ . '/../view/qvm/pagination.phtml')
     ),
 );

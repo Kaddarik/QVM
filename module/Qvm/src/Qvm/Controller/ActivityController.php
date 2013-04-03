@@ -2,11 +2,16 @@
 
 namespace Qvm\Controller;
 
+use Zend\Paginator\Adapter\Iterator;
+use Zend\Paginator\Paginator;
+use Qvm\Model\PreferenceTable;
 use Qvm\Model\GroupTable;
 use Qvm\Form\VoteEvenementForm;
 use Qvm\Model\AllEvents;
 use Qvm\Model\AllEventsTable;
+use Qvm\Model\PersonTable;
 use Qvm\Model\VoteKindTable;
+use Qvm\Model\CommentTable;
 use Qvm\Model\CategoryTable;
 use Qvm\Model\ActivityCategoryTable;
 use Qvm\Model\Activity;
@@ -22,6 +27,9 @@ class ActivityController extends AbstractActionController {
 	protected $allEventsTable;
 	protected $votekindTable;
 	protected $groupTable;
+	protected $preferenceTable;
+	protected $commentTable;
+	protected $personTable;
 	protected $value_options;
 	
 	public function indexAction() {
@@ -33,10 +41,10 @@ class ActivityController extends AbstractActionController {
 		}
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		return new ViewModel(array(
-    		'activites' => $this->getActivityTable()->fetchLimit(),
-			'nbActivites' => count ($this->getActivityTable()->fetchAll()),
-			'events' => $this->getAllEventsTable()->fetchLimit(),
-			'nbEvents' =>  count ($this->getAllEventsTable()->fetchAll()),
+    		'activites' => $this->getAllEventsTable()->getActivityByPerson(1,5),
+			'nbActivites' => count ($this->getAllEventsTable()->getActivityByPerson(1,null)),
+			'events' => $this->getAllEventsTable()->getEventsByPerson(1,5),
+			'nbEvents' =>  count ($this->getAllEventsTable()->getEventsByPerson(1, null)),
 			'form' => $form,
 		));
 	}
@@ -49,14 +57,42 @@ class ActivityController extends AbstractActionController {
 			$value_options[$votekind->id_votekind] = $votekind->label;
 		}
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
-		
+		$form->get ( 'voteEvenement' )->setLabel('Mon vote par defaut : ');
 		$id = (int) $this->params()->fromRoute('id', 0);
+		
+		$activityCategory = $this->getActivityCategoryTable()->getActivityCategory($id);
 		$activity = $this->getActivityTable()->getActivity($id);
+
 		
 		return new ViewModel(array(
 				'groups' => $this->getGroupTable()->getGroupsByActivity($activity->id_activity),
+				'events' => $this->getAllEventsTable()->getEventsByActivityAndPerson($activity->id_activity,1),
+				'category' => $this->getCategoryTable()->getCategory($activityCategory->id_category),
+				'preference' => $this->getPreferenceTable()->getPreferenceByActivityAndPerson($activity->id_activity, 1),
 				'form' => $form,
 				'activity' => $activity,
+		));
+	}
+	
+	public function detailEventAction() {
+		$form  = new VoteEvenementForm();
+		$votekindTable = $this->getVoteKindTable();
+		$value_options = array();
+		foreach ($votekindTable->fetchAll() as $votekind) {
+			$value_options[$votekind->id_votekind] = $votekind->label;
+		}
+		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
+		$form->get ( 'voteEvenement' )->setLabel('Participation : ');
+		
+		$id = (int) $this->params()->fromRoute('id', 0);
+		$event = $this->getAllEventsTable()->getEvent($id);
+		$activity = $this->getActivityTable()->getActivity($event->id_activity);
+		$comments = $this->getCommentTable()->getCommentByEvent($id);
+		return new ViewModel(array(
+				'comments' => $comments,
+				'form' => $form,
+				'activity' => $activity,
+				'event' => $event,
 		));
 	}
 	
@@ -86,12 +122,40 @@ class ActivityController extends AbstractActionController {
 		);
 	}
 	
-/*	public function listAction() {
+	public function listAction() {
+		$page = (int) $this->params()->fromRoute('page', 1);
+		$activites = $this->getAllEventsTable()->getActivityByPerson(1,null);
+		$iteratorAdapter = new Iterator($activites);
+		$paginator = new Paginator($iteratorAdapter);
+		$paginator->setCurrentPageNumber($page);
+		$paginator->setItemCountPerPage(15);
 		return new ViewModel(array(
-    		'activites' => $this->getActivityTable()->fetchLimit(),
-			'nbActivites' => count ($this->getActivityTable()->fetchAll()),
+				'activities' => $paginator,
 		));
-	}*/
+	}
+	
+	public function listEventsAction() {
+		$form  = new VoteEvenementForm();
+		$votekindTable = $this->getVoteKindTable();
+		$value_options = array();
+		foreach ($votekindTable->fetchAll() as $votekind) {
+			$value_options[$votekind->id_votekind] = $votekind->label;
+		}
+		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
+		
+		$page = (int) $this->params()->fromRoute('page', 1);
+		$events = $this->getAllEventsTable()->getEventsByPerson(1,null);
+		$iteratorAdapter = new Iterator($events);
+		$paginator = new Paginator($iteratorAdapter);
+		$paginator->setCurrentPageNumber($page);
+		$paginator->setItemCountPerPage(15);
+		
+		return new ViewModel(array(
+				'events' => $paginator,
+				'form' => $form,
+				
+		));
+	}
 	
 	public function getActivityTable()
 	{
@@ -145,6 +209,34 @@ class ActivityController extends AbstractActionController {
 			$this->groupTable = $sm->get('Qvm\Model\GroupTable');
 		}
 		return $this->groupTable;
+	}
+	
+
+	public function getPreferenceTable()
+	{
+		if (!$this->preferenceTable) {
+			$sm = $this->getServiceLocator();
+			$this->preferenceTable = $sm->get('Qvm\Model\PreferenceTable');
+		}
+		return $this->preferenceTable;
+	}
+	
+	public function getCommentTable()
+	{
+		if (!$this->commentTable) {
+			$sm = $this->getServiceLocator();
+			$this->commentTable = $sm->get('Qvm\Model\CommentTable');
+		}
+		return $this->commentTable;
+	}
+	
+	public function getPersonTable()
+	{
+		if (!$this->personTable) {
+			$sm = $this->getServiceLocator();
+			$this->personTable = $sm->get('Qvm\Model\PersonTable');
+		}
+		return $this->personTable;
 	}
 	
 

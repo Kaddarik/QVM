@@ -15,8 +15,12 @@ use Qvm\Model\ActivityCategory;
 use Qvm\Model\ActivityCategoryTable;
 use Qvm\Model\Category;
 use Qvm\Model\CategoryTable;
+use Qvm\Model\Comment;
+use Qvm\Model\CommentTable;
 use Qvm\Model\Group;
 use Qvm\Model\GroupTable;
+use Qvm\Model\Preference;
+use Qvm\Model\PreferenceTable;
 use Qvm\Model\UpcomingParticipatingTable;
 use Qvm\Model\UpcomingParticipating;
 use Qvm\Model\PendingParticipatingTable;
@@ -220,6 +224,28 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new ParticipatingGroup());
     						return new TableGateway('participatinggroup', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\PreferenceTable' =>  function($sm) {
+    						$tableGateway = $sm->get('PreferenceTableGateway');
+    						$table = new PreferenceTable($tableGateway);
+    						return $table;
+    					},
+    					'PreferenceTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Preference());
+    						return new TableGateway('preference', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\CommentTable' =>  function($sm) {
+    						$tableGateway = $sm->get('CommentTableGateway');
+    						$table = new CommentTable($tableGateway);
+    						return $table;
+    					},
+    					'CommentTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Comment());
+    						return new TableGateway('comment', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);
