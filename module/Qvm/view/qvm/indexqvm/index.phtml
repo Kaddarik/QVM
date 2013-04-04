@@ -29,8 +29,6 @@ echo $this->form ()->openTag ( $form );
 		<h1>Mes &eacutev&eacutenements en attente de vote</h1>
 		<table class="table">
 			<?php
-			$nbEvtEnAttente = count ( $pendingParticipatings );
-			
 			foreach ( $pendingParticipatingsLimit as $pendingParticipating ) :
 				?>
 				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
@@ -67,7 +65,6 @@ echo $this->form ()->openTag ( $form );
 		<h1>Mes groupes</h1>
 		<table class="table">
 			<?php
-			$nbGroupe = count ( $groups );
 			foreach ( $groupsLimit as $group ) :
 				?>
 				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
@@ -80,7 +77,7 @@ echo $this->form ()->openTag ( $form );
 			<?php endforeach; ?>
 		</table>
 		<?php
-		if ($nbGroupe > $nbLimit) {
+		if ($nbGroups > $nbLimit) {
 			?>
 			<p class="table">
 				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'index'));?>">
