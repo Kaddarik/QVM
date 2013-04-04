@@ -21,7 +21,7 @@
 							}?>
 							<span class="pull-right">
 								<?php 
-									if ($this->escapeHtml($membre->is_sysadmin) == 1){
+									if ($this->escapeHtml($membre->is_admin) == 1){
 										echo 'Administrateur du groupe';
 									}
 								?>
@@ -33,7 +33,7 @@
 									if (isset($membre->phonenumber)){
 										echo 'Num&eacute;ro de t&eacute;l&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
 									}
-									if ($this->escapeHtml($membre->is_sysadmin) == 1){
+									if ($this->escapeHtml($membre->is_admin) == 1){
 										echo 'Administrateur du groupe';
 									}
 								?>

@@ -6,9 +6,10 @@
 		<table class="table" id="details-membres-hide">
 			<?php
 			$nbMembres = count($membres);
+			$maxMembres = 3;
 			
 			foreach ( $membres as $indexMembre => $membre ) : 
-				if ($indexMembre <= 3){
+				if ($indexMembre <= $maxMembres){
 					?>
 					 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 						<td>
@@ -25,7 +26,7 @@
 							?>
 							<span class="pull-right">
 								<?php 
-									if ($this->escapeHtml($membre->is_sysadmin) == 1){
+									if ($this->escapeHtml($membre->is_admin) == 1){
 										echo 'Administrateur du groupe';
 									}
 								?>
@@ -35,9 +36,9 @@
 								<?php 
 									echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
 									if (isset($membre->phonenumber)){
-										echo 'Num&eacute;ro de t&eacute;l&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
+										echo 'Num&eacute;ro de t&eacute;lis_admin&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
 									}
-									if ($this->escapeHtml($membre->is_sysadmin) == 1){
+									if ($this->escapeHtml($membre->is_admin) == 1){
 										echo 'Administrateur du groupe';
 									}
 								?>
@@ -51,7 +52,7 @@
 		</table>
 	
 		<?php 
-		if ($indexMembre >= 4){
+		if ($indexMembre > $maxMembres){
 			?>
 			<p class="table">
 				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
@@ -66,8 +67,10 @@
 		<h2>Liste des activit&eacute;s</h2>
 		<table class="table">
 			<?php 
+			$maxActivite = 1;
 			
-			foreach ($activites as $activite) :?>
+			foreach ($activites as $indexActivite => $activite) :
+				if ($indexActivite <= $maxActivite){ ?>
 					<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 						<td>
 							<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
@@ -75,9 +78,22 @@
 							</a>
 						</td>
 					</tr>
-					<?php 
+					<?php
+				} 
 			endforeach;
 			?>
 		</table>
+		
+		<?php 
+		if ($indexActivite > $maxActivite){
+			?>
+			<p class="table">
+				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeActivites', 'id' => $id));?>">
+					<?php echo $this->translate("Plus d'activit&eacute;s") ?> &raquo;
+				</a>
+			</p>
+			<?php
+		}
+		?>
 	</div>
 </div>

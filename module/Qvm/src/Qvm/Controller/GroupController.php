@@ -1,6 +1,10 @@
 <?php 
 namespace Qvm\Controller;
 
+use Zend\View\Model\ViewModel;
+
+use Zend\Validator\File\Count;
+
 use Zend\Mvc\Controller\Plugin\Redirect;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -13,6 +17,7 @@ class GroupController extends AbstractActionController
 	protected $groupTable;
 	protected $activityTable;
 	protected $personTable;
+	protected $groupMemberTable;
 
     public function indexAction()
     {
@@ -32,8 +37,8 @@ class GroupController extends AbstractActionController
     	
     	return array(
     		'nbLimit' => $nbLimit,
-    		'groups' => $this->getGroupTable()->fetchAll(),
-    		'groupsLimit' => $this->getGroupTable()->fetchLimit($nbLimit),
+    		'nbGroups' => count($this->getGroupTable()->getGroupByPerson(1, null)),
+    		'groupsLimit' => $this->getGroupTable()->getGroupByPerson(1, $nbLimit),
 			'form' => $form    		
     	);
     }
@@ -69,6 +74,20 @@ class GroupController extends AbstractActionController
     	);
     }
     
+    public function listeActivitesAction(){
+    	$idGroupe = (int) $this->params()->fromRoute('id', 0);
+    	if (!$idGroupe) {
+    		return $this->redirect()->toRoute('group', array(
+    				'action' => 'index'
+    		));
+    	}
+    	 
+    	return array(
+    			'group' => $this->getGroupTable()->getGroup($idGroupe),
+    			'activites' => $this->getActivityTable()->getActivitesByGroup($idGroupe)
+    	);
+    }
+    
     public function createAction() {
     	$form = new GroupForm ();
     	$request = $this->getRequest ();
@@ -89,11 +108,24 @@ class GroupController extends AbstractActionController
     }
     
     public function rejoindreAction(){
+    	//$this->getGroupMemberTable()->updateGroupsPrivateInvit(1, 2);
     	
     	return array(
-    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivate(),	
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
     		'groups' => $this->getGroupTable()->fetchAll()
     	);
+    }
+    
+    public function majGroupsPrivateInvitAction(){
+    	$this->getGroupMemberTable()->updateGroupsPrivateInvit(1, 2);
+    	
+    	$result = new ViewModel(array(
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
+    		'groups' => $this->getGroupTable()->fetchAll()
+    			));
+    	$result->setTemplate('qvm\group\rejoindre.phtml');
+    	
+    	return $result;
     }
     
 	public function getGroupTable()
@@ -121,6 +153,15 @@ class GroupController extends AbstractActionController
 			$this->personTable = $sm->get('Qvm\Model\PersonTable');
 		}
 		return $this->personTable;
+	}
+	
+	public function getGroupMemberTable()
+	{
+		if (!$this->groupMemberTable) {
+			$sm = $this->getServiceLocator();
+			$this->groupMemberTable = $sm->get('Qvm\Model\GroupMemberTable');
+		}
+		return $this->groupMemberTable;
 	}
 	
 }

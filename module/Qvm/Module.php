@@ -37,6 +37,9 @@ use Qvm\Model\GroupMemberTable;
 use Qvm\Model\GroupMember;
 use Qvm\Model\ParticipatingGroupTable;
 use Qvm\Model\ParticipatingGroup;
+use Qvm\Model\PendingTable;
+use Qvm\Model\Pending;
+
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
@@ -242,6 +245,17 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new Comment());
     						return new TableGateway('comment', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\PendingTable' =>  function($sm) {
+    						$tableGateway = $sm->get('PendingTableGateway');
+    						$table = new PendingTable($tableGateway);
+    						return $table;
+    					},
+    					'PendingTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Pending());
+    						return new TableGateway('pending', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);

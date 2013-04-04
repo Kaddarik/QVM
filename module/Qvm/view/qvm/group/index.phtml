@@ -12,7 +12,6 @@
 		?>
 		<table class="table decalage-droite width80">
 			<?php 
-			$nbGroupe = count ( $groups );
 			foreach ( $groupsLimit as $group ) :?>
 				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td>
@@ -24,7 +23,7 @@
 			<?php endforeach; ?>
 		</table>
 		<?php
-		if ($nbGroupe > $nbLimit) { 
+		if ($nbGroups > $nbLimit) { 
 			?>
 			<p class="pagination">
 				Pagination

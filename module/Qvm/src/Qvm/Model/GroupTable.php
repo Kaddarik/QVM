@@ -1,6 +1,8 @@
 <?php
 namespace Qvm\Model;
 
+use Zend\Db\Sql\Update;
+
 use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\TableGateway;
@@ -38,14 +40,14 @@ class GroupTable
 		return $this->tableGateway->selectWith($select);
 	}
 	
-	public function getGroupsPrivate()
+	/*public function getGroupsPrivate()
 	{
 		$resultSet = $this->tableGateway->select(function (Select $select){
 			//liste tous les groupes privés
 			$select->where->equalTo('is_private', 1);
 		});
 		return $resultSet;
-	}
+	}*/
 	
 	public function getGroupsByActivity($idActivity){
 		$select = new Select;
@@ -53,7 +55,6 @@ class GroupTable
 		->join('participatinggroup', 'group.id_group = participatinggroup.id_group', array())
 		->join('activity', 'participatinggroup.id_activity = activity.id_activity', array())
 		->where(array('activity.id_activity' => $idActivity));
-		//echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
 	
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();
@@ -65,6 +66,18 @@ class GroupTable
 		return $resultSet;
 	}
 	
+	public function getGroupsPrivateInvitByPerson($idPerson){
+		$select = new Select;
+		$select->columns(array('id_group', 'label'))->from('group')
+		->join('groupmember', 'group.id_group = groupmember.id_group', array())
+		->where(array('groupmember.id_person' => $idPerson))
+		->join('pending', 'groupmember.id_pending = pending.id_pending', array())
+		->where->equalTo('group.is_private', 1)
+		->and->equalTo('pending.id_pending', 1);
+		
+		return $this->tableGateway->selectWith($select);
+	}
+	
 	public function getGroup($id)
 	{
 		$id  = (int) $id;
@@ -74,6 +87,24 @@ class GroupTable
 			throw new \Exception("Could not find row $id");
 		}
 		return $row;
+	}
+	
+	public function getGroupByPerson($idPerson, $limit){
+		$select = new Select;
+		$select->columns(array('id_group', 'label', 'is_private'))->from('group')
+		->join('groupmember', 'group.id_group = groupmember.id_group')
+		->where(array('groupmember.id_person' => $idPerson))
+		->limit($limit);
+		
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
+		$resultSet->buffer();
+		$resultSet->next();
+		
+		return $resultSet;
 	}
 	
 	public function saveGroup(Group $group)
