@@ -5,7 +5,9 @@ return array (
 						'Qvm\Controller\Indexqvm' => 'Qvm\Controller\IndexqvmController',
 						'Qvm\Controller\Group' => 'Qvm\Controller\GroupController',
 						'Qvm\Controller\Activity' => 'Qvm\Controller\ActivityController',
-						'Qvm\Controller\User' => 'Qvm\Controller\UserController' 
+						'Qvm\Controller\User' => 'Qvm\Controller\UserController',
+						'Qvmrest\Controller\Group' => 'Qvmrest\Controller\GroupController',
+						'Qvmrest\Controller\Event' => 'Qvmrest\Controller\EventController',
 				) 
 		),
 		'router' => array (
@@ -131,7 +133,31 @@ return array (
 												'action' => 'index' 
 										) 
 								) 
-						) 
+						) ,
+						'rest-group' => array(
+								'type' => 'Segment',
+								'options' => array(
+										'route' => '/rest/group[/:id]',
+										'constraints' => array(
+												'id'=> '[0-9]+',
+										),
+										'defaults' => array(
+												'controller' => 'Qvmrest\Controller\Group',
+										)
+								)
+						),
+						'rest-event' => array(
+								'type' => 'Segment',
+								'options' => array(
+										'route' => '/rest/event[/:id]',
+										'constraints' => array(
+												'id'=> '[0-9]+',
+										),
+										'defaults' => array(
+												'controller' => 'Qvmrest\Controller\Event',
+										)
+								)
+						)
 				) 
 		),
 		'service_manager' => array(
@@ -151,7 +177,8 @@ return array (
 		),
 		'view_manager' => array (
 				'template_path_stack' => array (
-						'qvm' => __DIR__ . '/../view' 
+						'qvm' => __DIR__ . '/../view',
+						'qvmrest' => __DIR__ . '/../view'
 				),
 				'template_map' => array (
 						'pagination' => __DIR__ . '/../view/qvm/pagination.phtml' 

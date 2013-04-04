@@ -6,3 +6,8 @@ RewriteRule ^.*$ - [NC,L]
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
 RewriteRule ^(.*)$ - [E=BASE:%1]
 RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
+
+#Redirection vers le site mobile
+RewriteEngine On RewriteCond %{HTTP_USER_AGENT} "ipod|iphone|ipad" [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} "android|palm"
+RewriteRule (.*) http://m.votredomaine.com [R=301,L]

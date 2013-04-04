@@ -2,7 +2,7 @@
 return array(
     'modules' => array(
         'Application',
-    	'Qvm',
+    	'Qvm','Qvmrest',
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(
