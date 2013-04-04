@@ -108,23 +108,51 @@ class GroupController extends AbstractActionController
     }
     
     public function rejoindreAction(){
-    	//$this->getGroupMemberTable()->updateGroupsPrivateInvit(1, 2);
     	
     	return array(
     		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
-    		'groups' => $this->getGroupTable()->fetchAll()
+    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
+    		'groups' => $this->getGroupTable()->getGroupByPerson(1, null)
     	);
     }
     
-    public function majGroupsPrivateInvitAction(){
-    	$this->getGroupMemberTable()->updateGroupsPrivateInvit(1, 2);
+    public function majGroupsPrivateInvitValidAction(){
+    	$idGroupe = (int) $this->params()->fromRoute('id', 0);
+    	if (!$idGroupe) {
+    		return $this->redirect()->toRoute('group', array(
+    				'action' => 'index'
+    		));
+    	}
+    	
+    	$this->getGroupMemberTable()->updateGroupsPrivateInvitValid(1, $idGroupe);
     	
     	$result = new ViewModel(array(
     		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
-    		'groups' => $this->getGroupTable()->fetchAll()
+    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
+    		'groups' => $this->getGroupTable()->getGroupByPerson(1, null)
     			));
     	$result->setTemplate('qvm\group\rejoindre.phtml');
     	
+    	return $result;
+    }
+    
+    public function majGroupsPrivateInvitRefusAction(){
+    	$idGroupe = (int) $this->params()->fromRoute('id', 0);
+    	if (!$idGroupe) {
+    		return $this->redirect()->toRoute('group', array(
+    				'action' => 'index'
+    		));
+    	}
+    	 
+    	$this->getGroupMemberTable()->updateGroupsPrivateInvitRefus(1, $idGroupe);
+    	 
+    	$result = new ViewModel(array(
+    			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),
+    			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
+    			'groups' => $this->getGroupTable()->getGroupsPublicArejoindreByPerson(1)
+    	));
+    	$result->setTemplate('qvm\group\rejoindre.phtml');
+    	 
     	return $result;
     }
     
