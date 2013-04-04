@@ -40,15 +40,6 @@ class GroupTable
 		return $this->tableGateway->selectWith($select);
 	}
 	
-	/*public function getGroupsPrivate()
-	{
-		$resultSet = $this->tableGateway->select(function (Select $select){
-			//liste tous les groupes privés
-			$select->where->equalTo('is_private', 1);
-		});
-		return $resultSet;
-	}*/
-	
 	public function getGroupsByActivity($idActivity){
 		$select = new Select;
 		$select->columns(array('id_group', 'label', 'is_private'))->from('group')
@@ -78,6 +69,20 @@ class GroupTable
 		return $this->tableGateway->selectWith($select);
 	}
 	
+	/*public function getGroupsPublicArejoindreByPerson($idPerson){
+		$select = new Select;
+		$select->columns(array('id_group', 'label'))->from('group')
+		->join('groupmember', 'group.id_group = groupmember.id_group', array())
+		->join('pending', 'groupmember.id_pending = pending.id_pending', array())
+		->where->equalTo('group.is_private', 0)
+		->and->equalTo('pending.id_pending', 2)
+		->and->notEqualTo('groupmember.id_person', $idPerson);
+	
+		echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
+		
+		return $this->tableGateway->selectWith($select);
+	}*/
+	
 	public function getGroup($id)
 	{
 		$id  = (int) $id;
@@ -93,6 +98,7 @@ class GroupTable
 		$select = new Select;
 		$select->columns(array('id_group', 'label', 'is_private'))->from('group')
 		->join('groupmember', 'group.id_group = groupmember.id_group')
+		->where(array('groupmember.id_pending' => 0))
 		->where(array('groupmember.id_person' => $idPerson))
 		->limit($limit);
 		

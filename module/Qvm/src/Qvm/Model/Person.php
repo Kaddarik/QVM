@@ -18,7 +18,6 @@ class Person implements InputFilterAwareInterface
 	public $meteo_location;
 	public $idsession;
 	public $is_sysadmin;
-	public $is_pending;
 
 	public function exchangeArray($data)
 	{
@@ -32,7 +31,6 @@ class Person implements InputFilterAwareInterface
 		$this->meteo_location  = (isset($data['meteo_location'])) ? $data['meteo_location'] : null;
 		$this->idsession  = (isset($data['idsession'])) ? $data['idsession'] : null;
 		$this->is_sysadmin  = (isset($data['is_sysadmin'])) ? $data['is_sysadmin'] : null;
-		$this->is_pending  = (isset($data['is_pending'])) ? $data['is_pending'] : null;
 	} 
 	
 	public function getInputFilter() {
@@ -84,12 +82,6 @@ class Person implements InputFilterAwareInterface
 					'name'     => 'idsession',
 					'required' => false,
 			)));
-			
-			$inputFilter->add($factory->createInput(array(
-					'name'     => 'is_pending',
-					'required' => false,
-			)));
-		
 			$inputFilter->add($factory->createInput(array(
 					'name'     => 'is_sysadmin',
 					'required' => false,

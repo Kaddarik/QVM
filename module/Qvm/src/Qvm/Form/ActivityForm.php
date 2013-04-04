@@ -23,16 +23,17 @@ class ActivityForm extends Form
 
         $select = new Element\Select('categorieselect');
         $select->setName('categorie');
-        $select->setLabel('Categorie :');
+        $select->setLabel('Categorie : ');
         $this->add($select);
 
         $this->add(array(
             'name' => 'title',
             'attributes' => array(
                 'type' => 'text',
+            	
             	),
                 	'options' => array(
-        				'label' => 'Nom :',
+        				'label' => 'Nom : ',
         		),
         ));
         $this->add(array(
@@ -41,7 +42,7 @@ class ActivityForm extends Form
                 'type' => 'textarea',
              	),
                 	'options' => array(
-        				'label' => 'Description :',
+        				'label' => 'Description : ',
         		),
         ));
         $this->add(array(
@@ -50,6 +51,7 @@ class ActivityForm extends Form
         				'type'  => 'submit',
         				'value' => 'Ajouter',
         				'id' => 'submitbutton',
+        				'class' => 'btn btn-success '
         		),
         ));
     }

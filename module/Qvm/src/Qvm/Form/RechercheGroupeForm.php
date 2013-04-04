@@ -28,7 +28,7 @@ class RechercheGroupeForm extends Fieldset
             'attributes' => array(
                 'type'  => 'submit',
                 'value' => 'Valider',
-                'class' => 'pull-right',
+                'class' => 'pull-right btn btn-success',
             ),
         ));
 	}

@@ -6,8 +6,8 @@ body {
 .zf-green {
     color: #68b604;
 }
-
-.btn-success {
+.btn-plus{
+  color:white;
   background-color: #08465C;
   background-image: -moz-linear-gradient(top, #1299CA, #08465C);
   background-image: -ms-linear-gradient(top, #1299CA, #08465C);
@@ -16,17 +16,19 @@ body {
   background-image: -o-linear-gradient(top, #1299CA, #08465C);
   background-image: linear-gradient(top, #1299CA, #08465C);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1299CA', endColorstr='#08465C', GradientType=0);
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
 }
 
-.btn-success:hover,
-.btn-success:active,
-.btn-success.active,
-.btn-success.disabled,
-.btn-success[disabled] {
+.btn-plus:hover,
+.btn-plus:active,
+.btn-plus.active,
+.btn-plus.disabled,
+.btn-plus[disabled] {
   background-color: #08465C;
+  color:white;
 }
 
-.btn-success:active, .btn-success.active {
+.btn-plus:active, .btn-plus.active {
   background-color: #08465C;
 }
 
@@ -56,6 +58,9 @@ div.container a.brand {
 .width80{
 	width:80%;
 }
+.width310{
+	width:310px;
+}
 .btn-vert-cent{
 	vertical-align:25%;
 	margin-left:5px;
@@ -68,4 +73,9 @@ div.container a.brand {
 }
 .display-none{
 	display:none;
+}
+form#activity>dl.zend_form dd>label>span, form#group>dl.zend_form dd>label>span{
+	width:100px;
+	display:block;
+	float:left;
 }

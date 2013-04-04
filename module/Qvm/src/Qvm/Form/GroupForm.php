@@ -25,7 +25,7 @@ class GroupForm extends Form
                 'type' => 'text',
             	),
                 	'options' => array(
-        				'label' => 'Nom :',
+        				'label' => 'Nom : ',
         		),
         ));
         $this->add(array(
@@ -34,6 +34,7 @@ class GroupForm extends Form
         				'type'  => 'submit',
         				'value' => 'Ajouter',
         				'id' => 'submitbutton',
+        				'class' => 'btn btn-success'
         		),
         ));
     }

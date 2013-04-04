@@ -57,7 +57,7 @@ class IndexqvmController extends AbstractActionController
 			'nbEvtEnAttente' => count($this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, null)),
 			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, 5),
 			'nbLimit' => $nbLimit,
-			'nbGroups' => count($this->getGroupTable()->getGroupByPerson(1, null)),$this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, null),
+			'nbGroups' => count($this->getGroupTable()->getGroupByPerson(1, null)),
 			'groupsLimit' => $this->getGroupTable()->getGroupByPerson(1, $nbLimit),
 			'form' => $form
         ));

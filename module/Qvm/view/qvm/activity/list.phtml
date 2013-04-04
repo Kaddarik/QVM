@@ -1,20 +1,24 @@
-<?php
-$form = $this->form;
-echo $this->form ()->openTag ( $form );
-?>
-<h1>Mes activit&eacutes</h1>
-<table class="table">
-<?php 
-foreach ($activities as $activity) :
-	?>
-<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-	<td>
-		<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activity->id_activity));?>" >
-			<?php echo $this->escapeHtml($activity->title);?>
-		</a>
-	</td>
-</tr>
-<?php endforeach; ?>
-</table>
-
-<?php echo $this->paginationControl($this->activities, 'Elastic', 'pagination', array('route' => 'paginationActivityList/page')); ?>
+<div class="row-fluid">
+	<div class="span9">
+		<?php
+		$form = $this->form;
+		echo $this->form ()->openTag ( $form );
+		?>
+		<h1>Mes activit&eacutes</h1>
+		<table class="table">
+		<?php 
+		foreach ($activities as $activity) :
+			?>
+		<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+			<td>
+				<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activity->id_activity));?>" >
+					<?php echo $this->escapeHtml($activity->title);?>
+				</a>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+		</table>
+		
+		<?php echo $this->paginationControl($this->activities, 'Elastic', 'pagination', array('route' => 'paginationActivityList/page')); ?>
+	</div>
+</div>

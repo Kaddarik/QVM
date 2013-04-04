@@ -30,7 +30,7 @@
 										echo 'Administrateur du groupe';
 									}
 								?>
-								<a href="#" class="<?php echo 'btnHide btn btn-success btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
+								<a href="#" class="<?php echo 'btnHide btn btn-plus btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
 							</span>
 							<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
 								<?php 
@@ -55,7 +55,7 @@
 		if ($indexMembre > $maxMembres){
 			?>
 			<p class="table">
-				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
+				<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
 					<?php echo $this->translate("Plus de membres") ?> &raquo;
 				</a>
 			</p>
@@ -88,7 +88,7 @@
 		if ($indexActivite > $maxActivite){
 			?>
 			<p class="table">
-				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeActivites', 'id' => $id));?>">
+				<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeActivites', 'id' => $id));?>">
 					<?php echo $this->translate("Plus d'activit&eacute;s") ?> &raquo;
 				</a>
 			</p>

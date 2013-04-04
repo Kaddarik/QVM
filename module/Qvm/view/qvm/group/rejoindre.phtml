@@ -1,7 +1,7 @@
-<h1>Invitations aux groupes priv&eacute;s</h1>
-
 <div class="row-fluid">
 	<div class="span9">
+		<?php if($nbGroupsPrivate != 0){?>
+		<h1>Invitations aux groupes priv&eacute;s</h1>
 		<table class="table">
 		<?php 
 		foreach ( $groupsPrivate as $groupPrivate ) :
@@ -10,10 +10,10 @@
 			<td>
 				<?php echo $this->escapeHtml($groupPrivate->label);?>
 				<span class="pull-right">
-					<a href="<?php echo $this->url('group', array('action'=>'majGroupsPrivateInvit'));?>">
+					<a href="<?php echo $this->url('group', array('action'=>'majGroupsPrivateInvitValid',  'id' => $groupPrivate->id_group));?>">
 						<i class="icon-ok-sign"></i>
 					</a>
-					<a href="#">
+					<a href="<?php echo $this->url('group', array('action'=>'majGroupsPrivateInvitRefus',  'id' => $groupPrivate->id_group));?>">
 						<i class="icon-remove-sign"></i>
 					</a>
 				</span>
@@ -21,26 +21,26 @@
 		</tr>
 		<?php endforeach; ?>
 		</table>
+		<?php }?>
 
 
 		<h1>Liste des groupes publiques</h1>
 
 		<table class="table">
 		<?php 
-		foreach ( $groups as $group ) :
-			?>
-		<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-			<td>
-				<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
-					<?php echo $this->escapeHtml($group->label);?>
-				</a>
-				<span class="pull-right">
-					<a href="#">
-						Rejoindre
+		foreach ( $groups as $group ) :?>
+			<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+				<td>
+					<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
+						<?php echo $this->escapeHtml($group->label);?>
 					</a>
-				</span>
-			</td>
-		</tr>
+					<span class="pull-right">
+						<a href="#">
+							Rejoindre
+						</a>
+					</span>
+				</td>
+			</tr>
 		<?php endforeach; ?>
 		</table>
 	</div>
