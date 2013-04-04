@@ -20,7 +20,15 @@ echo $this->dateFormat(
 
 <h2>Liste des participants</h2>
 <table class="table">
+<?php foreach ($persons as $person) :?>
+ <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+		<td><?php echo $this->escapeHtml($person->firstname);?></td>
+		<td><?php echo $this->escapeHtml($person->surname);?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$person->vote)->setAttribute('disabled','disabled') );?></td>
+	</tr>	
+<?php endforeach; ?>
 </table>
+<?php echo $this->paginationControl($this->persons, 'Elastic', 'pagination', array('route' => 'paginationActivityDetailEvent/page', 'id' => $event->id_event)); ?>
 
 <h2>Commentaires</h2>
 <table class="table">

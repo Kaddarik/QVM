@@ -78,6 +78,18 @@ class ActivityController extends AbstractActionController {
 	}
 	
 	public function detailEventAction() {
+		//Recuperation de l'id de l'event
+		$id = (int) $this->params()->fromRoute('id', 0);
+		
+		// Pagination
+		$page = (int) $this->params()->fromRoute('page', 1);
+		$persons = $this->getAllEventsTable()->getPersonByEvent($id, null);
+		$iteratorAdapter = new Iterator($persons);
+		$paginator = new Paginator($iteratorAdapter);
+		$paginator->setCurrentPageNumber($page);
+		$paginator->setItemCountPerPage(10);
+		
+		// Liste deroulante
 		$form  = new VoteEvenementForm();
 		$votekindTable = $this->getVoteKindTable();
 		$value_options = array();
@@ -86,16 +98,19 @@ class ActivityController extends AbstractActionController {
 		}
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		$form->get ( 'voteEvenement' )->setLabel('Participation : ');
-
-		$id = (int) $this->params()->fromRoute('id', 0);
+		
+		//Recuperation donnees BDD
 		$event = $this->getAllEventsTable()->getEvent($id);
 		$activity = $this->getActivityTable()->getActivity($event->id_activity);
 		$comments = $this->getCommentTable()->getCommentByEvent($id);
+		
+		//Construction de la vue
 		return new ViewModel(array(
 				'comments' => $comments,
 				'form' => $form,
 				'activity' => $activity,
 				'event' => $event,
+				'persons' => $paginator,
 		));
 	}
 	

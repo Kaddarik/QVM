@@ -52,6 +52,22 @@ return array (
 										)
 								)
 						),
+						'paginationActivityDetailEvent' => array (
+								'type' => 'Segment',
+								'options' => array (
+										'route' => '/activity/detail-event/[:id]/page/[:page]',
+										'constraints' => array (
+												'id' => '[0-9]+',
+												'page' => '[0-9]+'
+										),
+										'defaults' => array (
+												'controller' => 'Qvm\Controller\Activity',
+												'action' => 'detailEvent',
+												'page' => 1,
+												'id' =>1
+										)
+								)
+						),
 						'indexqvm' => array (
 								'type' => 'segment',
 								'options' => array (

@@ -76,6 +76,25 @@ class AllEventsTable
 	
 	}
 	
+
+	public function getPersonByEvent($id_event, $limit)
+	{
+		$select = new Select;
+		$select->columns(array('id_person','firstname','surname','vote'))->from('allevents')
+		->where(array('allevents.id_event' => $id_event))
+		->limit($limit)
+		->order('allevents.id_person');
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
+		$resultSet->buffer();
+		$resultSet->next();
+		return $resultSet;
+	
+	}
+	
 	public function getActivityByPerson($id_person, $limit)
 	{
 		$select = new Select;
