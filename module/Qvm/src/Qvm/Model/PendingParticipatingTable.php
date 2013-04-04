@@ -3,6 +3,7 @@ namespace Qvm\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\ResultSet\ResultSet;
 
 class PendingParticipatingTable
 {
@@ -39,5 +40,22 @@ class PendingParticipatingTable
 			throw new \Exception("Could not find row $id");
 		}
 		return $row;
+	}
+	
+	public function getPendingParticipatingByPerson($id_person, $limit)
+	{
+		$select = new Select;
+		$select->columns(array('id_event','title','date','vote'))->from('pendingparticipating')
+		->where(array('pendingparticipating.id_person' => $id_person))
+		->limit($limit)
+		->order('pendingparticipating.date');
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
+		$resultSet->buffer();
+		$resultSet->next();
+		return $resultSet;	
 	}
 }

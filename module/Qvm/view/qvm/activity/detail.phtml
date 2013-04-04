@@ -27,7 +27,13 @@ echo $this->form ()->openTag ( $form );
 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td><?php echo $this->escapeHtml($event->title);?></td>
 		<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $event->id_event));?>" >
-			<?php echo $this->escapeHtml($event->date);?></a>
+			<?php
+				echo $this->dateFormat(
+    			new DateTime($event->date),
+    			IntlDateFormatter::FULL, // date
+    			IntlDateFormatter::SHORT // time
+			);?>
+</a>
 		</td>
 </tr>
 <?php endforeach; ?>

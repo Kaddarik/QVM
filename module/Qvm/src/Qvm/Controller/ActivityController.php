@@ -17,6 +17,7 @@ use Qvm\Model\ActivityCategoryTable;
 use Qvm\Model\Activity;
 use Qvm\Model\ActivityCategory;
 use Qvm\Form\ActivityForm;
+use Zend\I18n\View\Helper\DateFormat;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -30,7 +31,9 @@ class ActivityController extends AbstractActionController {
 	protected $preferenceTable;
 	protected $commentTable;
 	protected $personTable;
+	protected $pendingParticipatingTable;
 	protected $value_options;
+	
 	
 	public function indexAction() {
 		$form  = new VoteEvenementForm();
@@ -83,7 +86,7 @@ class ActivityController extends AbstractActionController {
 		}
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		$form->get ( 'voteEvenement' )->setLabel('Participation : ');
-		
+
 		$id = (int) $this->params()->fromRoute('id', 0);
 		$event = $this->getAllEventsTable()->getEvent($id);
 		$activity = $this->getActivityTable()->getActivity($event->id_activity);
@@ -157,6 +160,28 @@ class ActivityController extends AbstractActionController {
 		));
 	}
 	
+	public function listPendingParticipatingAction() {
+		$form  = new VoteEvenementForm();
+		$votekindTable = $this->getVoteKindTable();
+		$value_options = array();
+		foreach ($votekindTable->fetchAll() as $votekind) {
+			$value_options[$votekind->id_votekind] = $votekind->label;
+		}
+		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
+	
+		$page = (int) $this->params()->fromRoute('page', 1);
+		$events = $this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, null);
+		$iteratorAdapter = new Iterator($events);
+		$paginator = new Paginator($iteratorAdapter);
+		$paginator->setCurrentPageNumber($page);
+		$paginator->setItemCountPerPage(15);
+	
+		return new ViewModel(array(
+				'events' => $paginator,
+				'form' => $form,
+		));
+	}
+	         
 	public function getActivityTable()
 	{
 		if (!$this->activityTable) {
@@ -239,5 +264,13 @@ class ActivityController extends AbstractActionController {
 		return $this->personTable;
 	}
 	
+	public function getPendingParticipatingTable()
+	{
+		if (!$this->pendingParticipatingTable) {
+			$sm = $this->getServiceLocator();
+			$this->pendingParticipatingTable = $sm->get('Qvm\Model\PendingParticipatingTable');
+		}
+		return $this->pendingParticipatingTable;
+	}
 
 }

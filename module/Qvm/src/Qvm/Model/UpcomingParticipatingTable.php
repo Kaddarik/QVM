@@ -3,6 +3,7 @@ namespace Qvm\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Select;
+use Zend\Db\ResultSet\ResultSet;
 
 class UpcomingParticipatingTable
 {
@@ -32,27 +33,21 @@ class UpcomingParticipatingTable
 		return $row;
 	}
 
-	/*public function saveAlbum(Album $album)
+	public function getUpcomingParticipatingByPerson($id_person, $limit)
 	{
-		$data = array(
-				'artist' => $album->artist,
-				'title'  => $album->title,
-		);
-
-		$id = (int)$album->id;
-		if ($id == 0) {
-			$this->tableGateway->insert($data);
-		} else {
-			if ($this->getAlbum($id)) {
-				$this->tableGateway->update($data, array('id' => $id));
-			} else {
-				throw new \Exception('Form id does not exist');
-			}
-		}
+		$select = new Select;
+		$select->columns(array('id_event','title','date','vote'))->from('upcomingparticipating')
+		->where(array('upcomingparticipating.id_person' => $id_person))
+		->limit($limit)
+		->order('upcomingparticipating.date');
+		$adapter = $this->tableGateway->getAdapter();
+		$statement = $adapter->createStatement();
+		$select->prepareStatement($adapter, $statement);
+		$resultSet = new ResultSet();
+		$resultSet->initialize($statement->execute());
+		$resultSet->buffer();
+		$resultSet->next();
+		return $resultSet;
+	
 	}
-
-	public function deleteAlbum($id)
-	{
-		$this->tableGateway->delete(array('id' => $id));
-	}*/
 }

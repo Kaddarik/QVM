@@ -11,8 +11,16 @@ echo $this->form ()->openTag ( $form );
 				?>
 				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
-					<td><?php echo $this->escapeHtml($upcomingParticipating->date);?></td>
-					<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$upcomingParticipating->vote) ).'&nbsp;'; echo $this->formRow ( $form->get ( 'submit' ));?></td>
+					<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $upcomingParticipating->id_event));?>" >
+			<?php
+				echo $this->dateFormat(
+   				new DateTime($upcomingParticipating->date),
+    			IntlDateFormatter::FULL, // date
+    			IntlDateFormatter::SHORT // time
+			);
+?>
+		</td>
+				<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$upcomingParticipating->vote) ).'&nbsp;'; echo $this->formRow ( $form->get ( 'submit' ));?></td>
 				</tr>
 				<?php 
 			endforeach; ?>
@@ -27,7 +35,15 @@ echo $this->form ()->openTag ( $form );
 				?>
 				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
-					<td><?php echo $this->escapeHtml($pendingParticipating->date);?></td>
+					<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $pendingParticipating->id_event));?>" >
+			<?php
+				echo $this->dateFormat(
+   				new DateTime($pendingParticipating->date),
+    			IntlDateFormatter::FULL, // date
+    			IntlDateFormatter::SHORT // time
+			);
+?>
+		</td>
 					<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$pendingParticipating->vote) ).'&nbsp;'; echo $this->formRow ( $form->get ( 'submit' ));?></td>
 				</tr>
 				<?php 
@@ -39,7 +55,9 @@ echo $this->form ()->openTag ( $form );
 		if ($nbEvtEnAttente > $nbLimit) {
 			?>
 			<p class="table">
-				<a class="btn btn-success btn-small pull-right" href="#"><?php echo $this->translate("Plus d'&eacute;v&egrave;nements") ?> &raquo;</a>
+				<a class="btn btn-success btn-small pull-right" href="<?php echo $this->url('activity', array('action'=>'listPendingParticipating'));?>">
+		<?php echo $this->translate("Plus d'&eacutev&eacutenements en attente") ?>
+	</a>
 			</p>
 			<?php
 		}

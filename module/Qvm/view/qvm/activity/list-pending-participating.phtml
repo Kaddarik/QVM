@@ -2,7 +2,7 @@
 $form = $this->form;
 echo $this->form ()->openTag ( $form );
 ?>
-<h1>Mes &eacutev&eacutenements</h1>
+<h1>Mes &eacutev&eacutenements en attente de vote</h1>
 <table class="table">
 <?php 
 foreach ($events as $event) :
@@ -24,4 +24,4 @@ foreach ($events as $event) :
 <?php endforeach; ?>
 </table>
 
-<?php echo $this->paginationControl($this->events, 'Elastic', 'pagination', array('route' => 'paginationActivityListEvents/page')); ?>
+<?php echo $this->paginationControl($this->events, 'Elastic', 'pagination', array('route' => 'paginationActivityListPendingParticipating/page')); ?>

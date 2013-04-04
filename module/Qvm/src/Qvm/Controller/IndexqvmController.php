@@ -53,9 +53,9 @@ class IndexqvmController extends AbstractActionController
 		}
 		
 		return new ViewModel(array(
-            'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->fetchAll(),
-			'pendingParticipatings' => $this->getPendingParticipatingTable()->fetchAll(),
-			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->fetchLimit(),
+            'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->getUpcomingParticipatingByPerson(1, 5),
+			'pendingParticipatings' => $this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, null),
+			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, 5),
 			'nbLimit' => $nbLimit,
 			'groups' => $this->getGroupTable()->fetchAll(),
 			'groupsLimit' => $this->getGroupTable()->fetchLimit($nbLimit),
