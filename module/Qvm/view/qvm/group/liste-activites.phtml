@@ -1,23 +1,19 @@
 <h1>Groupe " <?php echo $group->label;?> "</h1>
 
-<div class="row-fluid">
-	<div class="span9">
-		<h2>Liste des activit&eacute;s</h2>
-		<table class="table">
-			<?php 
-			
-			foreach ($activites as $activite) : ?>
-					<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-						<td>
-							<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
-								<?php echo $this->escapeHtml($activite->title);?>
-							</a>
-						</td>
-					</tr>
-					<?php
-			endforeach;
-			?>
-		</table>
-		<?php echo $this->paginationControl($this->activites, 'Elastic', 'pagination', array('route' => 'paginationGroupListeActivites', 'id' => $group->id_group)); ?>
-	</div>
-</div>
+	<h2>Liste des activit&eacute;s</h2>
+	<table class="table">
+		<?php 
+		
+		foreach ($activites as $activite) : ?>
+				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+					<td>
+						<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
+							<?php echo $this->escapeHtml($activite->title);?>
+						</a>
+					</td>
+				</tr>
+				<?php
+		endforeach;
+		?>
+	</table>
+	<?php echo $this->paginationControl($this->activites, 'Elastic', 'pagination', array('route' => 'paginationGroupListeActivites', 'id' => $group->id_group)); ?>

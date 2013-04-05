@@ -12,8 +12,7 @@ foreach ($events as $event) :
 		<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $event->id_event));?>" >
 			<?php  echo strftime("%d/%m/%Y a %Hh%M", strtotime($event->date) ); ?></a>
 		</td>
-		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) );?></td>
-		<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
+		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) ).'&nbsp;'; echo $this->formRow ( $form->get ( 'submit' ));?></td>
 </tr>
 <?php endforeach; ?>
 </table>

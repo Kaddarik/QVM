@@ -1,99 +1,97 @@
 <h1>Groupe " <?php echo $group->label;?> "</h1>
 
-<div class="row-fluid">
-	<div class="span5">
-		<h2>Liste des membres</h2>
-		<table class="table" id="details-membres-hide">
-			<?php
-			$nbMembres = count($membres);
-			$maxMembres = 5;
-			
-			foreach ( $membres as $indexMembre => $membre ) : 
-				if ($indexMembre <= $maxMembres){
-					?>
-					 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-						<td>
-							<?php echo $this->escapeHtml($membre->firstname).'&nbsp;'; 
-							echo $this->escapeHtml($membre->surname).'&nbsp';
-							if($indexMembre != 0){
-								$membreAdminDetails='display-none';
-								$membreAdminButton='btn-rotat';
-							}
-							else{
-								$membreAdminDetails='';
-								$membreAdminButton='';
-							}
-							?>
-							<span class="pull-right">
-								<?php 
-									if ($this->escapeHtml($membre->is_admin) == 1){
-										echo 'Administrateur du groupe';
-									}
-								?>
-								<a href="#" class="<?php echo 'btnHide btn btn-plus btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
-							</span>
-							<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
-								<?php 
-									echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
-									if (isset($membre->phonenumber)){
-										echo 'Num&eacute;ro de t&eacute;lis_admin&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
-									}
-									if ($this->escapeHtml($membre->is_admin) == 1){
-										echo 'Administrateur du groupe';
-									}
-								?>
-							</div>
-						</td>
-					</tr>
-					<?php 
-				}
-			endforeach; 
-			?>
-		</table>
-	
-		<?php 
-		if ($indexMembre > $maxMembres){
-			?>
-			<p class="table">
-				<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
-					<?php echo $this->translate("Plus de membres") ?> &raquo;
-				</a>
-			</p>
-			<?php
-		}
-		?>
-	</div>
-	<div class="span5">
-		<h2>Liste des activit&eacute;s</h2>
-		<table class="table">
-			<?php 
-			$maxActivite = 1;
-			
-			foreach ($activites as $indexActivite => $activite) :
-				if ($indexActivite <= $maxActivite){ ?>
-					<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-						<td>
-							<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
-								<?php echo $this->escapeHtml($activite->title);?>
-							</a>
-						</td>
-					</tr>
-					<?php
-				} 
-			endforeach;
-			?>
-		</table>
+<div class="span6">
+	<h2>Liste des membres</h2>
+	<table class="table" id="details-membres-hide">
+		<?php
+		$nbMembres = count($membres);
+		$maxMembres = 5;
 		
-		<?php 
-		if ($indexActivite > $maxActivite){
-			?>
-			<p class="table">
-				<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeActivites', 'id' => $id));?>">
-					<?php echo $this->translate("Plus d'activit&eacute;s") ?> &raquo;
-				</a>
-			</p>
-			<?php
-		}
+		foreach ( $membres as $indexMembre => $membre ) : 
+			if ($indexMembre <= $maxMembres){
+				?>
+				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+					<td>
+						<?php echo $this->escapeHtml($membre->firstname).'&nbsp;'; 
+						echo $this->escapeHtml($membre->surname).'&nbsp';
+						if($indexMembre != 0){
+							$membreAdminDetails='display-none';
+							$membreAdminButton='btn-rotat';
+						}
+						else{
+							$membreAdminDetails='';
+							$membreAdminButton='';
+						}
+						?>
+						<span class="pull-right">
+							<?php 
+								if ($this->escapeHtml($membre->is_admin) == 1){
+									echo 'Administrateur du groupe';
+								}
+							?>
+							<a href="#" class="<?php echo 'btnHide btn btn-plus btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
+						</span>
+						<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
+							<?php 
+								echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
+								if (isset($membre->phonenumber)){
+									echo 'Num&eacute;ro de t&eacute;lis_admin&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
+								}
+								if ($this->escapeHtml($membre->is_admin) == 1){
+									echo 'Administrateur du groupe';
+								}
+							?>
+						</div>
+					</td>
+				</tr>
+				<?php 
+			}
+		endforeach; 
 		?>
-	</div>
+	</table>
+
+	<?php 
+	if ($indexMembre > $maxMembres){
+		?>
+		<p class="table">
+			<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
+				<?php echo $this->translate("Plus de membres") ?> &raquo;
+			</a>
+		</p>
+		<?php
+	}
+	?>
+</div>
+<div class="span5">
+	<h2>Liste des activit&eacute;s</h2>
+	<table class="table">
+		<?php 
+		$maxActivite = 1;
+		
+		foreach ($activites as $indexActivite => $activite) :
+			if ($indexActivite <= $maxActivite){ ?>
+				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+					<td>
+						<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
+							<?php echo $this->escapeHtml($activite->title);?>
+						</a>
+					</td>
+				</tr>
+				<?php
+			} 
+		endforeach;
+		?>
+	</table>
+	
+	<?php 
+	if ($indexActivite > $maxActivite){
+		?>
+		<p class="table">
+			<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeActivites', 'id' => $id));?>">
+				<?php echo $this->translate("Plus d'activit&eacute;s") ?> &raquo;
+			</a>
+		</p>
+		<?php
+	}
+	?>
 </div>

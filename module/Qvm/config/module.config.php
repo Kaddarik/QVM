@@ -223,6 +223,7 @@ return array (
 		'service_manager' => array(
 				'factories' => array(
 						'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+						'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
 				),
 		),
 		'translator' => array (
@@ -234,6 +235,90 @@ return array (
 								'pattern' => '%s.mo' 
 						) 
 				) 
+		),
+		'navigation' => array(
+				'default' => array(
+						'accueil' => array(
+								'route' => 'indexqvm',
+								'label' => 'Accueil',
+								'pages' => array(
+										'group' => array(
+												'route' => 'group',
+												'label' => 'Mes groupes',
+												'action' => 'index',
+												'pages' => array(
+														'details' => array(
+																'action' => 'details',
+																'route' => 'group',
+																//'params'     => array('id' => ),
+																'label' => 'Details du groupe',
+																'pages' => array(
+																		'liste-membres' => array(
+																				'action' => 'listeMembres',
+																				'route' => 'group',
+																				'label' => 'Liste des membres du groupe',
+																		),
+																		'liste-activites' => array(
+																				'label' => 'Liste des activites du groupe',
+																				'route' => 'group ',
+																				'action' => 'listeActivites'
+																		)
+																)
+														),
+														'rejoindre' => array(
+																'action' => 'rejoindre',
+																'route' => 'group',
+																'label' => 'Rejoindre un groupe'
+														)
+												)
+										),
+										'creergroupe' => array(
+												'route' => 'group',
+												'action' => 'create',
+												'label' => 'Creer un groupe'
+										),
+										'activity' => array(
+												'route' => 'activity',
+												'action' => 'index',
+												'label' => 'Mes activites',
+												'pages' => array(
+														'list' => array(
+																'action' => 'list',
+																'route' => 'activity',
+																'label' => 'Liste des activites',
+																'pages' => array(
+																)
+														),
+														'detailactivity' => array(
+																'action' => 'detail',
+																'route' => 'activity',
+																'label' => "Details de l'activite"
+														),
+														'listevents' => array(
+																'action' => 'listEvents',
+																'route' => 'activity',
+																'label' => 'Liste des evenements'
+														),
+														'detailsevent' => array(
+																'action' => 'detailEvent',
+																'route' => 'activity',
+																'label' => "Details de l'evenement"
+														)
+												)
+										),
+										'creeractivite' => array(
+												'route' => 'activity',
+												'action' => 'create',
+												'label' => 'Creer une activite'
+										),
+										'evenementenattente' => array(
+												'route' => 'activity',
+												'action' => 'listPendingParticipating',
+												'label' => 'Mes evenments en attente',
+										),
+								)
+						)
+				)
 		),
 		'view_manager' => array (
 				'template_path_stack' => array (

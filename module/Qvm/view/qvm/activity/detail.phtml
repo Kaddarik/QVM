@@ -7,7 +7,7 @@ echo $this->form ()->openTag ( $form );
 <p>Description : <?php echo $this->escapeHtml($activity->description);?></p>
 
 <table class="table">
-	<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$preference->vote) );?></td>
+	<td class="width360"><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$preference->vote) );?></td>
 	<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
 </table>
 
@@ -33,6 +33,3 @@ echo $this->form ()->openTag ( $form );
 </tr>
 <?php endforeach; ?>
 </table>
-
-
-

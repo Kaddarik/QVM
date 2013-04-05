@@ -61,6 +61,9 @@ div.container a.brand {
 .width310{
 	width:310px;
 }
+.width360{
+	width:360px;
+}
 .btn-vert-cent{
 	vertical-align:25%;
 	margin-left:5px;
@@ -78,4 +81,7 @@ form#activity>dl.zend_form dd>label>span, form#group>dl.zend_form dd>label>span{
 	width:100px;
 	display:block;
 	float:left;
+}
+.fil-ariane{
+	font-size:12px;
 }

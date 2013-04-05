@@ -1,49 +1,45 @@
 <h1>Groupe " <?php echo $group->label;?> "</h1>
 
-<div class="row-fluid">
-	<div class="span9">
-		<h2>Liste des membres</h2>
-		<table class="table" id="details-membres-hide">
-			<?php
-			foreach ( $membres as $indexMembre => $membre ) : 
-					?>
-					 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-						<td>
-							<?php echo $this->escapeHtml($membre->firstname).'&nbsp;'; 
-							echo $this->escapeHtml($membre->surname).'&nbsp';
-							if($indexMembre != 0){
-								$membreAdminDetails='display-none';
-								$membreAdminButton='btn-rotat';
-							}
-							else{
-								$membreAdminDetails='';
-								$membreAdminButton='';
-							}?>
-							<span class="pull-right">
-								<?php 
-									if ($this->escapeHtml($membre->is_admin) == 1){
-										echo 'Administrateur du groupe';
-									}
-								?>
-								<a href="#" class="<?php echo 'btnHide btn btn-plus btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
-							</span>
-							<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
-								<?php 
-									echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
-									if (isset($membre->phonenumber)){
-										echo 'Num&eacute;ro de t&eacute;l&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
-									}
-									if ($this->escapeHtml($membre->is_admin) == 1){
-										echo 'Administrateur du groupe';
-									}
-								?>
-							</div>
-						</td>
-					</tr>
-					<?php 
-			endforeach; 
+<h2>Liste des membres</h2>
+<table class="table" id="details-membres-hide">
+	<?php
+	foreach ( $membres as $indexMembre => $membre ) : 
 			?>
-		</table>
-		<?php echo $this->paginationControl($this->membres, 'Elastic', 'pagination', array('route' => 'paginationGroupListeMembres', 'id' => $group->id_group)); ?>
-	</div>
-</div>
+			 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+				<td>
+					<?php echo $this->escapeHtml($membre->firstname).'&nbsp;'; 
+					echo $this->escapeHtml($membre->surname).'&nbsp';
+					if($indexMembre != 0){
+						$membreAdminDetails='display-none';
+						$membreAdminButton='btn-rotat';
+					}
+					else{
+						$membreAdminDetails='';
+						$membreAdminButton='';
+					}?>
+					<span class="pull-right">
+						<?php 
+							if ($this->escapeHtml($membre->is_admin) == 1){
+								echo 'Administrateur du groupe';
+							}
+						?>
+						<a href="#" class="<?php echo 'btnHide btn btn-plus btn-small '.$membreAdminButton?>" data-target='<?php echo 'infos-membres-groupe'.$indexMembre ?>'>&raquo;</a>
+					</span>
+					<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
+						<?php 
+							echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
+							if (isset($membre->phonenumber)){
+								echo 'Num&eacute;ro de t&eacute;l&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
+							}
+							if ($this->escapeHtml($membre->is_admin) == 1){
+								echo 'Administrateur du groupe';
+							}
+						?>
+					</div>
+				</td>
+			</tr>
+			<?php 
+	endforeach; 
+	?>
+</table>
+<?php echo $this->paginationControl($this->membres, 'Elastic', 'pagination', array('route' => 'paginationGroupListeMembres', 'id' => $group->id_group)); ?>

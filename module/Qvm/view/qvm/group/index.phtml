@@ -1,27 +1,23 @@
-<div class="row-fluid">
-	<div class="span9">
-		<p class="marg-bas">
-			<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'rejoindre'));?>">
-				<?php echo $this->translate("Rejoindre un groupe") ?>
-			</a>
-		</p>
-		
-		<h1>Mes Groupes</h1>
-		<?php
-		echo $this->formCollection($form);
-		?>
-		<table class="table decalage-droite width80">
-			<?php 
-			foreach ( $groups as $group ) :?>
-				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-					<td>
-						<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
-							<?php echo $this->escapeHtml($group->label);?>
-						</a>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</table>
-	<?php echo $this->paginationControl($this->groups, 'Elastic', 'pagination', array('route' => 'paginationGroupIndex')); ?>
-	</div>
-</div>
+<p class="marg-bas">
+	<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'rejoindre'));?>">
+		<?php echo $this->translate("Rejoindre un groupe") ?>
+	</a>
+</p>
+
+<h1>Mes Groupes</h1>
+<?php
+echo $this->formCollection($form);
+?>
+<table class="table decalage-droite width80">
+	<?php 
+	foreach ( $groups as $group ) :?>
+		<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+			<td>
+				<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
+					<?php echo $this->escapeHtml($group->label);?>
+				</a>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+</table>
+<?php echo $this->paginationControl($this->groups, 'Elastic', 'pagination', array('route' => 'paginationGroupIndex')); ?>

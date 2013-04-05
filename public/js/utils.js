@@ -10,4 +10,9 @@ $(document).ready(function(){
 			$ (this).addClass("btn-rotat");
 		}
 	});
+	
+	 $(function() {
+		 $( "#datepicker" ).datepicker();
+	 });
 });
+
