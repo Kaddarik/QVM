@@ -101,7 +101,6 @@ class GroupTable
 		->where(array('groupmember.id_pending' => 0))
 		->where(array('groupmember.id_person' => $idPerson))
 		->limit($limit);
-		
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();
 		$select->prepareStatement($adapter, $statement);
@@ -109,7 +108,6 @@ class GroupTable
 		$resultSet->initialize($statement->execute());
 		$resultSet->buffer();
 		$resultSet->next();
-		
 		return $resultSet;
 	}
 	

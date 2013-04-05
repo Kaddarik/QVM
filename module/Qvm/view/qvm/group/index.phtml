@@ -12,7 +12,7 @@
 		?>
 		<table class="table decalage-droite width80">
 			<?php 
-			foreach ( $groupsLimit as $group ) :?>
+			foreach ( $groups as $group ) :?>
 				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td>
 						<a href="<?php echo $this->url('group', array('action'=>'details', 'id' => $group->id_group));?>" >
@@ -22,14 +22,6 @@
 				</tr>
 			<?php endforeach; ?>
 		</table>
-		<?php
-		if ($nbGroups > $nbLimit) { 
-			?>
-			<p class="pagination">
-				Pagination
-			</p>
-			<?php
-		}
-		?>
+	<?php echo $this->paginationControl($this->groups, 'Elastic', 'pagination', array('route' => 'paginationGroupIndex')); ?>
 	</div>
 </div>

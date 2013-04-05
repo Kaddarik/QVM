@@ -74,14 +74,13 @@ class ActivityTable
 		->join('participatinggroup', 'activity.id_activity = participatinggroup.id_activity', array())
 		->join('group', 'group.id_group = participatinggroup.id_group', array())
 		->where(array('group.id_group' => $idGroupe));
-	
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();
 		$select->prepareStatement($adapter, $statement);
-	
 		$resultSet = new ResultSet();
 		$resultSet->initialize($statement->execute());
-	
+		$resultSet->buffer();
+		$resultSet->next();
 		return $resultSet;
 	}
 

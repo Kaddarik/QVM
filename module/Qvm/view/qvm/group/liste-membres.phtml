@@ -44,5 +44,6 @@
 			endforeach; 
 			?>
 		</table>
+		<?php echo $this->paginationControl($this->membres, 'Elastic', 'pagination', array('route' => 'paginationGroupListeMembres', 'id' => $group->id_group)); ?>
 	</div>
 </div>

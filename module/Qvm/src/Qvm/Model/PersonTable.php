@@ -30,14 +30,13 @@ class PersonTable
 		->join('group', 'groupmember.id_group = group.id_group', array())
 		->where(array('group.id_group' => $idGroupe))
 		->where->equalTo('groupmember.id_pending', 0);
-	
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();
 		$select->prepareStatement($adapter, $statement);
-	
 		$resultSet = new ResultSet();
 		$resultSet->initialize($statement->execute());
-	
+		$resultSet->buffer();
+		$resultSet->next();
 		return $resultSet;
 	}
 

@@ -2,11 +2,10 @@
 namespace Qvm\Controller;
 
 use Zend\View\Model\ViewModel;
-
 use Zend\Validator\File\Count;
-
 use Zend\Mvc\Controller\Plugin\Redirect;
-
+use Zend\Paginator\Adapter\Iterator;
+use Zend\Paginator\Paginator;
 use Zend\Mvc\Controller\AbstractActionController;
 use Qvm\Form\RechercheGroupeForm;
 use Qvm\Form\GroupForm;
@@ -20,8 +19,14 @@ class GroupController extends AbstractActionController
 	protected $groupMemberTable;
 
     public function indexAction()
-    {
-    	$nbLimit = (int) 10;
+    {    	
+    	// Pagination
+    	$page = (int) $this->params()->fromRoute('page', 1);
+    	$groups = $this->getGroupTable()->getGroupByPerson(1,null);
+    	$iteratorAdapter = new Iterator($groups);
+    	$paginator = new Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($page);
+    	$paginator->setItemCountPerPage(10);
     	
     	$form  = new RechercheGroupeForm();
     	$request = $this->getRequest();
@@ -34,14 +39,12 @@ class GroupController extends AbstractActionController
     			//SAVE TO DATABASE...
     		}
     	}
-    	
-    	return array(
-    		'nbLimit' => $nbLimit,
-    		'nbGroups' => count($this->getGroupTable()->getGroupByPerson(1, null)),
-    		'groupsLimit' => $this->getGroupTable()->getGroupByPerson(1, $nbLimit),
-			'form' => $form    		
-    	);
+    	return new ViewModel(array(
+    		'groups' => $paginator,
+			'form' => $form ,   		
+    	));
     }
+    
     
     public function detailsAction(){
     	//Renvoi l'id du groupe
@@ -51,7 +54,7 @@ class GroupController extends AbstractActionController
     				'action' => 'index'
     		));
     	}
-    	
+
     	 return array(
             'id' => $idGroupe,
             'group' => $this->getGroupTable()->getGroup($idGroupe),
@@ -68,9 +71,17 @@ class GroupController extends AbstractActionController
     		));
     	}
     	
+    	// Pagination 
+    	$page = (int) $this->params()->fromRoute('page', 1);
+    	$membres = $this->getPersonTable()->getMembersByGroup($idGroupe);
+    	$iteratorAdapter = new Iterator($membres);
+    	$paginator = new Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($page);
+    	$paginator->setItemCountPerPage(15);
+    	
     	return array(
     		'group' => $this->getGroupTable()->getGroup($idGroupe),
-    		'membres' => $this->getPersonTable()->getMembersByGroup($idGroupe)
+    		'membres' => $paginator
     	);
     }
     
@@ -81,10 +92,18 @@ class GroupController extends AbstractActionController
     				'action' => 'index'
     		));
     	}
-    	 
+    	
+    	// Pagination
+    	$page = (int) $this->params()->fromRoute('page', 1);
+    	$activites = $this->getActivityTable()->getActivitesByGroup($idGroupe);
+    	$iteratorAdapter = new Iterator($activites);
+    	$paginator = new Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($page);
+    	$paginator->setItemCountPerPage(15);
+ 	
     	return array(
     			'group' => $this->getGroupTable()->getGroup($idGroupe),
-    			'activites' => $this->getActivityTable()->getActivitesByGroup($idGroupe)
+    			'activites' => $paginator
     	);
     }
     

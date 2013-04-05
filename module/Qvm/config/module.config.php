@@ -70,6 +70,52 @@ return array (
 										)
 								)
 						),
+						'paginationGroupIndex' => array (
+								'type' => 'Segment',
+								'options' => array (
+										'route' => '/group/index/page/[:page]',
+										'constraints' => array (
+												'page' => '[0-9]+'
+										),
+										'defaults' => array (
+												'controller' => 'Qvm\Controller\Group',
+												'action' => 'index',
+												'page' => 1
+										)
+								)
+						),
+						'paginationGroupListeMembres' => array (
+								'type' => 'Segment',
+								'options' => array (
+										'route' => '/group/[:id]/liste-membres/page/[:page]',
+										'constraints' => array (
+												'id' => '[0-9]+',
+												'page' => '[0-9]+'
+										),
+										'defaults' => array (
+												'controller' => 'Qvm\Controller\Group',
+												'action' => 'listeMembres',
+												'page' => 1,
+												'id' =>1
+										)
+								)
+						),
+						'paginationGroupListeActivites' => array (
+								'type' => 'Segment',
+								'options' => array (
+										'route' => '/group/[:id]/liste-activites/page/[:page]',
+										'constraints' => array (
+												'id' => '[0-9]+',
+												'page' => '[0-9]+'
+										),
+										'defaults' => array (
+												'controller' => 'Qvm\Controller\Group',
+												'action' => 'listeActivites',
+												'page' => 1,
+												'id' =>1
+										)
+								)
+						),
 						'indexqvm' => array (
 								'type' => 'segment',
 								'options' => array (
