@@ -10,13 +10,7 @@ foreach ($events as $event) :
 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 		<td><?php echo $this->escapeHtml($event->title);?></td>
 		<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $event->id_event));?>" >
-		<?php
-			echo $this->dateFormat(
-    		new DateTime($event->date),
-    		IntlDateFormatter::FULL, // date
-    		IntlDateFormatter::SHORT // time
-		);
-?></a>
+			<?php  echo strftime("%d/%m/%Y a %Hh%M", strtotime($event->date) ); ?></a>
 		</td>
 		<td><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) );?></td>
 		<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>

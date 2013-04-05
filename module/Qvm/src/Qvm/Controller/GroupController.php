@@ -127,11 +127,18 @@ class GroupController extends AbstractActionController
     }
     
     public function rejoindreAction(){
+    	// Pagination
+    	$page = (int) $this->params()->fromRoute('page', 1);
+    	$groups = $this->getGroupTable()->getGroupByPerson(1, null);
+    	$iteratorAdapter = new Iterator($groups);
+    	$paginator = new Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($page);
+    	$paginator->setItemCountPerPage(15);
     	
     	return array(
     		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
     		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
-    		'groups' => $this->getGroupTable()->getGroupByPerson(1, null)
+    		'groups' => $paginator
     	);
     }
     
@@ -143,12 +150,20 @@ class GroupController extends AbstractActionController
     		));
     	}
     	
+    	// Pagination
+    	$page = (int) $this->params()->fromRoute('page', 1);
+    	$groups = $this->getGroupTable()->getGroupByPerson(1, null);
+    	$iteratorAdapter = new Iterator($groups);
+    	$paginator = new Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($page);
+    	$paginator->setItemCountPerPage(15);
+    	
     	$this->getGroupMemberTable()->updateGroupsPrivateInvitValid(1, $idGroupe);
     	
     	$result = new ViewModel(array(
     		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
     		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
-    		'groups' => $this->getGroupTable()->getGroupByPerson(1, null)
+    		'groups' => $paginator
     			));
     	$result->setTemplate('qvm\group\rejoindre.phtml');
     	
@@ -162,13 +177,21 @@ class GroupController extends AbstractActionController
     				'action' => 'index'
     		));
     	}
-    	 
+
+    	// Pagination
+    	$page = (int) $this->params()->fromRoute('page', 1);
+    	$groups = $this->getGroupTable()->getGroupByPerson(1, null);
+    	$iteratorAdapter = new Iterator($groups);
+    	$paginator = new Paginator($iteratorAdapter);
+    	$paginator->setCurrentPageNumber($page);
+    	$paginator->setItemCountPerPage(15);
+    	
     	$this->getGroupMemberTable()->updateGroupsPrivateInvitRefus(1, $idGroupe);
     	 
     	$result = new ViewModel(array(
     			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),
     			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
-    			'groups' => $this->getGroupTable()->getGroupsPublicArejoindreByPerson(1)
+    			'groups' => $paginator
     	));
     	$result->setTemplate('qvm\group\rejoindre.phtml');
     	 

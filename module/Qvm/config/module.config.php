@@ -116,6 +116,20 @@ return array (
 										)
 								)
 						),
+						'paginationGroupRejoindre' => array (
+								'type' => 'Segment',
+								'options' => array (
+										'route' => '/group/rejoindre/page/[:page]',
+										'constraints' => array (
+												'page' => '[0-9]+'
+										),
+										'defaults' => array (
+												'controller' => 'Qvm\Controller\Group',
+												'action' => 'rejoindre',
+												'page' => 1
+										)
+								)
+						),
 						'indexqvm' => array (
 								'type' => 'segment',
 								'options' => array (

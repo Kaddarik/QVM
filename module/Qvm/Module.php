@@ -13,6 +13,8 @@ use Qvm\Model\VoteKind;
 use Qvm\Model\VoteKindTable;
 use Qvm\Model\ActivityCategory;
 use Qvm\Model\ActivityCategoryTable;
+use Qvm\Model\ActivityAdmin;
+use Qvm\Model\ActivityAdminTable;
 use Qvm\Model\Category;
 use Qvm\Model\CategoryTable;
 use Qvm\Model\Comment;
@@ -190,6 +192,17 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new ActivityCategory());
     						return new TableGateway('activityCategory', $dbAdapter, null, $resultSetPrototype);
+    					},
+    					'Qvm\Model\ActivityAdminTable' =>  function($sm) {
+    						$tableGateway = $sm->get('ActivityAdminTableGateway');
+    						$table = new ActivityAdminTable($tableGateway);
+    						return $table;
+    					},
+    					'ActivityAdminTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new ActivityAdmin());
+    						return new TableGateway('activityAdmin', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Qvm\Model\AllEventsTable' =>  function($sm) {
     						$tableGateway = $sm->get('AllEventsTableGateway');

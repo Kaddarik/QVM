@@ -23,7 +23,6 @@
 		</table>
 		<?php }?>
 
-
 		<h1>Liste des groupes publiques</h1>
 
 		<table class="table">
@@ -43,5 +42,6 @@
 			</tr>
 		<?php endforeach; ?>
 		</table>
+		<?php echo $this->paginationControl($this->groups, 'Elastic', 'pagination', array('route' => 'paginationGroupRejoindre')); ?>
 	</div>
 </div>

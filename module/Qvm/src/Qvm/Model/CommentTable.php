@@ -18,7 +18,19 @@ class CommentTable
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
+	
 
+	public function getComment($id)
+	{
+		$id  = (int) $id;
+		$rowset = $this->tableGateway->select(array('id_comment' => $id));
+		$row = $rowset->current();
+		if (!$row) {
+			throw new \Exception("Could not find row $id");
+		}
+		return $row;
+	}
+	
 	public function getCommentByEvent($id)
 	{
 		$select = new Select;
@@ -27,21 +39,21 @@ class CommentTable
 		return $this->tableGateway->selectWith($select);
 	}
 
-	public function saveComment(Category $category)
+	public function saveComment(Comment $comment)
 	{
 		$data = array(
-				'label'  => $category->label,
-				'displaying_order' => '98',
-				'icon_class'  => $category->icon_class,
-
+				'body'  => $comment->body,
+				'datetime' => 'now()',
+				'id_event' =>  $comment->id_event,
+				'id_person' => $comment->id_person,
 		);
 
-		$id_category = (int)$category->id_category;
-		if ($id_category == 0) {
+		$id_comment = (int)$comment->id_comment;
+		if ($id_comment == 0) {
 			$this->tableGateway->insert($data);
 		} else {
-			if ($this->getCategory($id_category)) {
-				$this->tableGateway->update($data, array('id_category' => $id_category));
+			if ($this->getComment($id_comment)) {
+				$this->tableGateway->update($data, array('id_comment' => $id_comment));
 			} else {
 				throw new \Exception('Form id does not exist');
 			}

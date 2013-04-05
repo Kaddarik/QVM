@@ -2,29 +2,24 @@
 
 namespace Qvm\Controller;
 
+use Qvm\Model\Comment;
+
+use Qvm\Form\CommentForm;
+
 use Zend\Paginator\Adapter\Iterator;
 use Zend\Paginator\Paginator;
-use Qvm\Model\PreferenceTable;
-use Qvm\Model\GroupTable;
-use Qvm\Form\VoteEvenementForm;
-use Qvm\Model\AllEvents;
-use Qvm\Model\AllEventsTable;
-use Qvm\Model\PersonTable;
-use Qvm\Model\VoteKindTable;
-use Qvm\Model\CommentTable;
-use Qvm\Model\CategoryTable;
-use Qvm\Model\ActivityCategoryTable;
-use Qvm\Model\Activity;
-use Qvm\Model\ActivityCategory;
-use Qvm\Form\ActivityForm;
-use Zend\I18n\View\Helper\DateFormat;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\Controller\AbstractActionController;
+use Qvm\Form\VoteEvenementForm;
+use Qvm\Model\Activity;
+use Qvm\Form\ActivityForm;
+
 
 class ActivityController extends AbstractActionController {
 	protected $activityTable;
 	protected $categoryTable;
 	protected $activityCategoryTable;
+	protected $activityAdminTable;
 	protected $allEventsTable;
 	protected $votekindTable;
 	protected $groupTable;
@@ -99,15 +94,22 @@ class ActivityController extends AbstractActionController {
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		$form->get ( 'voteEvenement' )->setLabel('Participation : ');
 		
+		// Form commentaire
+		$commentForm  = new CommentForm();
+		
 		//Recuperation donnees BDD
 		$event = $this->getAllEventsTable()->getEvent($id);
 		$activity = $this->getActivityTable()->getActivity($event->id_activity);
 		$comments = $this->getCommentTable()->getCommentByEvent($id);
 		
+		$translator = $this->getServiceLocator()->get('translator');
+		$translator->setLocale('fr_FR');
+		
 		//Construction de la vue
 		return new ViewModel(array(
 				'comments' => $comments,
 				'form' => $form,
+				'formComment' => $commentForm,
 				'activity' => $activity,
 				'event' => $event,
 				'persons' => $paginator,
@@ -132,12 +134,29 @@ class ActivityController extends AbstractActionController {
 				$this->getActivityTable()->saveActivity($activity);
 				$id = $this->getActivityTable()->getLastActivity();
 				$this->getActivityCategoryTable()->saveActivityCategory($id,$form->get ( 'categorie' )->getValue());
+				$this->getActivityAdminTable()->saveActivityAdmin($id, 1);
 				return $this->redirect ()->toRoute ( 'activity' );
 			}
 		}
 		return array (
 				'form' => $form
 		);
+	}
+	
+	public function createCommentAction() {
+	$form = new CommentForm();
+	$request = $this->getRequest ();
+		if ($request->isPost ()) {
+			$comment = new Comment();
+			$form->setInputFilter ( $comment->getInputFilter() );
+			$form->setData ($request->getPost ());
+			$comment->id_person = 1;
+			if ($form->isValid ()) {
+				$comment->exchangeArray($form->getData());
+				$this->getCommentTable()->saveComment($comment);
+				return $this->redirect ()->toRoute ( 'activity' );
+			}
+		}
 	}
 	
 	public function listAction() {
@@ -240,6 +259,15 @@ class ActivityController extends AbstractActionController {
 			$this->activityCategoryTable = $sm->get('Qvm\Model\ActivityCategoryTable');
 		}
 		return $this->activityCategoryTable;
+	}
+	
+	public function getActivityAdminTable()
+	{
+		if (!$this->activityAdminTable) {
+			$sm = $this->getServiceLocator();
+			$this->activityAdminTable = $sm->get('Qvm\Model\ActivityAdminTable');
+		}
+		return $this->activityAdminTable;
 	}
 	
 	public function getGroupTable()
