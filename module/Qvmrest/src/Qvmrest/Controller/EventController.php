@@ -20,7 +20,7 @@ class EventController extends AbstractRestfulController
 	public function getList()
 	{
 		$idPers = 1;
-		$results = $this->getUpcomingParticipatingTable()->getUpcomingParticipatingTableByPerson(1, null);
+		$results = $this->getUpcomingParticipatingTable()->getUpcomingParticipatingByPerson(1, null);
 		$data = array();
 		foreach ($results as $result)
 		{

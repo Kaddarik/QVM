@@ -7,60 +7,107 @@
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-	</head>
-	<body>
-		<div data-role="page" id="mainPage">
-			<div data-role="header" data-position="fixed">
-				<!-- a href="#" data-rel="back" data-icon="arrow-l" class="ui-btn-left">Retour</a> -->
-				<h1>QuiVientManger?</h1>
-				<a href="#" data-icon="gear" class="ui-btn-right">Options</a>
-			</div>
-			<div id="result" data-role="content">	
-			</div>
-			<div data-role="footer" data-id="foo1" data-position="fixed">
-				<div data-role="navbar">
-					<ul>
-						<li><a href="#activitiesPage">Activit&eacute;s</a></li>
-						<li><a href="#groupesPage">Groupes</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<script>
+		
+		<script type="text/javascript">
+			$.getJSON("../public/rest/group",
+					function(data)
+					{
+						var i=0;
+						var items = [];
+						items.push('<li data-role="list-divider" role="heading">Groupes</li>');
+
+						$.each(data, function(key, val)
+							{
+								if(i<5)
+								{
+									items.push('<li data-theme="c">'+val.label+'</li>');
+									i++;
+								}
+							});
+						$('<ul/>', {
+							'id':'groupsIndex',
+							'data-inset':'true',
+							html: items.join('')
+							}).appendTo('#indexGroups');
+						$('#groupsIndex').listview();
+					});
+			$.getJSON("../public/rest/event",
+					function(data)
+					{
+						var i=0;
+						var items = [];
+						items.push('<li data-role="list-divider" role="heading">Evenements</li>');
+	
+						$.each(data, function(key, val)
+							{
+								if(i<5)
+								{
+									items.push('<li data-theme="c">'+val.title+'</li>');
+									i++;
+								}
+							});
+						$('<ul/>', {
+							'id':'eventsIndex',
+							'data-inset':'true',
+							html: items.join('')
+							}).appendTo('#indexEvents');
+						$('#eventsIndex').listview();
+					});
+
 			$.getJSON("../public/rest/event",
 					function(data)
 					{
 						var items = [];
-						items.push('<li data-role="list-divider" role="heading">Evenements</li>');
+						items.push('<li data-role="list-divider" role="heading">Mes Evenements</li>');
 	
 						$.each(data, function(key, val)
 							{
 								items.push('<li data-theme="c">'+val.title+'</li>');
 							});
 						$('<ul/>', {
-							'id':'events',
+							'id':'eventsEv',
 							'data-inset':'true',
 							html: items.join('')
-							}).appendTo('#result');
-						$('#groups').listview();
-					});
-			$.getJSON("../public/rest/group",
-					function(data)
-					{
-						var items = [];
-						items.push('<li data-role="list-divider" role="heading">Groupes</li>');
-
-						$.each(data, function(key, val)
-							{
-								items.push('<li data-theme="c">'+val.label+'</li>');
-							});
-						$('<ul/>', {
-							'id':'groups',
-							'data-inset':'true',
-							html: items.join('')
-							}).appendTo('#result');
-						$('#groups').listview();
+							}).appendTo('#eventsEvents');
+						$('#eventsEv').listview();
 					});
 		</script>
+	</head>
+	<body>
+		<div data-role="page" id="index">
+			<div data-role="header" data-position="fixed">
+				<!-- a href="#" data-rel="back" data-icon="arrow-l" class="ui-btn-left">Retour</a> -->
+				<h1>QuiVientManger?</h1>
+				<!-- a href="#" data-icon="gear" class="ui-btn-right">Options</a> -->
+			</div>
+			<div id="indexEvents" data-role="content">	
+			</div>
+			<div id="indexGroups" data-role="content">	
+			</div>
+			<div data-role="footer" data-id="foo1" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#eventsPage">Mes Ev&eacute;nements</a></li>
+						<li><a href="#groupsPage">Mes Groupes</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div data-role="page" id="eventsPage">
+			<div data-role="header" data-position="fixed">
+				<a href="#index" data-rel="back" data-icon="arrow-l" class="ui-btn-left">Retour</a>
+				<h1>Mes Evenements</h1>
+			</div>
+			<div id="eventsEvents" data-role="content">	
+			</div>
+			<div data-role="footer" data-id="foo1" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<!-- li><a href="#eventsPage">Mes Ev&eacute;nements</a></li> -->
+						<li><a href="#groupsPage">Mes Groupes</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

@@ -17,8 +17,8 @@ return array(
 					),
 					'defaults' => array(
 						'controller' => 'Qvmrest\Controller\Group',
-					)
-				)
+					),
+				),
 			),
 			'rest-event' => array(
 				'type' => 'Segment',
@@ -29,10 +29,10 @@ return array(
 					),
 					'defaults' => array(
 						'controller' => 'Qvmrest\Controller\Event',
-					)
-				)
-			)
-		)
+					),
+				),
+			),
+		),
 	),
 	'view_manager' => array(
 		'template_path_stack' => array(
