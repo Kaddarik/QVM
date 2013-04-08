@@ -2,7 +2,10 @@
 return array(
     'modules' => array(
         'Application',
-    	'Qvm','Qvmrest',
+    	'Qvm',
+    	'Qvmrest',
+    	'ZfcBase',
+    	'ZfcUser',
     ),
     'module_listener_options' => array(
         'config_glob_paths'    => array(

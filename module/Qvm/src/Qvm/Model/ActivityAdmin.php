@@ -15,7 +15,7 @@ class ActivityAdmin implements InputFilterAwareInterface
 	public function exchangeArray($data)
 	{
 		$this->id_activity     = (isset($data['id_activity'])) ? $data['id_activity'] : null;
-		$this->id_person = (isset($data['id_person'])) ? $data['id_person'] : null;
+		$this->id_person = (isset($data['user_id'])) ? $data['user_id'] : null;
 	} 
 	
 	public function setInputFilter(InputFilterInterface $inputFilter)
@@ -35,7 +35,7 @@ class ActivityAdmin implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'id_person',
+                'name'     => 'user_id',
                 'required' => false,
             )));
             

@@ -9,14 +9,14 @@ use Zend\InputFilter\InputFilterInterface;
 class GroupMember implements InputFilterAwareInterface
 {
 	public $id_group;
-	public $id_person;
+	public $user_id;
 	public $is_admin;
 	public $id_pending;
 
 	public function exchangeArray($data)
 	{
 		$this->id_group = (isset($data['id_group'])) ? $data['id_group'] : null;
-		$this->id_person     = (isset($data['id_person'])) ? $data['id_person'] : null;
+		$this->user_id     = (isset($data['user_id'])) ? $data['user_id'] : null;
 		$this->is_admin  = (isset($data['is_admin'])) ? $data['is_admin'] : null;
 		$this->id_pending  = (isset($data['id_pending'])) ? $data['id_pending'] : null;
 	} 
@@ -32,7 +32,7 @@ class GroupMember implements InputFilterAwareInterface
 			)));
 			
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'id_person',
+				'name'     => 'user_id',
 				'required' => false,
 			)));
 			

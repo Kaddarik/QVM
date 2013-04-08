@@ -3,19 +3,25 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Validator
  */
 
 namespace Zend\Validator\Barcode;
 
-/**
- * @category   Zend
- * @package    Zend_Validator
- */
+use Zend\Validator\Exception;
+use Zend\Stdlib\StringUtils;
+use Zend\Stdlib\StringWrapper\StringWrapperInterface;
+
 class Code128 extends AbstractAdapter
 {
+    /**
+     * The used string wrapper used for basic UTF-8 string functions
+     *
+     * @var StringWrapperInterface
+     */
+    protected $utf8StringWrapper;
+
     /**
      * Constructor for this barcode adapter
      */
@@ -36,8 +42,8 @@ class Code128 extends AbstractAdapter
             72 =>0x08, 73 =>0x09, 74 =>0x0A, 75 =>0x0B, 76 =>0x0C, 77 =>0x0D, 78 =>0x0E, 79 =>0x0F,
             80 =>0x10, 81 =>0x11, 82 =>0x12, 83 =>0x13, 84 =>0x14, 85 =>0x15, 86 =>0x16, 87 =>0x17,
             88 =>0x18, 89 =>0x19, 90 =>0x1A, 91 =>0x1B, 92 =>0x1C, 93 =>0x1D, 94 =>0x1E, 95 =>0x1F,
-            96 => '�!', 97 => 'ü', 98 => 'é', 99 => 'â',100 => 'ä',101 => 'à',102 => 'å',103 => '⬡',
-           104 => '� ',105 => '⬰',106 => 'Š'),
+            96 => 'Ç', 97 => 'ü', 98 => 'é', 99 => 'â',100 => 'ä',101 => 'à',102 => 'å',103 => '‡',
+           104 => 'ˆ',105 => '‰',106 => 'Š'),
         'B' => array(
              0 => ' ',  1 => '!',  2 => '"',  3 => '#',  4 => '$',  5 => '%',  6 => '&',  7 => "'",
              8 => '(',  9 => ')', 10 => '*', 11 => '+', 12 => ',', 13 => '-', 14 => '.', 15 => '/',
@@ -51,8 +57,8 @@ class Code128 extends AbstractAdapter
             72 => 'h', 73 => 'i', 74 => 'j', 75 => 'k', 76 => 'l', 77 => 'm', 78 => 'n', 79 => 'o',
             80 => 'p', 81 => 'q', 82 => 'r', 83 => 's', 84 => 't', 85 => 'u', 86 => 'v', 87 => 'w',
             88 => 'x', 89 => 'y', 90 => 'z', 91 => '{', 92 => '|', 93 => '}', 94 => '~', 95 =>0x7F,
-            96 => '�!', 97 => 'ü', 98 => 'é', 99 => 'â',100 => 'ä',101 => 'à',102 => 'å',103 => '⬡',
-           104 => '� ',105 => '⬰',106 => 'Š'),
+            96 => 'Ç', 97 => 'ü', 98 => 'é', 99 => 'â',100 => 'ä',101 => 'à',102 => 'å',103 => '‡',
+           104 => 'ˆ',105 => '‰',106 => 'Š'),
         'C' => array(
              0 => '00',  1 => '01',  2 => '02',  3 => '03',  4 => '04',  5 => '05',  6 => '06',  7 => '07',
              8 => '08',  9 => '09', 10 => '10', 11 => '11', 12 => '12', 13 => '13', 14 => '14', 15 => '15',
@@ -66,17 +72,40 @@ class Code128 extends AbstractAdapter
             72 => '72', 73 => '73', 74 => '74', 75 => '75', 76 => '76', 77 => '77', 78 => '78', 79 => '79',
             80 => '80', 81 => '81', 82 => '82', 83 => '83', 84 => '84', 85 => '85', 86 => '86', 87 => '87',
             88 => '88', 89 => '89', 90 => '90', 91 => '91', 92 => '92', 93 => '93', 94 => '94', 95 => '95',
-            96 => '96', 97 => '97', 98 => '98', 99 => '99',100 => 'ä', 101 => 'à', 102 => 'å', 103 => '⬡',
-           104 => '� ', 105 => '⬰', 106 => 'Š')));
+            96 => '96', 97 => '97', 98 => '98', 99 => '99',100 => 'ä', 101 => 'à', 102 => 'å', 103 => '‡',
+           104 => 'ˆ', 105 => '‰', 106 => 'Š')));
         $this->setChecksum('code128');
 
+    }
+
+    public function setUtf8StringWrapper(StringWrapperInterface $utf8StringWrapper)
+    {
+        if (!$utf8StringWrapper->isSupported('UTF-8')) {
+            throw new Exception\InvalidArgumentException(
+                "The string wrapper needs to support UTF-8 character encoding"
+            );
+        }
+        $this->utf8StringWrapper = $utf8StringWrapper;
+    }
+
+    /**
+     * Get the string wrapper supporting UTF-8 character encoding
+     *
+     * @return StringWrapperInterface
+     */
+    public function getUtf8StringWrapper()
+    {
+        if (!$this->utf8StringWrapper) {
+            $this->utf8StringWrapper = StringUtils::getWrapper('UTF-8');
+        }
+        return $this->utf8StringWrapper;
     }
 
     /**
      * Checks for allowed characters within the barcode
      *
      * @param  string $value The barcode to check for allowed characters
-     * @return boolean
+     * @return bool
      */
     public function hasValidCharacters($value)
     {
@@ -84,20 +113,23 @@ class Code128 extends AbstractAdapter
             return false;
         }
 
+        // get used string wrapper for UTF-8 character encoding
+        $strWrapper = $this->getUtf8StringWrapper();
+
         // detect starting charset
         $set        = $this->getCodingSet($value);
         $read       = $set;
         if ($set != '') {
-            $value = iconv_substr($value, 1, iconv_strlen($value, 'UTF-8'), 'UTF-8');
+            $value = $strWrapper->substr($value, 1, null);
         }
 
         // process barcode
         while ($value != '') {
-            $char = iconv_substr($value, 0, 1, 'UTF-8');
+            $char = $strWrapper->substr($value, 0, 1);
 
             switch ($char) {
                 // Function definition
-                case '�!' :
+                case 'Ç' :
                 case 'ü' :
                 case 'å' :
                     break;
@@ -130,9 +162,9 @@ class Code128 extends AbstractAdapter
                     break;
 
                 // Doubled start character
-                case '⬡' :
-                case '� ' :
-                case '⬰' :
+                case '‡' :
+                case 'ˆ' :
+                case '‰' :
                     return false;
                     break;
 
@@ -149,11 +181,11 @@ class Code128 extends AbstractAdapter
                     break;
             }
 
-            $value = iconv_substr($value, 1);
+            $value = $strWrapper->substr($value, 1, null);
             $read  = $set;
         }
 
-        if (($value != '') && (iconv_strlen($value, 'UTF-8') != 1)) {
+        if (($value != '') && ($strWrapper->strlen($value) != 1)) {
             return false;
         }
 
@@ -164,7 +196,7 @@ class Code128 extends AbstractAdapter
      * Validates the checksum ()
      *
      * @param  string $value The barcode to validate
-     * @return boolean
+     * @return bool
      */
     protected function code128($value)
     {
@@ -173,28 +205,29 @@ class Code128 extends AbstractAdapter
         $set        = $this->getCodingSet($value);
         $read       = $set;
         $usecheck   = $this->useChecksum(null);
-        $char       = iconv_substr($value, 0, 1, 'UTF-8');
-        if ($char == '⬡') {
+        $strWrapper = $this->getUtf8StringWrapper();
+        $char       = $strWrapper->substr($value, 0, 1);
+        if ($char == '‡') {
             $sum = 103;
-        } elseif ($char == '� ') {
+        } elseif ($char == 'ˆ') {
             $sum = 104;
-        } elseif ($char == '⬰') {
+        } elseif ($char == '‰') {
             $sum = 105;
         } elseif ($usecheck == true) {
             // no start value, unable to detect an proper checksum
             return false;
         }
 
-        $value = iconv_substr($value, 1, iconv_strlen($value, 'UTF-8'), 'UTF-8');
-        while (iconv_strpos($value, 'Š') || ($value != '')) {
-            $char = iconv_substr($value, 0, 1, 'UTF-8');
+        $value = $strWrapper->substr($value, 1, null);
+        while ($strWrapper->strpos($value, 'Š') || ($value != '')) {
+            $char = $strWrapper->substr($value, 0, 1);
             if ($read == 'C') {
-                $char = iconv_substr($value, 0, 2, 'UTF-8');
+                $char = $strWrapper->substr($value, 0, 2);
             }
 
             switch ($char) {
                 // Function definition
-                case '�!' :
+                case 'Ç' :
                 case 'ü' :
                 case 'å' :
                     $sum += ($pos * $this->ord128($char, $set));
@@ -230,9 +263,9 @@ class Code128 extends AbstractAdapter
                     $read = 'A';
                     break;
 
-                case '⬡' :
-                case '� ' :
-                case '⬰' :
+                case '‡' :
+                case 'ˆ' :
+                case '‰' :
                     return false;
                     break;
 
@@ -246,22 +279,22 @@ class Code128 extends AbstractAdapter
                     break;
             }
 
-            $value = iconv_substr($value, 1, iconv_strlen($value, 'UTF-8'), 'UTF-8');
+            $value = $strWrapper->substr($value, 1);
             ++$pos;
-            if ((iconv_strpos($value, 'Š', 0, 'UTF-8') == 1) && (iconv_strlen($value, 'UTF-8') == 2)) {
+            if (($strWrapper->strpos($value, 'Š') == 1) && ($strWrapper->strlen($value) == 2)) {
                 // break by stop and checksum char
                 break;
             }
             $read  = $set;
         }
 
-        if ((iconv_strpos($value, 'Š', 0, 'UTF-8') != 1) || (iconv_strlen($value, 'UTF-8') != 2)) {
+        if (($strWrapper->strpos($value, 'Š') != 1) || ($strWrapper->strlen($value) != 2)) {
             // return false if checksum is not readable and true if no startvalue is detected
             return (!$usecheck);
         }
 
         $mod = $sum % 103;
-        if (iconv_substr($value, 0, 1, 'UTF-8') == $this->chr128($mod, $set)) {
+        if ($strWrapper->substr($value, 0, 1) == $this->chr128($mod, $set)) {
             return true;
         }
 
@@ -276,15 +309,15 @@ class Code128 extends AbstractAdapter
      */
     protected function getCodingSet($value)
     {
-        $value = iconv_substr($value, 0, 1, 'UTF-8');
+        $value = $this->getUtf8StringWrapper()->substr($value, 0, 1);
         switch ($value) {
-            case '⬡' :
+            case '‡' :
                 return 'A';
                 break;
-            case '� ' :
+            case 'ˆ' :
                 return 'B';
                 break;
-            case '⬰' :
+            case '‰' :
                 return 'C';
                 break;
         }
@@ -406,8 +439,8 @@ class Code128 extends AbstractAdapter
                 return -1;
             }
         } else {
-            if ($ord <= 106) {
-                return ($ord + 32);
+            if ($value <= 106) {
+                return ($value + 32);
             } else {
                 return -1;
             }

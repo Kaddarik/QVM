@@ -22,7 +22,7 @@ class GroupController extends AbstractActionController
     {    	
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson(1,null);
+    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(),null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
@@ -129,15 +129,15 @@ class GroupController extends AbstractActionController
     public function rejoindreAction(){
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson(1, null);
+    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
     	
     	return array(
-    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
-    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId()),	
+    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId())),
     		'groups' => $paginator
     	);
     }
@@ -152,7 +152,7 @@ class GroupController extends AbstractActionController
     	
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson(1, null);
+    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
@@ -161,8 +161,8 @@ class GroupController extends AbstractActionController
     	$this->getGroupMemberTable()->updateGroupsPrivateInvitValid(1, $idGroupe);
     	
     	$result = new ViewModel(array(
-    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),	
-    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId()),	
+    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId())),
     		'groups' => $paginator
     			));
     	$result->setTemplate('qvm\group\rejoindre.phtml');
@@ -180,7 +180,7 @@ class GroupController extends AbstractActionController
 
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson(1, null);
+    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
@@ -189,8 +189,8 @@ class GroupController extends AbstractActionController
     	$this->getGroupMemberTable()->updateGroupsPrivateInvitRefus(1, $idGroupe);
     	 
     	$result = new ViewModel(array(
-    			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson(1),
-    			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson(1)),
+    			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId()),
+    			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId())),
     			'groups' => $paginator
     	));
     	$result->setTemplate('qvm\group\rejoindre.phtml');
@@ -220,7 +220,7 @@ class GroupController extends AbstractActionController
 	{
 		if (!$this->personTable) {
 			$sm = $this->getServiceLocator();
-			$this->personTable = $sm->get('Qvm\Model\PersonTable');
+			$this->personTable = $sm->get('Qvm\Model\UsersTable');
 		}
 		return $this->personTable;
 	}

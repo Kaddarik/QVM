@@ -33,11 +33,11 @@ class UpcomingParticipatingTable
 		return $row;
 	}
 
-	public function getUpcomingParticipatingByPerson($id_person, $limit)
+	public function getUpcomingParticipatingByPerson($user_id, $limit)
 	{
 		$select = new Select;
 		$select->columns(array('id_event','title','date','vote'))->from('upcomingparticipating')
-		->where(array('upcomingparticipating.id_person' => $id_person))
+		->where(array('upcomingparticipating.user_id' => $user_id))
 		->limit($limit)
 		->order('upcomingparticipating.date');
 		$adapter = $this->tableGateway->getAdapter();

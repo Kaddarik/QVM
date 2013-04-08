@@ -3,9 +3,8 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Soap
  */
 
 namespace Zend\Soap\Server;
@@ -66,10 +65,6 @@ use Zend\Soap\Exception\UnexpectedValueException;
  *  $soap = new \Zend\Soap\Server($wsdlFile);
  *  $soap->setObject(new \Zend\Soap\Server\DocumentLiteralWrapper($service));
  *  $soap->handle();
- *
- * @category   Zend
- * @package    Zend_Soap
- * @subpackage Server
  */
 class DocumentLiteralWrapper
 {
@@ -123,6 +118,7 @@ class DocumentLiteralWrapper
     protected function _parseArguments($method, $document)
     {
         $reflMethod = $this->reflection->getMethod($method);
+        /* @var \Zend\Server\Reflection\ReflectionParameter[] $params  */
         $params = array();
         foreach ($reflMethod->getParameters() as $param) {
             $params[$param->getName()] = $param;
@@ -132,8 +128,10 @@ class DocumentLiteralWrapper
         foreach (get_object_vars($document) as $argName => $argValue) {
             if (!isset($params[$argName])) {
                 throw new UnexpectedValueException(sprintf(
-                    "Received unknown argument %s which is not an argument to %s::%s",
-                    get_class($this->object), $method
+                    "Received unknown argument %s which is not an argument to %s::%s()",
+                    $argName,
+                    get_class($this->object),
+                    $method
                 ));
             }
             $delegateArgs[$params[$argName]->getPosition()] = $argValue;
@@ -151,7 +149,8 @@ class DocumentLiteralWrapper
         if (!$this->reflection->hasMethod($method)) {
             throw new BadMethodCallException(sprintf(
                 "Method %s does not exist on delegate object %s",
-                $method, get_class($this->object)
+                $method,
+                get_class($this->object)
             ));
         }
     }
@@ -161,7 +160,8 @@ class DocumentLiteralWrapper
         if (count($args) != 1) {
             throw new UnexpectedValueException(sprintf(
                 "Expecting exactly one argument that is the document/literal wrapper, got %d",
-                count($args)));
+                count($args)
+            ));
         }
     }
 }

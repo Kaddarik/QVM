@@ -3,9 +3,8 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Console
  */
 
 namespace Zend\Console\Adapter;
@@ -14,9 +13,7 @@ use Zend\Console\Charset;
 use Zend\Console\Exception;
 
 /**
- * @category   Zend
- * @package    Zend_Console
- * @subpackage Adapter
+ * Common console adapter codebase
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -91,7 +88,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $text = trim($text, "\r\n");
 
         // Replace newline characters with spaces
-        $test = str_replace("\n", " ", $text);
+        $text = str_replace("\n", " ", $text);
 
         // Trim the line if it's too long and output text
         $consoleWidth = $this->getWidth();
@@ -101,7 +98,8 @@ abstract class AbstractAdapter implements AdapterInterface
         } elseif ($width == $consoleWidth) {
             $this->write($text, $color, $bgColor);
         } else {
-            $this->write($text . "\n", $color, $bgColor);
+            $this->write($text, $color, $bgColor);
+            $this->write("\n");
         }
     }
 
@@ -222,9 +220,6 @@ abstract class AbstractAdapter implements AdapterInterface
                     break;
                 case static::FILL_SHADE_DARK:
                     $fillChar = $charset::SHADE_DARK;
-                    break;
-                case static::FILL_SHADE_LIGHT:
-                    $fillChar = $charset::SHADE_LIGHT;
                     break;
                 case static::FILL_BLOCK:
                 default:
@@ -365,32 +360,6 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Return current cursor position - array($x, $y)
-     *
-     *
-     * @return array array($x, $y);
-     */
-    public function getPos()
-    {
-    }
-
-//    /**
-//     * Return current cursor X coordinate (column)
-//     *
-//     *
-//     * @return  false|int       Integer or false if failed to determine.
-//     */
-//    public function getX();
-//
-//    /**
-//     * Return current cursor Y coordinate (row)
-//     *
-//     *
-//     * @return  false|int       Integer or false if failed to determine.
-//     */
-//    public function getY();
-
-    /**
      * Set cursor position
      *
      * @param int $x
@@ -422,22 +391,6 @@ abstract class AbstractAdapter implements AdapterInterface
     public function getTitle()
     {
         return '';
-    }
-
-    /**
-     * Set console window title
-     *
-     * @param $title
-     */
-    public function setTitle($title)
-    {
-    }
-
-    /**
-     * Reset console window title to previous value.
-     */
-    public function resetTitle()
-    {
     }
 
     /**
@@ -609,7 +562,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $f = fopen('php://stdin','r');
         do {
             $char = fread($f,1);
-        } while ($mask === null || stristr($mask, $char));
+        } while ("" === $char || ($mask !== null && false === strstr($mask, $char)));
         fclose($f);
         return $char;
     }

@@ -42,11 +42,11 @@ class PendingParticipatingTable
 		return $row;
 	}
 	
-	public function getPendingParticipatingByPerson($id_person, $limit)
+	public function getPendingParticipatingByPerson($user_id, $limit)
 	{
 		$select = new Select;
 		$select->columns(array('id_event','title','date','vote'))->from('pendingparticipating')
-		->where(array('pendingparticipating.id_person' => $id_person))
+		->where(array('pendingparticipating.user_id' => $user_id))
 		->limit($limit)
 		->order('pendingparticipating.date');
 		$adapter = $this->tableGateway->getAdapter();

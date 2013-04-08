@@ -45,7 +45,7 @@ class CommentTable
 				'body'  => $comment->body,
 				'datetime' => 'now()',
 				'id_event' =>  $comment->id_event,
-				'id_person' => $comment->id_person,
+				'user_id' => $comment->user_id,
 		);
 
 		$id_comment = (int)$comment->id_comment;

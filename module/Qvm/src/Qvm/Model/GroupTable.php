@@ -61,7 +61,7 @@ class GroupTable
 		$select = new Select;
 		$select->columns(array('id_group', 'label'))->from('group')
 		->join('groupmember', 'group.id_group = groupmember.id_group', array())
-		->where(array('groupmember.id_person' => $idPerson))
+		->where(array('groupmember.user_id' => $idPerson))
 		->join('pending', 'groupmember.id_pending = pending.id_pending', array())
 		->where->equalTo('group.is_private', 1)
 		->and->equalTo('pending.id_pending', 1);
@@ -76,7 +76,7 @@ class GroupTable
 		->join('pending', 'groupmember.id_pending = pending.id_pending', array())
 		->where->equalTo('group.is_private', 0)
 		->and->equalTo('pending.id_pending', 2)
-		->and->notEqualTo('groupmember.id_person', $idPerson);
+		->and->notEqualTo('groupmember.user_id', $idPerson);
 	
 		echo $select->getSqlString(new \Zend\Db\Adapter\Platform\Mysql());
 		
@@ -99,7 +99,7 @@ class GroupTable
 		$select->columns(array('id_group', 'label', 'is_private'))->from('group')
 		->join('groupmember', 'group.id_group = groupmember.id_group')
 		->where(array('groupmember.id_pending' => 0))
-		->where(array('groupmember.id_person' => $idPerson))
+		->where(array('groupmember.user_id' => $idPerson))
 		->limit($limit);
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();

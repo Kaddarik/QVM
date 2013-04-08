@@ -53,12 +53,12 @@ class IndexqvmController extends AbstractActionController
 		}
 		
 		return new ViewModel(array(
-            'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->getUpcomingParticipatingByPerson(1, 5),
-			'nbEvtEnAttente' => count($this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, null)),
-			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, 5),
+            'upcomingParticipatings' => $this->getUpcomingParticipatingTable()->getUpcomingParticipatingByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), 5),
+			'nbEvtEnAttente' => count($this->getPendingParticipatingTable()->getPendingParticipatingByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null)),
+			'pendingParticipatingsLimit' => $this->getPendingParticipatingTable()->getPendingParticipatingByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), 5),
 			'nbLimit' => $nbLimit,
-			'nbGroups' => count($this->getGroupTable()->getGroupByPerson(1, null)),
-			'groupsLimit' => $this->getGroupTable()->getGroupByPerson(1, $nbLimit),
+			'nbGroups' => count($this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null)),
+			'groupsLimit' => $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), $nbLimit),
 			'form' => $form
         ));
 	}

@@ -3,9 +3,8 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_Soap
  */
 
 namespace Zend\Soap\Wsdl\ComplexTypeStrategy;
@@ -16,10 +15,6 @@ use Zend\Soap\Wsdl\ComplexTypeStrategy\ComplexTypeStrategyInterface as ComplexTy
 
 /**
  * Zend_Soap_Wsdl_Strategy_Composite
- *
- * @category   Zend
- * @package    Zend_Soap
- * @subpackage WSDL
  */
 class Composite implements ComplexTypeStrategy
 {
@@ -113,9 +108,10 @@ class Composite implements ComplexTypeStrategy
             }
 
             if ( !($strategy instanceof ComplexTypeStrategy) ) {
-                throw new Exception\InvalidArgumentException(
-                    "Strategy for Complex Type '$type' is not a valid strategy object."
-                );
+                throw new Exception\InvalidArgumentException(sprintf(
+                    'Strategy for Complex Type "%s" is not a valid strategy object.',
+                    $type
+                ));
             }
             $this->typeMap[$type] = $strategy;
         } else {
@@ -146,9 +142,10 @@ class Composite implements ComplexTypeStrategy
     public function addComplexType($type)
     {
         if (!($this->context instanceof Wsdl) ) {
-            throw new Exception\InvalidArgumentException(
-                "Cannot add complex type '$type', no context is set for this composite strategy."
-            );
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Cannot add complex type "%s", no context is set for this composite strategy.',
+                $type
+            ));
         }
 
         $strategy = $this->getStrategyOfType($type);

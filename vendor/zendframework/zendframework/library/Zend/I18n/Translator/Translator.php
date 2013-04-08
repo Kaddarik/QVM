@@ -3,9 +3,8 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
- * @package   Zend_I18n
  */
 
 namespace Zend\I18n\Translator;
@@ -21,10 +20,6 @@ use Zend\Stdlib\ArrayUtils;
 
 /**
  * Translator.
- *
- * @category   Zend
- * @package    Zend_I18n
- * @subpackage Translator
  */
 class Translator
 {
@@ -87,7 +82,7 @@ class Translator
     /**
      * Instantiate a translator
      *
-     * @param  array|Traversable $options
+     * @param  array|Traversable                  $options
      * @return Translator
      * @throws Exception\InvalidArgumentException
      */
@@ -208,12 +203,13 @@ class Translator
     /**
      * Set the default locale.
      *
-     * @param  string $locale
+     * @param  string     $locale
      * @return Translator
      */
     public function setLocale($locale)
     {
         $this->locale = $locale;
+
         return $this;
     }
 
@@ -234,12 +230,13 @@ class Translator
     /**
      * Set the fallback locale.
      *
-     * @param  string $locale
+     * @param  string     $locale
      * @return Translator
      */
     public function setFallbackLocale($locale)
     {
         $this->fallbackLocale = $locale;
+
         return $this;
     }
 
@@ -262,6 +259,7 @@ class Translator
     public function setCache(CacheStorage $cache = null)
     {
         $this->cache = $cache;
+
         return $this;
     }
 
@@ -284,6 +282,7 @@ class Translator
     public function setPluginManager(LoaderPluginManager $pluginManager)
     {
         $this->pluginManager = $pluginManager;
+
         return $this;
     }
 
@@ -332,11 +331,11 @@ class Translator
     /**
      * Translate a plural message.
      *
-     * @param  string      $singular
-     * @param  string      $plural
-     * @param  int         $number
-     * @param  string      $textDomain
-     * @param  string|null $locale
+     * @param  string                         $singular
+     * @param  string                         $plural
+     * @param  int                            $number
+     * @param  string                         $textDomain
+     * @param  string|null                    $locale
      * @return string
      * @throws Exception\OutOfBoundsException
      */
@@ -348,9 +347,9 @@ class Translator
         $locale = null
     ) {
         $locale      = $locale ?: $this->getLocale();
-        $translation = $this->getTranslatedMessage($singular, $locale, $textDomain);
+        $translation = $this->getTranslatedMessage($singular, $locale, $textDomain, true);
 
-        if ($translation === null || $translation === '') {
+        if ($translation === null || $translation['message'] === '') {
             if (null !== ($fallbackLocale = $this->getFallbackLocale())
                 && $locale !== $fallbackLocale
             ) {
@@ -366,31 +365,31 @@ class Translator
             return ($number == 1 ? $singular : $plural);
         }
 
-        $index = $this->messages[$textDomain][$locale]
-                      ->getPluralRule()
-                      ->evaluate($number);
+        $index = $translation['plural_rule']->evaluate($number);
 
-        if (!isset($translation[$index])) {
+        if (!isset($translation['message'][$index])) {
             throw new Exception\OutOfBoundsException(sprintf(
                 'Provided index %d does not exist in plural array', $index
             ));
         }
 
-        return $translation[$index];
+        return $translation['message'][$index];
     }
 
     /**
      * Get a translated message.
      *
-     * @param  string $message
-     * @param  string $locale
-     * @param  string $textDomain
+     * @param  string      $message
+     * @param  string      $locale
+     * @param  string      $textDomain
+     * @param  boolean     $returnPluralRule
      * @return string|null
      */
     protected function getTranslatedMessage(
         $message,
         $locale = null,
-        $textDomain = 'default'
+        $textDomain = 'default',
+        $returnPluralRule = false
     ) {
         if ($message === '') {
             return '';
@@ -400,20 +399,40 @@ class Translator
             $this->loadMessages($textDomain, $locale);
         }
 
-        if (!isset($this->messages[$textDomain][$locale][$message])) {
-            return null;
+        if (is_array($this->messages[$textDomain][$locale])) {
+            foreach ($this->messages[$textDomain][$locale] as $textDomain) {
+                if (isset($textDomain[$message])) {
+                    if ($returnPluralRule) {
+                        return array(
+                            'message'    => $textDomain[$message],
+                            'plural_rule' => $textDomain->getPluralRule()
+                        );
+                    } else {
+                        return $textDomain[$message];
+                    }
+                }
+            }
+        } elseif (isset($this->messages[$textDomain][$locale][$message])) {
+            if ($returnPluralRule) {
+                return array(
+                    'message'     => $this->messages[$textDomain][$locale][$message],
+                    'plural_rule' => $this->messages[$textDomain][$locale]->getPluralRule()
+                );
+            } else {
+                return $this->messages[$textDomain][$locale][$message];
+            }
         }
 
-        return $this->messages[$textDomain][$locale][$message];
+        return null;
     }
 
     /**
      * Add a translation file.
      *
-     * @param  string $type
-     * @param  string $filename
-     * @param  string $textDomain
-     * @param  string $locale
+     * @param  string     $type
+     * @param  string     $filename
+     * @param  string     $textDomain
+     * @param  string     $locale
      * @return Translator
      */
     public function addTranslationFile(
@@ -428,8 +447,8 @@ class Translator
             $this->files[$textDomain] = array();
         }
 
-        $this->files[$textDomain][$locale] = array(
-            'type'     => $type,
+        $this->files[$textDomain][$locale][] = array(
+            'type' => $type,
             'filename' => $filename,
         );
 
@@ -439,10 +458,10 @@ class Translator
     /**
      * Add multiple translations with a file pattern.
      *
-     * @param  string $type
-     * @param  string $baseDir
-     * @param  string $pattern
-     * @param  string $textDomain
+     * @param  string     $type
+     * @param  string     $baseDir
+     * @param  string     $pattern
+     * @param  string     $textDomain
      * @return Translator
      */
     public function addTranslationFilePattern(
@@ -467,8 +486,8 @@ class Translator
     /**
      * Add remote translations.
      *
-     * @param  string $type
-     * @param  string $textDomain
+     * @param  string     $type
+     * @param  string     $textDomain
      * @return Translator
      */
     public function addRemoteTranslations($type, $textDomain = 'default')
@@ -485,8 +504,8 @@ class Translator
     /**
      * Load messages for a given language and domain.
      *
-     * @param  string $textDomain
-     * @param  string $locale
+     * @param  string                     $textDomain
+     * @param  string                     $locale
      * @throws Exception\RuntimeException
      * @return void
      */
@@ -501,11 +520,34 @@ class Translator
 
             if (null !== ($result = $cache->getItem($cacheId))) {
                 $this->messages[$textDomain][$locale] = $result;
+
                 return;
             }
         }
 
-        // Try to load from remote sources
+        $messagesLoaded = (
+            $this->loadMessagesFromRemote($textDomain, $locale)
+            || $this->loadMessagesFromPatterns($textDomain, $locale)
+            || $this->loadMessagesFromFiles($textDomain, $locale)
+        );
+
+        if ($messagesLoaded && $cache !== null) {
+            $cache->setItem($cacheId, $this->messages[$textDomain][$locale]);
+        }
+    }
+
+    /**
+     * Load messages from remote sources.
+     *
+     * @param  string $textDomain
+     * @param  string $locale
+     * @return boolean
+     * @throws Exception\RuntimeException When specified loader is not a remote loader
+     */
+    protected function loadMessagesFromRemote($textDomain, $locale)
+    {
+        $messagesLoaded = false;
+
         if (isset($this->remote[$textDomain])) {
             foreach ($this->remote[$textDomain] as $loaderType) {
                 $loader = $this->getPluginManager()->get($loaderType);
@@ -514,12 +556,37 @@ class Translator
                     throw new Exception\RuntimeException('Specified loader is not a remote loader');
                 }
 
-                $this->messages[$textDomain][$locale] = $loader->load($locale, $textDomain);
-                goto cache;
+                if (isset($this->messages[$textDomain][$locale])) {
+                    if (!is_array($this->messages[$textDomain][$locale])) {
+                        $this->messages[$textDomain][$locale] = array(
+                            $this->messages[$textDomain][$locale]
+                        );
+                    }
+
+                    $this->messages[$textDomain][$locale][] = $loader->load($locale, $textDomain);
+                } else {
+                    $this->messages[$textDomain][$locale] = $loader->load($locale, $textDomain);
+                }
+
+                $messagesLoaded = true;
             }
         }
 
-        // Try to load from pattern
+        return $messagesLoaded;
+    }
+
+    /**
+     * Load messages from patterns.
+     *
+     * @param  string $textDomain
+     * @param  string $locale
+     * @return boolean
+     * @throws Exception\RuntimeException When specified loader is not a file loader
+     */
+    protected function loadMessagesFromPatterns($textDomain, $locale)
+    {
+        $messagesLoaded = false;
+
         if (isset($this->patterns[$textDomain])) {
             foreach ($this->patterns[$textDomain] as $pattern) {
                 $filename = $pattern['baseDir'] . '/' . sprintf($pattern['pattern'], $locale);
@@ -531,35 +598,68 @@ class Translator
                         throw new Exception\RuntimeException('Specified loader is not a file loader');
                     }
 
-                    $this->messages[$textDomain][$locale] = $loader->load($locale, $filename);
-                    goto cache;
+                    if (isset($this->messages[$textDomain][$locale])) {
+                        if (!is_array($this->messages[$textDomain][$locale])) {
+                            $this->messages[$textDomain][$locale] = array(
+                                $this->messages[$textDomain][$locale]
+                            );
+                        }
+
+                        $this->messages[$textDomain][$locale][] = $loader->load($locale, $filename);
+                    } else {
+                        $this->messages[$textDomain][$locale] = $loader->load($locale, $filename);
+                    }
+
+                    $messagesLoaded = true;
                 }
             }
         }
 
-        // Try to load from concrete files
+        return $messagesLoaded;
+    }
+
+    /**
+     * Load messages from files.
+     *
+     * @param  string $textDomain
+     * @param  string $locale
+     * @return boolean
+     * @throws Exception\RuntimeException When specified loader is not a file loader
+     */
+    protected function loadMessagesFromFiles($textDomain, $locale)
+    {
+        $messagesLoaded = false;
+
         foreach (array($locale, '*') as $currentLocale) {
             if (!isset($this->files[$textDomain][$currentLocale])) {
                 continue;
             }
 
-            $file   = $this->files[$textDomain][$currentLocale];
-            $loader = $this->getPluginManager()->get($file['type']);
+            foreach ($this->files[$textDomain][$currentLocale] as $file) {
+                $loader = $this->getPluginManager()->get($file['type']);
 
-            if (!$loader instanceof FileLoaderInterface) {
-                throw new Exception\RuntimeException('Specified loader is not a file loader');
+                if (!$loader instanceof FileLoaderInterface) {
+                    throw new Exception\RuntimeException('Specified loader is not a file loader');
+                }
+
+                if (isset($this->messages[$textDomain][$locale])) {
+                    if (!is_array($this->messages[$textDomain][$locale])) {
+                        $this->messages[$textDomain][$locale] = array(
+                            $this->messages[$textDomain][$locale]
+                        );
+                    }
+
+                    $this->messages[$textDomain][$locale][] = $loader->load($locale, $file['filename']);
+                } else {
+                    $this->messages[$textDomain][$locale] = $loader->load($locale, $file['filename']);
+                }
+
+                $messagesLoaded = true;
             }
 
-            $this->messages[$textDomain][$locale] = $loader->load($locale, $file['filename']);
-
             unset($this->files[$textDomain][$currentLocale]);
-            goto cache;
         }
 
-        // Cache the loaded text domain
-        cache:
-        if ($cache !== null) {
-            $cache->setItem($cacheId, $this->messages[$textDomain][$locale]);
-        }
+        return $messagesLoaded;
     }
 }

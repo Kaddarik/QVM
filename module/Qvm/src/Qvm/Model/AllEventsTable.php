@@ -41,12 +41,12 @@ class AllEventsTable
 		return $row;
 	}
 	
-	public function getEventsByActivityAndPerson($id_activity,$id_person)
+	public function getEventsByActivityAndPerson($id_activity,$user_id)
 	{
 		$select = new Select;
-		$select->columns(array('id_event', 'id_activity', 'title','location_name','location_url','id_person','firstname','surname','date','vote'))->from('allevents')
+		$select->columns(array('id_event', 'id_activity', 'title','location_name','location_url','user_id','firstname','surname','date','vote'))->from('allevents')
 		->where(array('allevents.id_activity' => $id_activity))
-		->where(array('allevents.id_person' => $id_person))
+		->where(array('allevents.user_id' => $user_id))
 		->limit(5)
 		->order('allevents.date');
 		$adapter = $this->tableGateway->getAdapter();
@@ -58,11 +58,11 @@ class AllEventsTable
 
 	}
 	
-	public function getEventsByPerson($id_person, $limit)
+	public function getEventsByPerson($user_id, $limit)
 	{
 		$select = new Select;
 		$select->columns(array('id_event','title','date','vote'))->from('allevents')
-		->where(array('allevents.id_person' => $id_person))
+		->where(array('allevents.user_id' => $user_id))
 		->limit($limit)
 		->order('allevents.date');
 		$adapter = $this->tableGateway->getAdapter();
@@ -80,10 +80,10 @@ class AllEventsTable
 	public function getPersonByEvent($id_event, $limit)
 	{
 		$select = new Select;
-		$select->columns(array('id_person','firstname','surname','vote'))->from('allevents')
+		$select->columns(array('user_id','firstname','surname','vote'))->from('allevents')
 		->where(array('allevents.id_event' => $id_event))
 		->limit($limit)
-		->order('allevents.id_person');
+		->order('allevents.user_id');
 		$adapter = $this->tableGateway->getAdapter();
 		$statement = $adapter->createStatement();
 		$select->prepareStatement($adapter, $statement);
@@ -95,11 +95,11 @@ class AllEventsTable
 	
 	}
 	
-	public function getActivityByPerson($id_person, $limit)
+	public function getActivityByPerson($user_id, $limit)
 	{
 		$select = new Select;
 		$select->columns(array('id_activity','title','location_name','location_url'))->from('allevents')
-		->where(array('allevents.id_person' => $id_person))
+		->where(array('allevents.user_id' => $user_id))
 		->limit($limit)
 		->order('allevents.title');
 		$adapter = $this->tableGateway->getAdapter();

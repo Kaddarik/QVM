@@ -33,7 +33,7 @@ class ActivityAdminTable
 	{
 		$data = array(
 				'id_activity'  => $ida,
-				'id_person'  => $idp,
+				'user_id'  => $idp,
 
 		);
 		$this->tableGateway->insert($data);

@@ -1,3 +1,7 @@
+<?php if(!$this->zfcUserIdentity()): ?>
+    <!-- display the login form -->
+    <?php echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
+<?php endif?>
 <?php
 $form = $this->form;
 echo $this->form ()->openTag ( $form );

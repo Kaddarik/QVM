@@ -13,7 +13,7 @@ class Comment implements InputFilterAwareInterface
 	public $datetime;
 	public $severity;
 	public $id_event;
-	public $id_person;
+	public $user_id;
 	
 
     protected $inputFilter; 
@@ -25,7 +25,7 @@ class Comment implements InputFilterAwareInterface
 		$this->datetime  = (isset($data['datetime'])) ? $data['datetime'] : null;
 		$this->severity  = (isset($data['severity'])) ? $data['severity'] : null;
 		$this->id_event  = (isset($data['id_event'])) ? $data['id_event'] : null;
-		$this->id_person  = (isset($data['id_person'])) ? $data['id_person'] : null;
+		$this->user_id  = (isset($data['user_id'])) ? $data['user_id'] : null;
 	} 
 	
 	public function setInputFilter(InputFilterInterface $inputFilter)
@@ -67,7 +67,7 @@ class Comment implements InputFilterAwareInterface
             
 
             $inputFilter->add($factory->createInput(array(
-            		'name'     => 'id_person',
+            		'name'     => 'user_id',
             		'required' => false,
             )));
 

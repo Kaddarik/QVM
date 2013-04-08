@@ -9,7 +9,7 @@ use Zend\InputFilter\InputFilterInterface;
 class Preference implements InputFilterAwareInterface
 {
 	public $id_preference;
-	public $id_person;
+	public $user_id;
 	public $id_activity;
 	public $vote;
 	public $is_create_notif;
@@ -20,7 +20,7 @@ class Preference implements InputFilterAwareInterface
 	public function exchangeArray($data)
 	{
 		$this->id_preference     = (isset($data['id_preference'])) ? $data['id_preference'] : null;
-		$this->id_person = (isset($data['id_person'])) ? $data['id_person'] : null;
+		$this->user_id = (isset($data['user_id'])) ? $data['user_id'] : null;
 		$this->id_activity  = (isset($data['id_activity'])) ? $data['id_activity'] : null;
 		$this->vote  = (isset($data['vote'])) ? $data['vote'] : null;
 		$this->is_create_notif  = (isset($data['is_create_notif'])) ? $data['is_create_notif'] : null;
@@ -43,7 +43,7 @@ class Preference implements InputFilterAwareInterface
             )));
             
             $inputFilter->add($factory->createInput(array(
-            		'name'     => 'id_person',
+            		'name'     => 'user_id',
             		'required' => true,
             )));
 

@@ -138,16 +138,16 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype->setArrayObjectPrototype(new Activity());
     						return new TableGateway('activity', $dbAdapter, null, $resultSetPrototype);
     					},
-    					'Qvm\Model\PersonTable' =>  function($sm) {
-    						$tableGateway = $sm->get('PersonTableGateway');
-    						$table = new PersonTable($tableGateway);
+    					'Qvm\Model\UserTable' =>  function($sm) {
+    						$tableGateway = $sm->get('UsersTableGateway');
+    						$table = new UsersTable($tableGateway);
     						return $table;
     					},
-    					'PersonTableGateway' => function ($sm) {
+    					'UserTableGateway' => function ($sm) {
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
-    						$resultSetPrototype->setArrayObjectPrototype(new Person());
-    						return new TableGateway('person', $dbAdapter, null, $resultSetPrototype);
+    						$resultSetPrototype->setArrayObjectPrototype(new User());
+    						return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Qvm\Model\GroupMemberTable' =>  function($sm) {
     						$tableGateway = $sm->get('GroupMemberTableGateway');

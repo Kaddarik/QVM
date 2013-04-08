@@ -18,18 +18,18 @@ class GroupMemberTable
 		return $resultSet;
 	}
 	
-	public function updateGroupsPrivateInvitValid($idPerson, $idGroup){
+	public function updateGroupsPrivateInvitValid($user_id, $idGroup){
 		$data = array('id_pending' => 0);
-		$this->tableGateway->update($data, array('id_person' => $idPerson, 'id_group' => $idGroup));
+		$this->tableGateway->update($data, array('user_id' => $user_id, 'id_group' => $idGroup));
 	}
 	
-	public function updateGroupsPrivateInvitRefus($idPerson, $idGroup){
+	public function updateGroupsPrivateInvitRefus($user_id, $idGroup){
 		$data = array('id_pending' => 2);
-		$this->tableGateway->update($data, array('id_person' => $idPerson, 'id_group' => $idGroup));
+		$this->tableGateway->update($data, array('user_id' => $user_id, 'id_group' => $idGroup));
 	}
 	
-	/*public function updateGroupsPublicRejoindre($idPerson, $idGroup){
+	/*public function updateGroupsPublicRejoindre($user_id, $idGroup){
 		$data = array('id_pending' => 0);
-		$this->tableGateway->update($data, array('id_person' => $idPerson, 'id_group' => $idGroup));
+		$this->tableGateway->update($data, array('user_id' => $user_id, 'id_group' => $idGroup));
 	}*/
 }

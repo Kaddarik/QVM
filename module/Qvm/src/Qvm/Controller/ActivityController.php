@@ -39,10 +39,10 @@ class ActivityController extends AbstractActionController {
 		}
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		return new ViewModel(array(
-    		'activites' => $this->getAllEventsTable()->getActivityByPerson(1,5),
-			'nbActivites' => count ($this->getAllEventsTable()->getActivityByPerson(1,null)),
-			'events' => $this->getAllEventsTable()->getEventsByPerson(1,5),
-			'nbEvents' =>  count ($this->getAllEventsTable()->getEventsByPerson(1, null)),
+    		'activites' => $this->getAllEventsTable()->getActivityByPerson($this->zfcUserAuthentication()->getIdentity()->getId(),5),
+			'nbActivites' => count ($this->getAllEventsTable()->getActivityByPerson($this->zfcUserAuthentication()->getIdentity()->getId(),null)),
+			'events' => $this->getAllEventsTable()->getEventsByPerson($this->zfcUserAuthentication()->getIdentity()->getId(),5),
+			'nbEvents' =>  count ($this->getAllEventsTable()->getEventsByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null)),
 			'form' => $form,
 		));
 	}
@@ -134,7 +134,7 @@ class ActivityController extends AbstractActionController {
 				$this->getActivityTable()->saveActivity($activity);
 				$id = $this->getActivityTable()->getLastActivity();
 				$this->getActivityCategoryTable()->saveActivityCategory($id,$form->get ( 'categorie' )->getValue());
-				$this->getActivityAdminTable()->saveActivityAdmin($id, 1);
+				$this->getActivityAdminTable()->saveActivityAdmin($id, $this->zfcUserAuthentication()->getIdentity()->getId());
 				return $this->redirect ()->toRoute ( 'activity' );
 			}
 		}
@@ -150,7 +150,7 @@ class ActivityController extends AbstractActionController {
 			$comment = new Comment();
 			$form->setInputFilter ( $comment->getInputFilter() );
 			$form->setData ($request->getPost ());
-			$comment->id_person = 1;
+			$comment->id_person = $this->zfcUserAuthentication()->getIdentity()->getId();
 			if ($form->isValid ()) {
 				$comment->exchangeArray($form->getData());
 				$this->getCommentTable()->saveComment($comment);
@@ -204,7 +204,7 @@ class ActivityController extends AbstractActionController {
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 	
 		$page = (int) $this->params()->fromRoute('page', 1);
-		$events = $this->getPendingParticipatingTable()->getPendingParticipatingByPerson(1, null);
+		$events = $this->getPendingParticipatingTable()->getPendingParticipatingByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
 		$iteratorAdapter = new Iterator($events);
 		$paginator = new Paginator($iteratorAdapter);
 		$paginator->setCurrentPageNumber($page);
@@ -300,11 +300,11 @@ class ActivityController extends AbstractActionController {
 	
 	public function getPersonTable()
 	{
-		if (!$this->personTable) {
+		if (!$this->userTable) {
 			$sm = $this->getServiceLocator();
-			$this->personTable = $sm->get('Qvm\Model\PersonTable');
+			$this->userTable = $sm->get('Qvm\Model\UserTable');
 		}
-		return $this->personTable;
+		return $this->userTable;
 	}
 	
 	public function getPendingParticipatingTable()

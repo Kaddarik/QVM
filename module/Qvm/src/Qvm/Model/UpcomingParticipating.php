@@ -13,7 +13,7 @@ class UpcomingParticipating implements InputFilterAwareInterface
 	public $title;
 	public $location_name;
 	public $location_url;
-	public $id_person;
+	public $user_id;
 	public $firstname;
 	public $surname;
 	public $date;
@@ -27,7 +27,7 @@ class UpcomingParticipating implements InputFilterAwareInterface
 		$this->title  = (isset($data['title'])) ? $data['title'] : null;
 		$this->location_name  = (isset($data['location_name'])) ? $data['location_name'] : null;
 		$this->location_url  = (isset($data['location_url'])) ? $data['location_url'] : null;
-		$this->id_person  = (isset($data['id_person'])) ? $data['id_person'] : null;
+		$this->user_id  = (isset($data['user_id'])) ? $data['user_id'] : null;
 		$this->firstname  = (isset($data['firstname'])) ? $data['firstname'] : null;
 		$this->surname  = (isset($data['surname'])) ? $data['surname'] : null;
 		$this->date  = (isset($data['date'])) ? $data['date'] : null;
@@ -117,7 +117,7 @@ class UpcomingParticipating implements InputFilterAwareInterface
     		)));
     
     		$inputFilter->add($factory->createInput(array(
-    				'name'     => 'id_person',
+    				'name'     => 'user_id',
     				'required' => true,
     				'filters'  => array(
     						array('name' => 'Int'),
