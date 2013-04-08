@@ -316,6 +316,11 @@ return array (
 												'action' => 'listPendingParticipating',
 												'label' => 'Mes evenements en attente',
 										),
+										'moncompte' => array(
+											'route' => 'user',
+											'action' => 'settings',
+											'label' => 'Mon compte'
+										)
 								)
 						)
 				)
