@@ -152,12 +152,10 @@ class ActivityController extends AbstractActionController {
 		//Instantiation du formulaire de commentaire
 		$commentForm  = new CommentForm();
 		
-		
-		//Modification du vote
 		$request = $this->getRequest();
-		
 			if ($request->isPost()) {
 				if($this->getRequest()->getPost('vote')) {
+					//Modification du vote
 					$form->setData($request->getPost());
 					if ($form->isValid()) {
 						$vote = (int) $form->get ( 'voteEvenement' )->getValue();
@@ -165,7 +163,7 @@ class ActivityController extends AbstractActionController {
 						return $this->redirect ()->toRoute ( 'activity' );
 						}
 					}
-				else{
+				else{//Insertion du commentaire
 					$comment = new Comment();
 					$commentForm->setInputFilter ( $comment->getInputFilter() );
 					$commentForm->setData ($request->getPost ());
@@ -178,24 +176,7 @@ class ActivityController extends AbstractActionController {
 					}
 				}
 			}
-		
-	
-		//Insertion du commentaire
-		/*$request = $this->getRequest ();
-	
-		if ($request->isPost ()) {
-			$comment = new Comment();
-			$commentForm->setInputFilter ( $comment->getInputFilter() );
-			$commentForm->setData ($request->getPost ());
-			if ($commentForm->isValid ()) {
-				$comment->exchangeArray($commentForm->getData());
-				$comment->id_event = $id;
-				$comment->user_id = $user_id;
-				$this->getCommentTable()->saveComment($comment);
-				return $this->redirect ()->toRoute ( 'activity' );
-			}
-		}*/
-		
+
 		//Récupération données BDD
 		$event = $this->getAllEventsTable()->getEvent($id);
 		$activity = $this->getActivityTable()->getActivity($event->id_activity);

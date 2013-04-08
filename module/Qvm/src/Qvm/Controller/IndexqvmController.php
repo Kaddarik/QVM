@@ -31,6 +31,17 @@ class IndexqvmController extends AbstractActionController
 	 */
 	public function indexAction()
 	{	
+		if (!$this->zfcUserAuthentication()->hasIdentity()) {
+		
+		
+			// Use ZfcUser's login action rather than its authentication
+			// action.
+			return $this->forward()->dispatch('zfcuser', array(
+					'action' => 'login'
+			));
+		}
+		
+		
 		//Récupération de l'id de l'utilisateur connecté
 		$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
 		
@@ -63,7 +74,7 @@ class IndexqvmController extends AbstractActionController
 				$id_event = (int) $form->get ( 'id_event' )->getValue();
 				$vote = (int) $form->get ( 'voteEvenement' )->getValue();
 				$this->getParticipationTable()->updateParticipation($id_event, $vote, $user_id);
-				return array();
+				return $this->redirect ()->toRoute ( 'indexqvm' );
 			}
 		}
 		
