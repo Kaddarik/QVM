@@ -9,6 +9,8 @@
 
 namespace Qvm;
 
+use Qvm\Model\Participation;
+use Qvm\Model\ParticipationTable;
 use Qvm\Model\VoteKind;
 use Qvm\Model\VoteKindTable;
 use Qvm\Model\ActivityCategory;
@@ -33,8 +35,8 @@ use Qvm\Model\EventTable;
 use Qvm\Model\Event;
 use Qvm\Model\ActivityTable;
 use Qvm\Model\Activity;
-use Qvm\Model\PersonTable;
-use Qvm\Model\Person;
+use Qvm\Model\UserTable;
+use Qvm\Model\User;
 use Qvm\Model\GroupMemberTable;
 use Qvm\Model\GroupMember;
 use Qvm\Model\ParticipatingGroupTable;
@@ -127,6 +129,17 @@ class Module implements AutoloaderProviderInterface
     						$resultSetPrototype->setArrayObjectPrototype(new Group());
     						return new TableGateway('group', $dbAdapter, null, $resultSetPrototype);
     					},
+						'Qvm\Model\ParticipationTable' =>  function($sm) {
+    						$tableGateway = $sm->get('ParticipationTableGateway');
+    						$table = new ParticipationTable($tableGateway);
+    						return $table;
+    					},
+    					'ParticipationTableGateway' => function ($sm) {
+    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+    						$resultSetPrototype = new ResultSet();
+    						$resultSetPrototype->setArrayObjectPrototype(new Participation());
+    						return new TableGateway('participation', $dbAdapter, null, $resultSetPrototype);
+    					},
     					'Qvm\Model\ActivityTable' =>  function($sm) {
     						$tableGateway = $sm->get('ActivityTableGateway');
     						$table = new ActivityTable($tableGateway);
@@ -139,8 +152,8 @@ class Module implements AutoloaderProviderInterface
     						return new TableGateway('activity', $dbAdapter, null, $resultSetPrototype);
     					},
     					'Qvm\Model\UserTable' =>  function($sm) {
-    						$tableGateway = $sm->get('UsersTableGateway');
-    						$table = new UsersTable($tableGateway);
+    						$tableGateway = $sm->get('UserTableGateway');
+    						$table = new UserTable($tableGateway);
     						return $table;
     					},
     					'UserTableGateway' => function ($sm) {

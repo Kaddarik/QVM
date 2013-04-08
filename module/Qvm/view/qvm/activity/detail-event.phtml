@@ -2,18 +2,17 @@
 		$form = $this->form;
 		echo $this->form ()->openTag ( $form );
 		
-		$formComment = $this->formComment;
-		$formComment->setAttribute ( 'action', $this->url ( 'activity', array (
-				'action' => 'createComment'
-		) ) );
+		$formComment = $this->formComment ;
+		$formComment->prepare();
+		$formComment->setAttribute('action', $this->url('activity', array('action' => 'detail-event', 'event' => $event)));
 		$formComment->setAttribute('method', 'post');
-		$formComment->setAttribute('event', $event);
-		echo $this->form ()->openTag ( $formComment );
+		echo $this->form()->openTag($formComment);
+		
 		?>
 <div class="row-fluid">
 	<div class="span9">
 		<h1>Activit&eacute "<?php echo $this->escapeHtml($activity->title);?>" - Ev&eacutenement du 
-		<?php echo strftime("%d/%m/%Y a %Hh%M", strtotime($event->date) ); ?>
+		<?php echo date('d/m/Y H\hi', strtotime($event->date)); ?>
 		</h1>
 		<table class="table">
 			<td class="width310"><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) );?></td>
@@ -37,14 +36,14 @@
 		<?php foreach ($comments as $comment) :?>
 		 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 				<td><?php echo $this->escapeHtml($comment->user_id);?> - 
-			<?php echo strftime("%d/%m/%Y %H:%M", strtotime($comment->datetime) ); ?>
+			<?php echo date('d/m/Y H\hi', strtotime($comment->datetime)); ?>
 				<td><?php echo $this->escapeHtml($comment->body);?></td>
 			</tr>	
 		<?php endforeach; ?>
 		</table>
 		
 <dl class="zend_form">
-	<dd><?php echo $this->formRow ( $formComment->get ( 'commentaire' ) );?></dd>
+	<dd><?php echo $this->formRow ( $formComment->get ( 'body' ) );?></dd>
 	<dd><?php echo $this->formSubmit ( $formComment->get ( 'submit' ) );?></dd>
 </dl>
 	</div>

@@ -9,6 +9,10 @@
 
 namespace Qvm\Controller;
 
+
+use Qvm\Model\Participation;
+
+use Qvm\Model\VoteKind;
 use Qvm\Model\UpcomingParticipating;
 
 use Zend\Session\Container;
@@ -26,6 +30,7 @@ class IndexqvmController extends AbstractActionController
 	protected $pendingParticipatingTable;
 	protected $groupTable;
 	protected $votekindTable;
+	protected $participationTable;
 
 	public function indexAction()
 	{
@@ -40,16 +45,13 @@ class IndexqvmController extends AbstractActionController
 		}
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		
-		$request = $this->getRequest();
-		if ($request->isPost()) {
-			 
-			$vote = new UpcomingParticipating();
-			$form->setInputFilter($vote->getInputFilter());
-			$form->setData($request->getPost());
-		
-			if ($form->isValid()) {
-				//SAVE TO DATABASE...
-			}
+		$request = $this->getRequest ();
+		if ($request->isPost ()) {
+			$id_event = (int) $this->params()->fromRoute('id', 0);
+			$form->setData ($request->getPost ());
+			$vote = $form->get ( 'voteEvenement' )->getValue();
+			$this->getParticipationTable()->saveParticipation($id_event, 1, 1);
+			return array();
 		}
 		
 		return new ViewModel(array(
@@ -63,6 +65,26 @@ class IndexqvmController extends AbstractActionController
         ));
 	}
 	
+	public function majVoteAction()
+	{
+		$id_event = (int) $this->params()->fromRoute('id', 0);
+		$vote = (int) $this->params()->fromRoute('vote', 0);
+		if (!$id_event) {
+			return array();
+		}
+		
+		$form  = new VoteEvenementForm();
+		$request = $this->getRequest ();
+		$form->setData ($request->getPost ());
+			
+		/*$vote = $form->get ( 'voteEvenement' )->getValue();*/
+		if (!$id_event) {
+			return array();
+		}
+		// Changer vote
+		$this->getParticipationTable()->saveParticipation($id_event, 1, $vote);
+		return $this->redirect()->toRoute('indexqvm');
+	}
 	public function loginAction()
 	{
 		$user_session = new Container('user');
@@ -116,10 +138,13 @@ class IndexqvmController extends AbstractActionController
 		return $this->votekindTable;
 	}
 
-    public function fooAction()
-    {
-        // This shows the :controller and :action parameters in default route
-        // are working when you browse to /module-specific-root/indexqvm/foo
-        return array();
-    }
+	public function getParticipationTable()
+	{
+		if (!$this->participationTable) {
+			$sm = $this->getServiceLocator();
+			$this->participationTable = $sm->get('Qvm\Model\ParticipationTable');
+		}
+		return $this->participationTable;
+	}
+
 }

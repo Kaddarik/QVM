@@ -11,7 +11,7 @@ class CommentForm extends Form
         $this->setName('comment');
         $this->setAttribute('method', 'post');
         $this->add(array(
-            'name' => 'commentaire',
+            'name' => 'body',
             'attributes' => array(
                 'type' => 'textarea',
              	),

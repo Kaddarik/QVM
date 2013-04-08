@@ -41,9 +41,10 @@ class CommentTable
 
 	public function saveComment(Comment $comment)
 	{
+		date_default_timezone_set('Europe/Paris');
 		$data = array(
 				'body'  => $comment->body,
-				'datetime' => 'now()',
+				'datetime' => date('Y-m-d H:i:s'),
 				'id_event' =>  $comment->id_event,
 				'user_id' => $comment->user_id,
 		);

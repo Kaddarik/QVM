@@ -98,7 +98,8 @@ class AllEventsTable
 	public function getActivityByPerson($user_id, $limit)
 	{
 		$select = new Select;
-		$select->columns(array('id_activity','title','location_name','location_url'))->from('allevents')
+		$select->quantifier('DISTINCT')
+		->columns(array('id_activity','title','location_name','location_url'))->from('allevents')
 		->where(array('allevents.user_id' => $user_id))
 		->limit($limit)
 		->order('allevents.title');
