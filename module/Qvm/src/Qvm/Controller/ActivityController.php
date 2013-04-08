@@ -30,6 +30,7 @@ class ActivityController extends AbstractActionController {
 	protected $commentTable;
 	protected $userTable;
 	protected $pendingParticipatingTable;
+	protected $participationTable;
 	protected $value_options;
 	
 	/**
@@ -147,11 +148,41 @@ class ActivityController extends AbstractActionController {
 		$form->get ( 'voteEvenement' )->setValueOptions($value_options);
 		$form->get ( 'voteEvenement' )->setLabel('Participation : ');
 		
+
 		//Instantiation du formulaire de commentaire
 		$commentForm  = new CommentForm();
 		
+		
+		//Modification du vote
+		$request = $this->getRequest();
+		
+			if ($request->isPost()) {
+				if($this->getRequest()->getPost('vote')) {
+					$form->setData($request->getPost());
+					if ($form->isValid()) {
+						$vote = (int) $form->get ( 'voteEvenement' )->getValue();
+						$this->getParticipationTable()->updateParticipation($id, $vote, $user_id);
+						return $this->redirect ()->toRoute ( 'activity' );
+						}
+					}
+				else{
+					$comment = new Comment();
+					$commentForm->setInputFilter ( $comment->getInputFilter() );
+					$commentForm->setData ($request->getPost ());
+					if ($commentForm->isValid ()) {
+						$comment->exchangeArray($commentForm->getData());
+						$comment->id_event = $id;
+						$comment->user_id = $user_id;
+						$this->getCommentTable()->saveComment($comment);
+						return $this->redirect ()->toRoute ( 'activity' );
+					}
+				}
+			}
+		
+	
 		//Insertion du commentaire
-		$request = $this->getRequest ();
+		/*$request = $this->getRequest ();
+	
 		if ($request->isPost ()) {
 			$comment = new Comment();
 			$commentForm->setInputFilter ( $comment->getInputFilter() );
@@ -163,7 +194,7 @@ class ActivityController extends AbstractActionController {
 				$this->getCommentTable()->saveComment($comment);
 				return $this->redirect ()->toRoute ( 'activity' );
 			}
-		}
+		}*/
 		
 		//Récupération données BDD
 		$event = $this->getAllEventsTable()->getEvent($id);
@@ -459,6 +490,19 @@ class ActivityController extends AbstractActionController {
 			$this->pendingParticipatingTable = $sm->get('Qvm\Model\PendingParticipatingTable');
 		}
 		return $this->pendingParticipatingTable;
+	}
+	
+	/**
+	 * Getter du model ParticipationTable
+	 * @return Ambigous <object, multitype:, \Qvm\Model\PendingParticipatingTable>
+	 */
+	public function getParticipationTable()
+	{
+		if (!$this->participationTable) {
+			$sm = $this->getServiceLocator();
+			$this->participationTable = $sm->get('Qvm\Model\ParticipationTable');
+		}
+		return $this->participationTable;
 	}
 
 }

@@ -13,8 +13,8 @@ echo $this->form()->openTag($formComment);
 <?php echo date('d/m/Y H\hi', strtotime($event->date)); ?>
 </h1>
 <table class="table">
-	<td class="width310"><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) );?></td>
-	<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
+	<td class="width315"><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$event->vote) );?></td>
+	<td><?php echo $this->formRow ( $form->get ( 'submit' )->setName('vote'));?></td>
 </table>
 
 <h2>Liste des participants</h2>
@@ -41,5 +41,5 @@ echo $this->form()->openTag($formComment);
 		
 <dl class="zend_form">
 	<dd><?php echo $this->formRow ( $formComment->get ( 'body' ) );?></dd>
-	<dd><?php echo $this->formSubmit ( $formComment->get ( 'submit' ) );?></dd>
+	<dd><?php echo $this->formSubmit ( $formComment->get ( 'submit' )->setName('comment') );?></dd>
 </dl>
