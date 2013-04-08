@@ -20,6 +20,11 @@ protected $tableGateway;
 		return $resultSet;
 	}
 	
+	/**
+	 * Récupération des groupes participants à une activité
+	 * @param unknown $idActivity
+	 * @return unknown
+	 */
 	public function fetchByActivity($idActivity)
 	{	
 		$where = 'id_activity=' + $idActivity;

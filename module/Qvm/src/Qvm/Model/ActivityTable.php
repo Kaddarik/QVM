@@ -40,6 +40,10 @@ class ActivityTable
 		return $row;
 	}
 	
+	/**
+	 * Récupération de la dernière activité insérée
+	 * @return unknown
+	 */
 	public function getLastActivity()
 	{
 		
@@ -47,7 +51,12 @@ class ActivityTable
 		
 		return $rowset;
 	}
-
+	
+	/**
+	 * Insertion d'une nouvelle activité
+	 * @param Activity $activity
+	 * @throws \Exception
+	 */
 	public function saveActivity(Activity $activity)
 	{
 		$data = array(
@@ -68,6 +77,11 @@ class ActivityTable
 		}
 	}
 	
+	/**
+	 * Récupération des activités par groupe
+	 * @param unknown $idGroupe
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getActivitesByGroup($idGroupe){
 		$select = new Select;
 		$select->columns(array('id_activity', 'title'))->from('activity')
@@ -84,8 +98,4 @@ class ActivityTable
 		return $resultSet;
 	}
 
-	/*public function deleteAlbum($id)
-	{
-		$this->tableGateway->delete(array('id' => $id));
-	}*/
 }

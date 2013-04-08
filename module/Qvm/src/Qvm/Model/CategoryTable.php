@@ -29,6 +29,11 @@ class CategoryTable
 		return $row;
 	}
 
+	/**
+	 * Insertion d'une catégorie
+	 * @param Category $category
+	 * @throws \Exception
+	 */
 	public function saveCategory(Category $category)
 	{
 		$data = array(

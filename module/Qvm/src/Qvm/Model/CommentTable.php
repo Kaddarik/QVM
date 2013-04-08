@@ -38,7 +38,12 @@ class CommentTable
 		$select->where->equalTo('id_event', $id);
 		return $this->tableGateway->selectWith($select);
 	}
-
+	
+	/**
+	 * Insertion d'un commentaire
+	 * @param Comment $comment
+	 * @throws \Exception
+	 */
 	public function saveComment(Comment $comment)
 	{
 		date_default_timezone_set('Europe/Paris');

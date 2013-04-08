@@ -9,6 +9,13 @@ class VoteEvenementForm extends Form
 	public  function __construct($name = null){
 		parent::__construct("vote evenement");
 		
+		$this->add(array(
+				'name' => 'id_event',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+		
 		$select = new Element\Select('voteEvenementSelect');
         $select->setName('voteEvenement');
         $this->add($select);

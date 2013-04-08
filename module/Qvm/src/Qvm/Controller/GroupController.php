@@ -46,7 +46,6 @@ class GroupController extends AbstractActionController
     	));
     }
     
-    
     public function detailsAction(){
     	//Renvoi l'id du groupe
     	$idGroupe = (int) $this->params()->fromRoute('id', 0);

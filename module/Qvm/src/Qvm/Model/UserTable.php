@@ -22,6 +22,11 @@ class UserTable
 		return $resultSet;
 	}
 	
+	/**
+	 * Récupération des membres d'un groupe
+	 * @param unknown $idGroupe
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getMembersByGroup($idGroupe){
 		$select = new Select;
 		$select->columns(array('firstname', 'surname', 'email', 'phonenumber'))->from('user')
@@ -51,6 +56,12 @@ class UserTable
 		return $row;
 	}
 	
+	
+	/**
+	 * Insertion d'un utilisateur
+	 * @param User $user
+	 * @throws \Exception
+	 */
 	public function saveUser(User $user)
 	{
 		$data = array(

@@ -42,6 +42,12 @@ class PendingParticipatingTable
 		return $row;
 	}
 	
+	/**
+	 * Récupération des événements en attente de vote d'un utilisateur
+	 * @param unknown $user_id
+	 * @param unknown $limit
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getPendingParticipatingByPerson($user_id, $limit)
 	{
 		$select = new Select;

@@ -33,8 +33,7 @@ echo $this->form()->openTag($formComment);
 <table class="table">
 <?php foreach ($comments as $comment) :?>
  <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-		<td><?php echo $this->escapeHtml($comment->user_id);?> - 
-	<?php echo date('d/m/Y H\hi', strtotime($comment->datetime)); ?>
+		<td> <?php echo date('d/m/Y H\hi', strtotime($comment->datetime)); ?>
 		<td><?php echo $this->escapeHtml($comment->body);?></td>
 	</tr>	
 <?php endforeach; ?>

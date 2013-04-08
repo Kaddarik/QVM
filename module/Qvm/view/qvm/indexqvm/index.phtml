@@ -1,21 +1,17 @@
 <?php if(!$this->zfcUserIdentity()): ?>
     <!-- display the login form -->
-    <?php echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
+<?php echo $this->zfcUserLoginWidget(array('redirect'=>'application')); ?>
 <?php endif?>
-<?php
-$form = $this->form;
-$form->setAttribute ( 'action', $this->url ( 'indexqvm', array (
-		'action' => 'index', 'id' => $this->id_event ) ) );
-$form->setAttribute('method', 'post');
-$form->prepare();
-echo $this->form()->openTag($form);
-?>
 <div class="row-fluid">
 	<div class="span9">
 		<h1>Mes prochains &eacutev&eacutenements</h1>
 		<table class="table">
 			<?php
 			foreach ( $upcomingParticipatings as $upcomingParticipating ) :
+			$form = $this->form;
+			$form->setAttribute ( 'action', $this->url ( 'indexqvm', array ('action' => 'index') ) );
+			$form->setAttribute('method', 'post');
+			echo $this->form()->openTag($form);
 				?>
 				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td><?php echo $this->escapeHtml($upcomingParticipating->title);?></td>
@@ -23,21 +19,25 @@ echo $this->form()->openTag($form);
 							<?php echo date('d/m/Y H\hi', strtotime($upcomingParticipating->date))?></a>
 					</td>
 					<td><?php 
-				$this->id_event = $upcomingParticipating->id_event;
+				echo  $this->formRow ( $form->get ( 'id_event' )->setAttribute('value',$upcomingParticipating->id_event) );
 				echo  $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$upcomingParticipating->vote) ).'&nbsp;'; 
-				echo $this->formRow ( $form->get ( 'submit' ));?>
-				<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('indexqvm', array('action'=>'majVote', 'id' => $upcomingParticipating->id_event, 'vote' => $form->get ( 'voteEvenement' )->getValue()));?>">
-		<?php echo $this->translate("Ajouter 2") ?> &raquo;
-	</a></td>
+				echo  $this->formSubmit ( $form->get ( 'submit' ));?>
+				</td>
 				</tr>
 				<?php 
 			endforeach; ?>
 		</table>
 		
+<?php echo $this->form()->closeTag(); ?>
+		
 		<h1>Mes &eacutev&eacutenements en attente de vote</h1>
 		<table class="table">
 			<?php
 			foreach ( $pendingParticipatingsLimit as $pendingParticipating ) :
+			$form = $this->form;
+			$form->setAttribute ( 'action', $this->url ( 'indexqvm', array ('action' => 'index') ) );
+			$form->setAttribute('method', 'post');
+			echo $this->form()->openTag($form);
 				?>
 				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td><?php echo $this->escapeHtml($pendingParticipating->title);?></td>
@@ -52,6 +52,7 @@ echo $this->form()->openTag($form);
 			echo $this->form()->closeTag();
 			?>
 		</table>
+<?php echo $this->form()->closeTag(); ?>
 		<?php
 		if ($nbEvtEnAttente > $nbLimit) {
 			?>

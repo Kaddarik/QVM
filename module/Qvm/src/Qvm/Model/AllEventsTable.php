@@ -41,6 +41,12 @@ class AllEventsTable
 		return $row;
 	}
 	
+	/**
+	 * Récupération des événements d'une activité et d'un utilisateur
+	 * @param unknown $id_activity
+	 * @param unknown $user_id
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getEventsByActivityAndPerson($id_activity,$user_id)
 	{
 		$select = new Select;
@@ -58,6 +64,12 @@ class AllEventsTable
 
 	}
 	
+	/**
+	 * Récupération des événéments d'un utilisateur
+	 * @param unknown $user_id
+	 * @param unknown $limit
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getEventsByPerson($user_id, $limit)
 	{
 		$select = new Select;
@@ -76,7 +88,12 @@ class AllEventsTable
 	
 	}
 	
-
+	/**
+	 * Récupération des membres participants à un événement
+	 * @param unknown $id_event
+	 * @param unknown $limit
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getPersonByEvent($id_event, $limit)
 	{
 		$select = new Select;
@@ -95,6 +112,12 @@ class AllEventsTable
 	
 	}
 	
+	/**
+	 * Récupération des activités d'un utilisateur
+	 * @param unknown $user_id
+	 * @param unknown $limit
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getActivityByPerson($user_id, $limit)
 	{
 		$select = new Select;

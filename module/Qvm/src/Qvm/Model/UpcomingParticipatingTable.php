@@ -32,7 +32,13 @@ class UpcomingParticipatingTable
 		}
 		return $row;
 	}
-
+	
+	/**
+	 * Récupération des événements en attente de vote pour un utilisateur
+	 * @param unknown $user_id
+	 * @param unknown $limit
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getUpcomingParticipatingByPerson($user_id, $limit)
 	{
 		$select = new Select;

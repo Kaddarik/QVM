@@ -2,7 +2,6 @@
 namespace Qvm\Model;
 
 use Zend\Db\Sql\Update;
-
 use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\TableGateway;
@@ -40,6 +39,11 @@ class GroupTable
 		return $this->tableGateway->selectWith($select);
 	}
 	
+	/**
+	 * Récupération des groupes participants à une activité
+	 * @param unknown $idActivity
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getGroupsByActivity($idActivity){
 		$select = new Select;
 		$select->columns(array('id_group', 'label', 'is_private'))->from('group')
@@ -57,6 +61,10 @@ class GroupTable
 		return $resultSet;
 	}
 	
+	/**
+	 * Récupération des groupes privés dont la personne est invitée
+	 * @param unknown $idPerson
+	 */
 	public function getGroupsPrivateInvitByPerson($idPerson){
 		$select = new Select;
 		$select->columns(array('id_group', 'label'))->from('group')
@@ -94,6 +102,12 @@ class GroupTable
 		return $row;
 	}
 	
+	/**
+	 * Récupération des groupes dont la personne est membre
+	 * @param unknown $idPerson
+	 * @param unknown $limit
+	 * @return \Zend\Db\ResultSet\ResultSet
+	 */
 	public function getGroupByPerson($idPerson, $limit){
 		$select = new Select;
 		$select->columns(array('id_group', 'label', 'is_private'))->from('group')
@@ -111,6 +125,11 @@ class GroupTable
 		return $resultSet;
 	}
 	
+	/**
+	 * Insertion d'un groupe
+	 * @param Group $group
+	 * @throws \Exception
+	 */
 	public function saveGroup(Group $group)
 	{
 		$data = array(
@@ -129,6 +148,10 @@ class GroupTable
 		}
 	}
 	
+	/**
+	 * Récupération du dernier groupe inséré
+	 * @return unknown
+	 */
 	public function getLastGroup()
 	{
 		$rowset = $this->tableGateway->getLastInsertValue();

@@ -1,15 +1,21 @@
 <?php
 $form = $this->form;
+$form->setAttribute ( 'action', $this->url ( 'activity', array ('action' => 'detail', 'id' => $activity->id_activity ) ) );
+$form->setAttribute('method', 'post');
 echo $this->form ()->openTag ( $form );
 ?>
 <h1>Activit&eacute "<?php echo $this->escapeHtml($activity->title);?>"</h1>
 <p>Cat&eacutegorie : <?php echo $this->escapeHtml($category->label);?></p>
 <p>Description : <?php echo $this->escapeHtml($activity->description);?></p>
 
+<?php if(!$this->preference): ?>
+<p><b>Pas de pr&eacutef&eacuterence de vote</b></p>
+<?php else: ?>
 <table>
 	<td class="width360"><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$preference->vote) );?></td>
 	<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
 </table>
+<?php endif?>
 
 <div class="span5">
 	<h2>Liste des groupes</h2>

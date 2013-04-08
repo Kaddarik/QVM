@@ -28,7 +28,12 @@ class ActivityCategoryTable
 		}
 		return $row;
 	}
-
+	
+	/**
+	 * Insertion d'un nouvelle catégorie d'activité
+	 * @param unknown $ida
+	 * @param unknown $idc
+	 */
 	public function saveActivityCategory($ida, $idc)
 	{
 		$data = array(

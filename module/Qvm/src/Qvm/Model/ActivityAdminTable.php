@@ -28,7 +28,12 @@ class ActivityAdminTable
 		}
 		return $row;
 	}
-
+	
+	/**
+	 * Insertion d'un admin d'une activité
+	 * @param unknown $ida
+	 * @param unknown $idp
+	 */
 	public function saveActivityAdmin($ida, $idp)
 	{
 		$data = array(
