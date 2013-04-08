@@ -11,6 +11,10 @@ use Qvm\Form\RechercheGroupeForm;
 use Qvm\Form\GroupForm;
 use Qvm\Model\Group;
 
+/**
+ * @author Margot Bernard / Antoine Dumas / Sebastien Gendreau / Cedric Bouygues
+ *
+ */
 class GroupController extends AbstractActionController
 {
 	protected $groupTable;
@@ -18,18 +22,26 @@ class GroupController extends AbstractActionController
 	protected $userTable;
 	protected $groupMemberTable;
 
+	/**
+	 * Action index
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
     public function indexAction()
     {    	
-    	// Pagination
-    	$page = (int) $this->params()->fromRoute('page', 1);
+    	//Recuperation de l'id de l'utilisateur connecte
     	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+    	
+    	//Pagination
+    	$page = (int) $this->params()->fromRoute('page', 1);
     	$groups = $this->getGroupTable()->getGroupByPerson($user_id, null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(10);
     	
+    	//Instantiation du formulaire de vote
     	$form  = new RechercheGroupeForm();
+    	
     	$request = $this->getRequest();
     	if ($request->isPost()) {
     		$group = new Group();
@@ -40,13 +52,22 @@ class GroupController extends AbstractActionController
     			//SAVE TO DATABASE...
     		}
     	}
+    	
+    	//Construction de la vue
     	return new ViewModel(array(
     		'groups' => $paginator,
 			'form' => $form ,   		
     	));
     }
     
+    /**
+     * Action utilisée pour afficher les détails du groupe
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:number \Zend\Db\ResultSet\ResultSet mixed
+     */
     public function detailsAction(){
+    	$maxMembres = 10;
+    	$maxActivites = 10;
+    	
     	//Renvoi l'id du groupe
     	$idGroupe = (int) $this->params()->fromRoute('id', 0);
     	if (!$idGroupe) {
@@ -55,14 +76,21 @@ class GroupController extends AbstractActionController
     		));
     	}
 
+    	//Construction de la vue
     	 return array(
             'id' => $idGroupe,
             'group' => $this->getGroupTable()->getGroup($idGroupe),
     	 	'membres' => $this->getUserTable()->getMembersByGroup($idGroupe),
+    	 	'maxMembres' => $maxMembres,
     	 	'activites' => $this->getActivityTable()->getActivitesByGroup($idGroupe),
+    	 	'maxActivites' => $maxActivites,
         );
     }
     
+    /**
+     * Action utilisée pour lister les membres du groupe
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:\Zend\Paginator\Paginator mixed
+     */
     public function listeMembresAction(){
     	$idGroupe = (int) $this->params()->fromRoute('id', 0);
     	if (!$idGroupe) {
@@ -79,12 +107,17 @@ class GroupController extends AbstractActionController
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
     	
+    	//Construction de la vue
     	return array(
     		'group' => $this->getGroupTable()->getGroup($idGroupe),
     		'membres' => $paginator
     	);
     }
     
+    /**
+     * Action utilisée pour lister les activités du groupe
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:\Zend\Paginator\Paginator mixed
+     */
     public function listeActivitesAction(){
     	$idGroupe = (int) $this->params()->fromRoute('id', 0);
     	if (!$idGroupe) {
@@ -101,15 +134,25 @@ class GroupController extends AbstractActionController
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
  	
+    	//Construction de la vue
     	return array(
     			'group' => $this->getGroupTable()->getGroup($idGroupe),
     			'activites' => $paginator
     	);
     }
     
+    /**
+     * Action qui permet l'ajout d'un groupe
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:\Qvm\Form\GroupForm
+     */
     public function createAction() {
+    	//Recuperation de l'id de l'utilisateur connecte
     	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+    	
+    	//Instantiation du formulaire de vote
     	$form = new GroupForm ();
+    	
+    	//Insertion du group et de l'admin de du groupe
     	$request = $this->getRequest ();
     	if ($request->isPost ()) {
     		$group = new Group();
@@ -124,11 +167,17 @@ class GroupController extends AbstractActionController
     			return $this->redirect ()->toRoute ( 'group' );
     		}
     	}
+    	
+    	//Construction de la vue
     	return array (
     			'form' => $form
     	);
     }
     
+    /**
+     * Action utilisée pour rejoindre un groupe
+     * @return multitype:number \Zend\Paginator\Paginator NULL
+     */
     public function rejoindreAction(){
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
@@ -139,6 +188,7 @@ class GroupController extends AbstractActionController
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
     	
+    	//Construction de la vue
     	return array(
     		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id),	
     		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id)),
@@ -146,6 +196,10 @@ class GroupController extends AbstractActionController
     	);
     }
     
+    /**
+     * Action utilisée pour valider une invitation privée
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|\Zend\View\Model\ViewModel
+     */
     public function majGroupsPrivateInvitValidAction(){
     	$idGroupe = (int) $this->params()->fromRoute('id', 0);
     	if (!$idGroupe) {
@@ -162,19 +216,25 @@ class GroupController extends AbstractActionController
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
+    	$this->getGroupMemberTable()->updateGroupsPrivateInvitValid($user_id, $idGroupe);
     	
-    	$this->getGroupMemberTable()->updateGroupsPrivateInvitValid(1, $idGroupe);
-    	
+    	//Construction de la vue
     	$result = new ViewModel(array(
     		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id),	
     		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id)),
     		'groups' => $paginator
     			));
+    	
+    	//utilisation de la vue rejoindre
     	$result->setTemplate('qvm\group\rejoindre.phtml');
     	
     	return $result;
     }
     
+    /**
+     * Action utilisée pour refuser une invitation privée
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|\Zend\View\Model\ViewModel
+     */
     public function majGroupsPrivateInvitRefusAction(){
     	$idGroupe = (int) $this->params()->fromRoute('id', 0);
     	if (!$idGroupe) {
@@ -191,19 +251,24 @@ class GroupController extends AbstractActionController
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
-    	
     	$this->getGroupMemberTable()->updateGroupsPrivateInvitRefus($user_id, $idGroupe);
     	 
+    	//Construction de la vue
     	$result = new ViewModel(array(
     			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id),
     			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id)),
     			'groups' => $paginator
     	));
+    	//Utilisation de la vue rejoindre
     	$result->setTemplate('qvm\group\rejoindre.phtml');
     	 
     	return $result;
     }
     
+    /**
+     * Getter du model GroupTable
+     * @return Ambigous <object, multitype:, \Qvm\Model\GroupTable>
+     */
 	public function getGroupTable()
 	{
 		if (!$this->groupTable) {
@@ -213,6 +278,10 @@ class GroupController extends AbstractActionController
 		return $this->groupTable;
 	}
 	
+	/**
+	 * Getter du model ActivityTable
+	 * @return Ambigous <object, multitype:, \Qvm\Model\ActivityTable>
+	 */
 	public function getActivityTable()
 	{
 		if (!$this->activityTable) {
@@ -222,6 +291,10 @@ class GroupController extends AbstractActionController
 		return $this->activityTable;
 	}
 	
+	/**
+	 * Getter du model UserTable
+	 * @return Ambigous <object, multitype:, \Qvm\Model\UserTable>
+	 */
 	public function getUserTable()
 	{
 		if (!$this->userTable) {
@@ -231,6 +304,10 @@ class GroupController extends AbstractActionController
 		return $this->userTable;
 	}
 	
+	/**
+	 * Getter du model GroupMemberTable
+	 * @return Ambigous <object, multitype:, \Qvm\Model\GroupMemberTable>
+	 */
 	public function getGroupMemberTable()
 	{
 		if (!$this->groupMemberTable) {

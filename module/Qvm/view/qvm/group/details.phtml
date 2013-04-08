@@ -4,11 +4,8 @@
 	<h2>Liste des membres</h2>
 	<table class="table" id="details-membres-hide">
 		<?php
-		$nbMembres = count($membres);
-		$maxMembres = 5;
-		
-		foreach ( $membres as $indexMembre => $membre ) : 
-			if ($indexMembre <= $maxMembres){
+		foreach ( $membres as $indexMembre => $membre ) :
+			if ($indexMembre < $maxMembres){
 				?>
 				 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td>
@@ -51,7 +48,7 @@
 	</table>
 
 	<?php 
-	if ($indexMembre > $maxMembres){
+	if ($indexMembre >= $maxMembres){
 		?>
 		<p class="table">
 			<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeMembres', 'id' => $id));?>">
@@ -66,10 +63,8 @@
 	<h2>Liste des activit&eacute;s</h2>
 	<table class="table">
 		<?php 
-		$maxActivite = 1;
-		
 		foreach ($activites as $indexActivite => $activite) :
-			if ($indexActivite <= $maxActivite){ ?>
+			if ($indexActivite < $maxActivites){ ?>
 				<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
 					<td>
 						<a href="<?php echo $this->url('activity', array('action'=>'detail', 'id' => $activite->id_activity));?>" >
@@ -84,7 +79,7 @@
 	</table>
 	
 	<?php 
-	if ($indexActivite > $maxActivite){
+	if ($indexActivite >= $maxActivites){
 		?>
 		<p class="table">
 			<a class="btn btn-plus btn-small pull-right" href="<?php echo $this->url('group', array('action'=>'listeActivites', 'id' => $id));?>">
