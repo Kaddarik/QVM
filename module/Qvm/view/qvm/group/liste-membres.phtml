@@ -27,7 +27,7 @@
 					</span>
 					<div class="<?php echo 'decalage-droite '.$membreAdminDetails?>" id="<?php echo 'infos-membres-groupe'.$indexMembre?>">
 						<?php 
-							echo 'Mail : '.$this->escapeHtml($membre->mail).'<br/>';
+							echo 'Email : '.$this->escapeHtml($membre->email).'<br/>';
 							if (isset($membre->phonenumber)){
 								echo 'Num&eacute;ro de t&eacute;l&eacute;phone : 	'.$this->escapeHtml($membre->phonenumber).'<br/>';
 							}

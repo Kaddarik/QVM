@@ -32,4 +32,16 @@ class GroupMemberTable
 		$data = array('id_pending' => 0);
 		$this->tableGateway->update($data, array('user_id' => $user_id, 'id_group' => $idGroup));
 	}*/
+	
+	public function saveGroupAdmin($idg, $idp)
+	{
+		$data = array(
+				'id_group' => $idg,
+				'id_person'  => $idp,
+				'is_admin' => 1,
+				'id_pending' => 0,
+		);
+	
+		$this->tableGateway->insert($data);
+	}
 }

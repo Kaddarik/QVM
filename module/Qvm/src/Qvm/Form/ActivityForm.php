@@ -30,6 +30,7 @@ class ActivityForm extends Form
             'name' => 'title',
             'attributes' => array(
                 'type' => 'text',
+            	'required' => 'required'
             	
             	),
                 	'options' => array(

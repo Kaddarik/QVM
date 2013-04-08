@@ -24,7 +24,7 @@ class UserTable
 	
 	public function getMembersByGroup($idGroupe){
 		$select = new Select;
-		$select->columns(array('firstname', 'surname', 'mail', 'phonenumber'))->from('user')
+		$select->columns(array('firstname', 'surname', 'email', 'phonenumber'))->from('user')
 		->join('groupmember', 'user.user_id = groupmember.user_id', array('is_admin'))
 		->order('is_admin DESC')
 		->join('group', 'groupmember.id_group = group.id_group', array())
@@ -40,7 +40,7 @@ class UserTable
 		return $resultSet;
 	}
 
-	public function getUsers($id)
+	public function getUser($id)
 	{
 		$id  = (int) $id;
 		$rowset = $this->tableGateway->select(array('user_id' => $id));
@@ -49,5 +49,27 @@ class UserTable
 			throw new \Exception("Could not find row $id");
 		}
 		return $row;
+	}
+	
+	public function saveUser(User $user)
+	{
+		$data = array(
+				'surname' => $user->surname,
+				'firstname'  => $user->firstname,
+				'password' => $user->password,
+				'email' => $user->email,
+				'phonenumber' => $user->phonenumber,
+		);
+	
+		$id = (int)$user->user_id;
+		if ($id == 0) {
+			$this->tableGateway->insert($data);
+		} else {
+			if ($this->getUser($id)) {
+				$this->tableGateway->update($data, array('user_id' => $id));
+			} else {
+				throw new \Exception('Form id does not exist');
+			}
+		}
 	}
 }

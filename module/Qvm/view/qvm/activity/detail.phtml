@@ -6,30 +6,34 @@ echo $this->form ()->openTag ( $form );
 <p>Cat&eacutegorie : <?php echo $this->escapeHtml($category->label);?></p>
 <p>Description : <?php echo $this->escapeHtml($activity->description);?></p>
 
-<table class="table">
+<table>
 	<td class="width360"><?php echo $this->formRow ( $form->get ( 'voteEvenement' )->setAttribute('value',$preference->vote) );?></td>
 	<td><?php echo $this->formRow ( $form->get ( 'submit' ));?></td>
 </table>
 
-<h2>Liste des groupes</h2>
-<table class="table">
-<?php foreach ( $groups as $group ) :?>
- <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-		<td><?php echo $this->escapeHtml($group->label);?></td>
-	</tr>
-		
-<?php endforeach; ?>
-</table>
+<div class="span5">
+	<h2>Liste des groupes</h2>
+	<table class="table">
+	<?php foreach ( $groups as $group ) :?>
+	 <tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+			<td><?php echo $this->escapeHtml($group->label);?></td>
+		</tr>
+			
+	<?php endforeach; ?>
+	</table>
+</div>
 
+<div class="span6">
 <h2>Liste des &eacutev&eacutenements</h2>
-<table class="table">
-<?php foreach ($events as $event) :?>
-<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
-		<td><?php echo $this->escapeHtml($event->title);?></td>
-		<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $event->id_event));?>" >
-			<?php  echo strftime("%d/%m/%Y a %Hh%M", strtotime($event->date) ); ?>
-</a>
-		</td>
-</tr>
-<?php endforeach; ?>
-</table>
+	<table class="table">
+	<?php foreach ($events as $event) :?>
+	<tr class="<?php echo $this->cycle(array('liste-grise','liste-blanche'))->next()?>">
+			<td><?php echo $this->escapeHtml($event->title);?></td>
+			<td><a href="<?php echo $this->url('activity', array('action'=>'detailEvent', 'id' => $event->id_event));?>" >
+				<?php  echo date('d/m/Y H\hi'', strtotime($event->date) ); ?>
+	</a>
+			</td>
+	</tr>
+	<?php endforeach; ?>
+	</table>
+</div>

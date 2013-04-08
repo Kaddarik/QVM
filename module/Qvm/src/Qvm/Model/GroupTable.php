@@ -128,4 +128,11 @@ class GroupTable
 			}
 		}
 	}
+	
+	public function getLastGroup()
+	{
+		$rowset = $this->tableGateway->getLastInsertValue();
+	
+		return $rowset;
+	}
 }

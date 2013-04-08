@@ -23,6 +23,7 @@ class GroupForm extends Form
             'name' => 'label',
             'attributes' => array(
                 'type' => 'text',
+            	'required' => 'required'
             	),
                 	'options' => array(
         				'label' => 'Nom : ',

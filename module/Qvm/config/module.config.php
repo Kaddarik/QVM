@@ -314,7 +314,7 @@ return array (
 										'evenementenattente' => array(
 												'route' => 'activity',
 												'action' => 'listPendingParticipating',
-												'label' => 'Mes evenments en attente',
+												'label' => 'Mes evenements en attente',
 										),
 								)
 						)

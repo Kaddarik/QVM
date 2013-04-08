@@ -13,7 +13,7 @@ class User implements InputFilterAwareInterface
 	public $surname;
 	public $firstname;
 	public $password;
-	public $mail;
+	public $email;
 	public $phonenumbre;
 	public $id_twitter;
 	public $meteo_location;
@@ -23,17 +23,22 @@ class User implements InputFilterAwareInterface
 	public function exchangeArray($data)
 	{
 		$this->user_id     = (isset($data['user_id'])) ? $data['user_id'] : null;
-		$this->surname = (isset($data['username'])) ? $data['username'] : null;
+		$this->username = (isset($data['username'])) ? $data['username'] : null;
 		$this->surname = (isset($data['surname'])) ? $data['surname'] : null;
 		$this->firstname  = (isset($data['firstname'])) ? $data['firstname'] : null;
 		$this->password  = (isset($data['password'])) ? $data['password'] : null;
-		$this->mail  = (isset($data['mail'])) ? $data['mail'] : null;
+		$this->email  = (isset($data['email'])) ? $data['email'] : null;
 		$this->phonenumber  = (isset($data['phonenumber'])) ? $data['phonenumber'] : null;
 		$this->id_twitter  = (isset($data['id_twitter'])) ? $data['id_twitter'] : null;
 		$this->meteo_location  = (isset($data['meteo_location'])) ? $data['meteo_location'] : null;
 		$this->idsession  = (isset($data['idsession'])) ? $data['idsession'] : null;
 		$this->is_sysadmin  = (isset($data['is_sysadmin'])) ? $data['is_sysadmin'] : null;
 	} 
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
 	
 	public function getInputFilter() {
 		if (!$this->inputFilter) {
@@ -66,7 +71,7 @@ class User implements InputFilterAwareInterface
 			)));
 			
 			$inputFilter->add($factory->createInput(array(
-					'name'     => 'mail',
+					'name'     => 'email',
 					'required' => false,
 			)));
 			
@@ -93,12 +98,10 @@ class User implements InputFilterAwareInterface
 					'name'     => 'is_sysadmin',
 					'required' => false,
 			)));
+			
+			$this->inputFilter = $inputFilter;
 		}
-	}
-	
-	public function setInputFilter(InputFilterInterface $inputFilter)
-	{
-		throw new \Exception("Not used");
+        return $this->inputFilter;
 	}
 
 	public function getArrayCopy()

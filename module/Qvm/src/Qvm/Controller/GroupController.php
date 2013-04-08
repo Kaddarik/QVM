@@ -15,7 +15,7 @@ class GroupController extends AbstractActionController
 {
 	protected $groupTable;
 	protected $activityTable;
-	protected $personTable;
+	protected $userTable;
 	protected $groupMemberTable;
 
     public function indexAction()
@@ -58,7 +58,7 @@ class GroupController extends AbstractActionController
     	 return array(
             'id' => $idGroupe,
             'group' => $this->getGroupTable()->getGroup($idGroupe),
-    	 	'membres' => $this->getPersonTable()->getMembersByGroup($idGroupe),
+    	 	'membres' => $this->getUserTable()->getMembersByGroup($idGroupe),
     	 	'activites' => $this->getActivityTable()->getActivitesByGroup($idGroupe),
         );
     }
@@ -73,7 +73,7 @@ class GroupController extends AbstractActionController
     	
     	// Pagination 
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$membres = $this->getPersonTable()->getMembersByGroup($idGroupe);
+    	$membres = $this->getUserTable()->getMembersByGroup($idGroupe);
     	$iteratorAdapter = new Iterator($membres);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
@@ -117,6 +117,8 @@ class GroupController extends AbstractActionController
     		if ($form->isValid ()) {
     			$group->exchangeArray($form->getData());
     			$this->getGroupTable()->saveGroup($group);
+    			$id = $this->getGroupTable()->getLastGroup();
+    			$this->getGroupMemberTable()->saveGroupAdmin($id, 1);
     			
     			return $this->redirect ()->toRoute ( 'group' );
     		}
@@ -216,13 +218,13 @@ class GroupController extends AbstractActionController
 		return $this->activityTable;
 	}
 	
-	public function getPersonTable()
+	public function getUserTable()
 	{
-		if (!$this->personTable) {
+		if (!$this->userTable) {
 			$sm = $this->getServiceLocator();
-			$this->personTable = $sm->get('Qvm\Model\UsersTable');
+			$this->userTable = $sm->get('Qvm\Model\UserTable');
 		}
-		return $this->personTable;
+		return $this->userTable;
 	}
 	
 	public function getGroupMemberTable()

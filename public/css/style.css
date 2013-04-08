@@ -33,7 +33,6 @@ body {
 }
 
 div.container a.brand {
-    background: url("../images/zf2-logo.png") no-repeat scroll 0 10px transparent;
     margin-left: 0;
     padding: 8px 20px 12px 40px;
 }
@@ -64,8 +63,12 @@ div.container a.brand {
 .width360{
 	width:360px;
 }
-.btn-vert-cent{
+table.table .btn-vert-cent{
 	vertical-align:25%;
+	margin-left:5px;
+}
+table .btn-vert-cent{
+	vertical-align:95%;
 	margin-left:5px;
 }
 .btn-rotat{
@@ -77,11 +80,25 @@ div.container a.brand {
 .display-none{
 	display:none;
 }
-form#activity>dl.zend_form dd>label>span, form#group>dl.zend_form dd>label>span{
-	width:100px;
+form#activity>dl.zend_form dd>label>span, form#group>dl.zend_form dd>label>span, form#user>dl.zend_form dd>label>span{
 	display:block;
 	float:left;
 }
+form#activity>dl.zend_form dd>label>span{
+	width:95px;
+}
+form#group>dl.zend_form dd>label>span{
+	width:50px;
+}
+form#user>dl.zend_form dd>label>span{
+	width:150px;
+}
 .fil-ariane{
 	font-size:12px;
+}
+footer{
+	text-align:center;
+	margin-top:20px;
+	padding-top:10px;
+	padding-bottom:3px;
 }
