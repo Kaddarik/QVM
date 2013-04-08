@@ -22,7 +22,8 @@ class GroupController extends AbstractActionController
     {    	
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(),null);
+    	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+    	$groups = $this->getGroupTable()->getGroupByPerson($user_id, null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
@@ -108,6 +109,7 @@ class GroupController extends AbstractActionController
     }
     
     public function createAction() {
+    	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
     	$form = new GroupForm ();
     	$request = $this->getRequest ();
     	if ($request->isPost ()) {
@@ -118,7 +120,7 @@ class GroupController extends AbstractActionController
     			$group->exchangeArray($form->getData());
     			$this->getGroupTable()->saveGroup($group);
     			$id = $this->getGroupTable()->getLastGroup();
-    			$this->getGroupMemberTable()->saveGroupAdmin($id, 1);
+    			$this->getGroupMemberTable()->saveGroupAdmin($id, $user_id);
     			
     			return $this->redirect ()->toRoute ( 'group' );
     		}
@@ -131,15 +133,16 @@ class GroupController extends AbstractActionController
     public function rejoindreAction(){
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
+    	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+    	$groups = $this->getGroupTable()->getGroupByPerson($user_id, null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
     	
     	return array(
-    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId()),	
-    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId())),
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id),	
+    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id)),
     		'groups' => $paginator
     	);
     }
@@ -154,7 +157,8 @@ class GroupController extends AbstractActionController
     	
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
+    	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+    	$groups = $this->getGroupTable()->getGroupByPerson($user_id, null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
@@ -163,8 +167,8 @@ class GroupController extends AbstractActionController
     	$this->getGroupMemberTable()->updateGroupsPrivateInvitValid(1, $idGroupe);
     	
     	$result = new ViewModel(array(
-    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId()),	
-    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId())),
+    		'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id),	
+    		'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id)),
     		'groups' => $paginator
     			));
     	$result->setTemplate('qvm\group\rejoindre.phtml');
@@ -182,17 +186,18 @@ class GroupController extends AbstractActionController
 
     	// Pagination
     	$page = (int) $this->params()->fromRoute('page', 1);
-    	$groups = $this->getGroupTable()->getGroupByPerson($this->zfcUserAuthentication()->getIdentity()->getId(), null);
+    	$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+    	$groups = $this->getGroupTable()->getGroupByPerson($user_id, null);
     	$iteratorAdapter = new Iterator($groups);
     	$paginator = new Paginator($iteratorAdapter);
     	$paginator->setCurrentPageNumber($page);
     	$paginator->setItemCountPerPage(15);
     	
-    	$this->getGroupMemberTable()->updateGroupsPrivateInvitRefus(1, $idGroupe);
+    	$this->getGroupMemberTable()->updateGroupsPrivateInvitRefus($user_id, $idGroupe);
     	 
     	$result = new ViewModel(array(
-    			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId()),
-    			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($this->zfcUserAuthentication()->getIdentity()->getId())),
+    			'groupsPrivate' => $this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id),
+    			'nbGroupsPrivate' => count($this->getGroupTable()->getGroupsPrivateInvitByPerson($user_id)),
     			'groups' => $paginator
     	));
     	$result->setTemplate('qvm\group\rejoindre.phtml');

@@ -15,8 +15,8 @@ class UserController extends AbstractActionController
 	}
 	
 	public function settingsAction(){
-		$id = (int) 1;
-		$user = $this->getUserTable()->getUser(1);
+		$user_id = $this->zfcUserAuthentication()->getIdentity()->getId();
+		$user = $this->getUserTable()->getUser($user_id);
 			
 		$form  = new UserForm();
 		$form->bind($user);
@@ -34,7 +34,7 @@ class UserController extends AbstractActionController
 		}
 	
 		return array(
-				'id' => $id,
+				'id' => $user_id,
 				'form' => $form,
 		);
 	}
