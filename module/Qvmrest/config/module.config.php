@@ -4,6 +4,7 @@ return array(
 		'invokables' => array(
 			'Qvmrest\Controller\Group' => 'Qvmrest\Controller\GroupController',
 			'Qvmrest\Controller\Event' => 'Qvmrest\Controller\EventController',
+			'Qvmrest\Controller\Member' => 'Qvmrest\Controller\MemberController',
 		),
 	),
 	'router' => array(
@@ -29,6 +30,18 @@ return array(
 					),
 					'defaults' => array(
 						'controller' => 'Qvmrest\Controller\Event',
+					),
+				),
+			),
+			'rest-member' => array(
+				'type' => 'Segment',
+				'options' => array(
+					'route' => 'rest/member[/:id]',
+					'constraints' => array(
+						'id' => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Qvmrest\Controller\Member',
 					),
 				),
 			),
